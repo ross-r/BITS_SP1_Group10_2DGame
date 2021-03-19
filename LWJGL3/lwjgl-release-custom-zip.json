@@ -1,0 +1,30 @@
+{
+  "build": "release",
+  "mode": "zip",
+  "selectedAddons": [
+    "joml"
+  ],
+  "platform": [
+    "macos",
+    "windows"
+  ],
+  "descriptions": false,
+  "compact": false,
+  "hardcoded": false,
+  "javadoc": true,
+  "includeJSON": true,
+  "source": true,
+  "osgi": false,
+  "language": "groovy",
+  "contents": [
+    "lwjgl",
+    "lwjgl-glfw",
+    "lwjgl-jemalloc",
+    "lwjgl-nanovg",
+    "lwjgl-opengl",
+    "lwjgl-sse",
+    "lwjgl-stb"
+  ],
+  "version": "3.2.3",
+  "versionLatest": "3.2.3"
+}
