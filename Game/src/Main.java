@@ -59,7 +59,7 @@ public class Main {
 		glfwWindowHint(GLFW_SAMPLES, 16); // 16x MSAA
 		
 		// Create the window
-		window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL);
+		window = glfwCreateWindow(1280, 720, "Hello World!", NULL, NULL);
 		if ( window == NULL )
 			throw new RuntimeException("Failed to create the GLFW window");
 
@@ -124,8 +124,8 @@ public class Main {
 			
 			final NVGColor color = NVGColor.create();
 			color.r(255.F / 255.F);
-			color.g(255.F / 255.F);
-			color.b(255.F / 255.F);
+			color.g(0.F / 255.F);
+			color.b(0.F / 255.F);
 			color.a(127.F / 255.F);
 			
 			nvgBeginFrame(vg, width, height, 96.F);
