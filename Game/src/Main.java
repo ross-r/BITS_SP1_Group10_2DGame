@@ -11,6 +11,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import org.lwjgl.nanovg.*;
+
 public class Main {
 
 	// The window handle
