@@ -2,7 +2,7 @@ import org.lwjgl.*;
 import org.lwjgl.nanovg.NVGColor;
 
 import static org.lwjgl.nanovg.NanoVG.*;
-import static org.lwjgl.nanovg.NanoVGGL3.*;
+import static org.lwjgl.nanovg.NanoVGGL2.*;
 
 import static org.lwjgl.system.MemoryUtil.NULL;
 

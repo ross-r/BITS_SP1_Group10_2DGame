@@ -170,8 +170,7 @@ public class Window {
 			
 			updateWindowSizes();
 		});
-		
-		System.out.printf("OpenGL version: %s\n", glGetString(GL_VERSION));
+
 	}
 	
 	public void render(Runnable callback, float r, float g, float b, float a) {
