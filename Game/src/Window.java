@@ -81,9 +81,7 @@ public class Window {
 		}
 	}
 	
-	private void initAndCreateWindow() {
-		System.out.printf("OpenGL version: %s\n", glGetString(GL_VERSION));
-		
+	private void initAndCreateWindow() {		
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -172,6 +170,8 @@ public class Window {
 			
 			updateWindowSizes();
 		});
+		
+		System.out.printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 	}
 	
 	public void render(Runnable callback, float r, float g, float b, float a) {
