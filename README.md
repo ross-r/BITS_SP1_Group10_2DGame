@@ -13,16 +13,24 @@ Git bash: [https://gitforwindows.org/](https://gitforwindows.org/)
 
 2. Open your Git CLI, you will need to navigate to a folder you want to clone into.
 To do this use the `cd` command (change directory)
+
 		cd ~
 		cd Documents
 
 3. Now you can clone the repository
+
 		git clone https://github.com/RossRRMIT/BITS_SP1_Group10_2DGame.git
+
 This will create a folder called `BITS_SP1_Group10_2DGame` inside of this folder is the repository, now you can navigate into it.
+
 		cd BITS_SP1_Group10_2DGame
+
 To make sure everything is working properly, execute the following:
+
 		git status
+
 Your output should be:
+
 		On branch master
 		Your branch is up to date with 'origin/master'.
 		
