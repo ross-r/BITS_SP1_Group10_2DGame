@@ -119,7 +119,10 @@ public class Window {
 		
 		// Create the window.
 		this.hHandle = glfwCreateWindow(iWidth, iHeight, sTitle, NULL, NULL);
-
+		if(this.hHandle == NULL) {
+			throw new RuntimeException("Failed to create GLFW window.");
+		}
+		
 		// Update the window width and height and internal buffer sizes.
 		updateWindowSizes();
 		
