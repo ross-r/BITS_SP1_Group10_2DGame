@@ -94,6 +94,13 @@ public class Window {
 		//
 		// Configure GLFW
 		//
+
+		if (Platform.get() == Platform.MACOSX) {
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		}
 		
 		// optional, the current window hints are already the default
 		glfwDefaultWindowHints();
