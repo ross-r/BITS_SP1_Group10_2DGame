@@ -167,6 +167,10 @@ public class Window {
 	
 	public void render(Runnable callback, float r, float g, float b, float a) {
 		
+		if(this.hHandle == NULL) {
+			throw new RuntimeException("Invalid window handle in Window::render");
+		}
+		
 		// TODO: @Ross, render statistics (fps, frame time, etc..)
 		
 		while(!glfwWindowShouldClose(hHandle)) {
