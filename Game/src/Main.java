@@ -2,6 +2,9 @@ import org.lwjgl.*;
 import org.lwjgl.nanovg.NVGColor;
 
 import static org.lwjgl.nanovg.NanoVG.*;
+
+// We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
+// NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
 import static org.lwjgl.nanovg.NanoVGGL2.*;
 
 import static org.lwjgl.system.MemoryUtil.NULL;
