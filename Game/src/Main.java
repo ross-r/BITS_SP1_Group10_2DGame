@@ -1,13 +1,8 @@
 import org.lwjgl.*;
-import org.lwjgl.nanovg.NVGColor;
-
-import static org.lwjgl.nanovg.NanoVG.*;
 
 // We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
 // NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
 import static org.lwjgl.nanovg.NanoVGGL2.*;
-
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
 
@@ -15,10 +10,7 @@ public class Main {
 	private final int WINDOW_HEIGHT = 720;
 	
 	private Window window;
-	
-	// Temporary NanoVG stuff.
-	private long vg;
-	private NVGColor color;
+	private Graphics graphics;
 
 	public void start() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -26,42 +18,27 @@ public class Main {
 		// Create our window.
 		window = new Window("Trash Unit Response Droid (T.U.R.D)", WINDOW_WIDTH, WINDOW_HEIGHT);
 		
-		// Now that we have the window created we can initialize NanoVG.
-		// TODO: This would be in its own class, something like Graphics.setup();
-		vg = nvgCreate(NVG_ANTIALIAS);
-		if (vg == NULL) {
-			throw new RuntimeException("Could not create nanovg.");
-        }
-		
-		// Initialize color instance.
-		// This allocates 4 bytes in memory.
-		color = NVGColor.create();
+		// Create graphics.
+		graphics = new Graphics(window, NVG_ANTIALIAS);
 		
 		window.render(() -> {
 			
-			// Begin the frame, setup NanoVG for rendering and set opengl states and buffers.
-			// TODO: @Ross, set device pixel ratio properly.
-			nvgBeginFrame(vg, window.getScaledWidth(), window.getScaledHeight(), window.getPixelRatio());
+			System.out.printf("FPS: %.0f (%.3f m/s)\n", window.getFps(), window.getFrameTime()*1000.0);
 			
-			// Render some stuff.
-			color.r(255.F / 255.F);
-			color.g(0.F / 255.F);
-			color.b(0.F / 255.F);
-			color.a(127.F / 255.F);
+			graphics.beginFrame();
 			
-			nvgBeginPath(vg);
-			nvgRoundedRect(vg, 0, 0, 80, 80, 9.F);
-			nvgFillColor(vg, color);
-			nvgFill(vg);
+			//
+			graphics.setColor(0.f, 255.f, 255.f, 1.f);
+			graphics.drawFilledRect(40, 40, 80, 80);
+			//
 			
-			// End the frame, this will set some opengl states and clear buffers.
-			nvgEndFrame(vg);
+			graphics.endFrame();
 			
 		}, 0.3F, 0.3F, 0.32F, 1.F);
 		
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
-		nvgDelete(vg);
+		graphics.terminate();
 	}
 
 	public static void main(String[] args) {

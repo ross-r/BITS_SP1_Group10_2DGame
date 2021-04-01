@@ -38,6 +38,13 @@ public class Window {
 	private int iVisible;
 	private int iMSAAQuality;
 	
+	// The frame time between rendering cycles.
+	private double flFrameTime;
+
+	// The frames per second.
+	// 1/flFrameTime
+	private double flFps;
+	
 	public Window(String title, int w, int h) {
 		this.sTitle = title;
 		this.iWidth = w;
@@ -115,10 +122,7 @@ public class Window {
 		 This is for larger resolution monitors like 1440p, 4K and retina displays.
 		 */
 		glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-		
-		// TODO: @Ross, temporarily disabled as Leo has window creation failures on macOS.
-		// 				this may be the cause of those issues.
-		//glfwWindowHint(GLFW_SAMPLES, iMSAAQuality);
+		glfwWindowHint(GLFW_SAMPLES, iMSAAQuality);
 		
 		//
 		// Window creation.
@@ -170,7 +174,14 @@ public class Window {
 			
 			updateWindowSizes();
 		});
-
+		
+		// Setup a cursor position callback.
+		// This will notify us of where our mouse is within the winow.
+		glfwSetCursorPosCallback(hHandle, (window, x, y) -> {
+			
+			// x, y are doubles.
+			
+		});
 	}
 	
 	public void render(Runnable callback, float r, float g, float b, float a) {
@@ -179,10 +190,27 @@ public class Window {
 			throw new RuntimeException("Invalid window handle in Window::render");
 		}
 		
-		// TODO: @Ross, render statistics (fps, frame time, etc..)
+		// Set a baseline time.
+		glfwSetTime(0);
+		
+		// This variable will be used inside the main loop to get execution time between iterations.
+		double prevt = glfwGetTime();
 		
 		while(!glfwWindowShouldClose(hHandle)) {
 		
+			// Get the current time at the point of this loop execution.
+			double time = glfwGetTime();
+			
+			// Get the time between now and the previously stored off time.
+			// This is the delta time between loop iterations and measures how long the loop takes to execute a cycle.
+			flFrameTime = time - prevt;
+            
+			// Calculate the fps.
+			flFps = 1.0 / flFrameTime;
+			
+            // Store the current time for comparison on the next loop execution.
+			prevt = time;
+			
 			// Set the clear color.
 			glClearColor(r, g, b, a);
 			
@@ -242,5 +270,13 @@ public class Window {
 		int a = getScaledWidth();
 		int b = getScaledHeight();
 		return a > b ? a : b;
+	}
+
+	public double getFrameTime() {
+		return flFrameTime;
+	}
+	
+	public double getFps() {
+		return flFps;
 	}
 }
