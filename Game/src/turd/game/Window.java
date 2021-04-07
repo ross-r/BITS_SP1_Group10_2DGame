@@ -3,6 +3,8 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import turd.game.input.KeyboardInput;
+
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -163,9 +165,7 @@ public class Window {
 		
 		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
 		glfwSetKeyCallback(hHandle, (window, key, scancode, action, mods) -> {
-			
-			// We'll use this to notify the input class of changes.
-			inputCallback(window, key, scancode, action, mods);
+			KeyboardInput.getInstance().updateKeys(window, key, scancode, action, mods);
 		});
 		
 		// Setup a size callback.
@@ -241,10 +241,6 @@ public class Window {
 		// Terminate GLFW and free the error callback
 		glfwTerminate();
 		glfwSetErrorCallback(null).free();
-	}
-	
-	private void inputCallback(long window, int key, int scancode, int action, int mods) {
-		// TODO: Implement input class.		
 	}
 
 	//
