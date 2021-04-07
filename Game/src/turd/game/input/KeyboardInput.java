@@ -1,5 +1,9 @@
 package turd.game.input;
 
+import turd.game.Window;
+import turd.game.objects.ObjectList;
+import turd.game.objects.GameObject.GAMEOBJ_UPDATE_TYPE;
+
 public class KeyboardInput {
 	private static KeyboardInput instance = null;
 	
@@ -18,7 +22,7 @@ public class KeyboardInput {
     	return instance;
     }
 
-	public void updateKeys(long window, int key, int scancode, int action, int mods) {
+	public void updateKeys(Window window, int key, int scancode, int action, int mods) {
 		//System.out.printf("key: %d, action: %d, mods: %d\n", key, action, mods);
 		
 		// Key is out of our accepted range.
@@ -27,6 +31,9 @@ public class KeyboardInput {
 		}
 		
 		this.keyStates[key] = action;
+		
+		// Update all entities/objects.
+		ObjectList.getInstance().update(window, GAMEOBJ_UPDATE_TYPE.KEYBOARD);
 	}
 	
 	public boolean isKeyDown(int key) {

@@ -165,7 +165,7 @@ public class Window {
 		
 		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
 		glfwSetKeyCallback(hHandle, (window, key, scancode, action, mods) -> {
-			KeyboardInput.getInstance().updateKeys(window, key, scancode, action, mods);
+			KeyboardInput.getInstance().updateKeys(this, key, scancode, action, mods);
 		});
 		
 		// Setup a size callback.
