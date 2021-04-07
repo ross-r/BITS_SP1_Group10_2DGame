@@ -1,3 +1,4 @@
+package turd.game;
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL2.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -14,10 +15,12 @@ public class Graphics {
 	private NVGColor color;
 	
 	private Window window;
+	private FontRenderer fontRenderer;
 	
 	public Graphics(Window window, int flags) {
 		this.vg = nvgCreate(flags);
 		this.window = window;
+		this.fontRenderer = new FontRenderer(window);
 		
 		if (this.vg == NULL) {
 			throw new RuntimeException("Could not create nanovg.");
@@ -31,11 +34,21 @@ public class Graphics {
 	}
 
 	public void beginFrame() {
+		fontRenderer.setGLStates();
+		
 		nvgBeginFrame(vg, window.getScaledWidth(), window.getScaledHeight(), window.getPixelRatio());
 	}
 	
 	public void endFrame() {
 		nvgEndFrame(vg);
+	}
+	
+	public void drawString(String text, int x, int y) {
+		fontRenderer.drawString(text, x, y, 1.f);
+	}
+	
+	public void drawString(String text, int x, int y, float scale) {
+		fontRenderer.drawString(text, x, y, scale);
 	}
 	
 	public void setColor(float r, float g, float b, float a) {
@@ -47,6 +60,9 @@ public class Graphics {
 	
 	public void translate(int x, int y) {
 		nvgTranslate(vg, x, y);
+		
+		// Update text translations.
+		fontRenderer.translate(x, y);
 	}
 	
 	public void rotate(float angle) {

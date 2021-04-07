@@ -1,3 +1,5 @@
+package turd.game;
+
 import org.lwjgl.*;
 
 // We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
@@ -23,15 +25,16 @@ public class Main {
 		
 		window.render(() -> {
 			
-			System.out.printf("FPS: %.0f (%.3f m/s)\n", window.getFps(), window.getFrameTime()*1000.0);
-			
 			graphics.beginFrame();
+
+			// Draw FPS/Render time stats.
+			graphics.drawString(String.format("FPS: %.0f (%.3f m/s)\n", window.getFps(), window.getFrameTime() * 1000.0), 2, 2, 1.f);
 			
 			//
 			graphics.setColor(0.f, 255.f, 255.f, 1.f);
 			graphics.drawFilledRect(40, 40, 80, 80);
 			//
-			
+						
 			graphics.endFrame();
 			
 		}, 0.3F, 0.3F, 0.32F, 1.F);

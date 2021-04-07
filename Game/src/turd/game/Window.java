@@ -1,3 +1,4 @@
+package turd.game;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -208,7 +209,7 @@ public class Window {
 			// Calculate the fps.
 			flFps = 1.0 / flFrameTime;
 			
-            // Store the current time for comparison on the next loop execution.
+			// Store the current time for comparison on the next loop execution.
 			prevt = time;
 			
 			// Set the clear color.
