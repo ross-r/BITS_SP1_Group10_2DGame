@@ -61,7 +61,7 @@ public class Main {
 				// Disable V-SYNC for testing (this will make your fps very very high)
 				// 0 = V-SYNC OFF
 				// 1 = V-SYNC ON
-				glfwSwapInterval(0);
+				glfwSwapInterval(1);
 				
 				// Our constant move speed that we want.
 				// We can use this to boost player move speed if we pick up objects, etc...
