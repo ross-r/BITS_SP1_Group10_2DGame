@@ -23,9 +23,7 @@ public class Main {
 	double iPlayerY = 128;
 	int iPlayerW = 64;
 	int iPlayerH = 64;
-	
-	int a;
-	
+		
 	public void start() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
@@ -61,7 +59,9 @@ public class Main {
 				// Choose a constant speed for all frame rates.
 	
 				// Disable V-SYNC for testing (this will make your fps very very high)
-				glfwSwapInterval(1);
+				// 0 = V-SYNC OFF
+				// 1 = V-SYNC ON
+				glfwSwapInterval(0);
 				
 				// Our constant move speed that we want.
 				// We can use this to boost player move speed if we pick up objects, etc...
@@ -89,15 +89,11 @@ public class Main {
 					double flDirectionX = Math.sin(-flDirection);
 					double flDirectionY = Math.cos(flDirection);
 					
-					System.out.printf("sidemove: %f, upmove: %f, direction: %f (%f) (x: %f, y: %f)\n", flSideMove, flUpMove, flDirection, Math.toDegrees(flDirection), flDirectionX, flDirectionY);
+					//System.out.printf("sidemove: %f, upmove: %f, direction: %f (%f) (x: %f, y: %f)\n", flSideMove, flUpMove, flDirection, Math.toDegrees(flDirection), flDirectionX, flDirectionY);
 					
 					// Finally adjust our players position.
-					iPlayerX += (flDirectionX * moveSpeed) * window.getFrameTime();
-					iPlayerY += (flDirectionY * moveSpeed) * window.getFrameTime();
-					
-					// Just make sure to floor the values so we don't get weird rounding.
-					iPlayerX = Math.floor(iPlayerX);
-					iPlayerY = Math.floor(iPlayerY);
+					iPlayerX += (moveSpeed * window.getFrameTime()) * flDirectionX;
+					iPlayerY += (moveSpeed * window.getFrameTime()) * flDirectionY;
 				}
 			}
 			

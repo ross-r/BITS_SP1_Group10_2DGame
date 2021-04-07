@@ -19,7 +19,7 @@ public class KeyboardInput {
     }
 
 	public void updateKeys(long window, int key, int scancode, int action, int mods) {
-		System.out.printf("key: %d, action: %d, mods: %d\n", key, action, mods);
+		//System.out.printf("key: %d, action: %d, mods: %d\n", key, action, mods);
 		
 		// Key is out of our accepted range.
 		if(key < 0 || key >= MAX_KEYS) {
