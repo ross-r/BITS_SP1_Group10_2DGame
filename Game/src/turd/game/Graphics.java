@@ -34,7 +34,7 @@ public class Graphics {
 	}
 
 	public void beginFrame() {
-		fontRenderer.setGLStates();
+		this.fontRenderer.setGLStates();
 		
 		nvgBeginFrame(vg, window.getScaledWidth(), window.getScaledHeight(), window.getPixelRatio());
 	}
@@ -44,18 +44,20 @@ public class Graphics {
 	}
 	
 	public void drawString(String text, int x, int y) {
-		fontRenderer.drawString(text, x, y, 1.f);
+		this.fontRenderer.drawString(text, x, y, 1.f);
 	}
 	
 	public void drawString(String text, int x, int y, float scale) {
-		fontRenderer.drawString(text, x, y, scale);
+		this.fontRenderer.drawString(text, x, y, scale);
 	}
 	
 	public void setColor(float r, float g, float b, float a) {
-		this.color.r(r);
-		this.color.g(g);
-		this.color.b(b);
-		this.color.a(a);
+		this.color.r(r / 255.f);
+		this.color.g(g / 255.f);
+		this.color.b(b / 255.f);
+		this.color.a(a / 255.f);
+		
+		this.fontRenderer.setColor(this.color.r(), this.color.g(), this.color.b(), this.color.a());
 	}
 	
 	public void translate(int x, int y) {

@@ -28,10 +28,11 @@ public class Main {
 			graphics.beginFrame();
 
 			// Draw FPS/Render time stats.
-			graphics.drawString(String.format("FPS: %.0f (%.3f m/s)\n", window.getFps(), window.getFrameTime() * 1000.0), 2, 2, 1.f);
+			graphics.setColor(255.f, 255.f, 255.f, 255.f);
+			graphics.drawString(String.format("Trash Unit Response Droid (T.U.R.D)\nFPS: %.0f (%.3f m/s)", window.getFps(), window.getFrameTime() * 1000.0), 2, 2, 1.f);
 			
 			//
-			graphics.setColor(0.f, 255.f, 255.f, 1.f);
+			graphics.setColor(0.f, 255.f, 255.f, 127.f);
 			graphics.drawFilledRect(40, 40, 80, 80);
 			//
 						

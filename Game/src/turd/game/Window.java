@@ -217,7 +217,7 @@ public class Window {
 			
 			// Clear a couple buffers that NanoVG and other libraries may touch.
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		
+
 			// Make sure to update the viewport for window resizing.
 			glViewport(0, 0, this.iFrameBufferWidth, this.iFrameBufferHeight);
 			

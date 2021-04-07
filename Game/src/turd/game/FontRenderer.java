@@ -2,6 +2,8 @@ package turd.game;
 
 import java.nio.ByteBuffer;
 
+import org.lwjgl.opengl.GL11;
+
 import static org.lwjgl.stb.STBEasyFont.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
@@ -25,6 +27,12 @@ public class FontRenderer {
 	private int iTranslateX;
 	private int iTranslateY;
 	
+	// Used to color the string.
+	private float flRed;
+	private float flGreen;
+	private float flBlue;
+	private float flAlpha;
+	
 	public FontRenderer(Window window) {
 		this.window = window;
 		
@@ -33,6 +41,11 @@ public class FontRenderer {
 		
 		this.iTranslateX = 0;
 		this.iTranslateY = 0;
+		
+		this.flRed = 1.f;
+		this.flGreen = 1.f;
+		this.flBlue = 1.f;
+		this.flAlpha = 1.f;
 	}
 	
 	public void setGLStates() {
@@ -43,6 +56,9 @@ public class FontRenderer {
 	public void drawString(String text, int x, int y, float scale) {
         glPushMatrix();
 		
+        // Allow transparency.
+        glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        
         // Set up projection used by STBEasyFont.
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -58,11 +74,21 @@ public class FontRenderer {
 		// Relative to original coordinates.
 		glTranslatef(x + this.iTranslateX, y + this.iTranslateY, 0);
 		
+		// Set color.
+		glColor4f(this.flRed, this.flGreen, this.flBlue, this.flAlpha);
+		
         glDrawArrays(GL_QUADS, 0, quads * 4);
         
         glPopMatrix();
 	}
 
+	public void setColor(float r, float g, float b, float a) {
+		this.flRed = r;
+		this.flGreen = g;
+		this.flBlue = b;
+		this.flAlpha = a;
+	}
+	
 	public void translate(int x, int y) {
 		iTranslateX = x;
 		iTranslateY = y;
