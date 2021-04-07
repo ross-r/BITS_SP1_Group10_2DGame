@@ -54,16 +54,16 @@ public class FontRenderer {
 	}
 	
 	public void drawString(String text, int x, int y, float scale) {
-        glPushMatrix();
+		glPushMatrix();
 		
-        // Allow transparency.
-        glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        
-        // Set up projection used by STBEasyFont.
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0.0, window.getWidth(), window.getHeight(), 0.0, -1.0, 1.0);
-        glMatrixMode(GL_MODELVIEW);
+		// Allow transparency.
+		glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		
+		// Set up projection used by STBEasyFont.
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, window.getWidth(), window.getHeight(), 0.0, -1.0, 1.0);
+		glMatrixMode(GL_MODELVIEW);
 		
 		int quads = stb_easy_font_print(x, y, text, null, buffer);
 		
