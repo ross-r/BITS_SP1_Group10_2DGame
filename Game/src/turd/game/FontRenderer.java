@@ -77,9 +77,9 @@ public class FontRenderer {
 		// Set color.
 		glColor4f(this.flRed, this.flGreen, this.flBlue, this.flAlpha);
 		
-        glDrawArrays(GL_QUADS, 0, quads * 4);
-        
-        glPopMatrix();
+		glDrawArrays(GL_QUADS, 0, quads * 4);
+		
+		glPopMatrix();
 	}
 
 	public void setColor(float r, float g, float b, float a) {
