@@ -45,7 +45,7 @@
 	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-stb-natives-macos.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-stb-natives-windows.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-stb-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-openal/lwjgl-openal.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-openal/lwjgl-openal.jar" sourcepath="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-openal/lwjgl-openal-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-openal/lwjgl-openal-javadoc.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-openal/lwjgl-openal-natives-windows.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tgg/Desktop/School/Courses/BITS/BITS_SP1_Group10_2DGame/LWJGL3/lwjgl-openal/lwjgl-openal-sources.jar"/>

@@ -9,6 +9,7 @@ public class SoundSource {
 	private final int sourceID;
 	
 	public SoundSource(boolean loop, boolean relative) {
+		
 		this.sourceID = alGenSources();
 		
 		if (loop) {
@@ -68,6 +69,12 @@ public class SoundSource {
 		stop();
 		
 		alDeleteSources(sourceID);
+		
+	}
+	
+	public int getSourceID () {
+		
+		return this.sourceID;
 		
 	}
 }

@@ -13,12 +13,16 @@ import java.nio.file.Paths;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.BufferUtils.*;
 
+// Sound package utilities.
 public class Utils {
 	
+	//Load file to a Byte Buffer.
 	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
+		
 		ByteBuffer buffer;
 		
 		Path path = Paths.get(resource);
+		
 		if (Files.isReadable(path)) {
 			try (SeekableByteChannel fc = Files.newByteChannel(path)) {
 				buffer = BufferUtils.createByteBuffer((int) fc.size() +1);
@@ -48,9 +52,13 @@ public class Utils {
 		}
 	
 	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
+		
 		ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
+		
 		buffer.flip();
+		
 		newBuffer.put(buffer);
 		return newBuffer;
+		
 	}
 }
