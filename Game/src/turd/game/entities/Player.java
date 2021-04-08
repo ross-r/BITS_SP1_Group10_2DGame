@@ -6,20 +6,20 @@ import turd.game.Graphics;
 import turd.game.Window;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.GameObject;
+import turd.game.objects.ObjectList;
+import turd.game.objects.StaticObject;
 
 public class Player extends GameObject {
 	private final int PLAYER_MOVE_SPEED = 500;
 	private final int PLAYER_BOUNDS = 64;
 	
+	// Absolute position that isn't restricted to pixels.
 	private double flPosX;
 	private double flPosY;
 	
-	// TODO: Maybe these properties could be in a Collision class?
-	// These properties define the player bounds (e.i; the width/height)
-	// and can be used for collision detection based on the root position (flPosX, flPosY)
-	private int iBoundsX;
-	private int iBoundsY;
-	
+	private int iOldX;
+	private int iOldY;
+
 	// Movement related properties.
 	private float flSideMove;
 	private float flUpMove;
@@ -33,12 +33,11 @@ public class Player extends GameObject {
 	private double flRotation;
 	
 	public Player() {
+		super();
+		
 		this.flPosX = 0.0;
 		this.flPosY = 0.0;
-		
-		this.iBoundsX = PLAYER_BOUNDS;
-		this.iBoundsY = PLAYER_BOUNDS;
-		
+				
 		this.flSideMove = 0.f;
 		this.flUpMove = 0.f;
 		
@@ -49,15 +48,14 @@ public class Player extends GameObject {
 		
 		this.flDirection = 0.0;
 		this.flRotation = 0.0;
+	
+		this.setBounds(PLAYER_BOUNDS, PLAYER_BOUNDS);
 	}
 	
 	@Override
 	public void render(Window window, Graphics g) {
-		int x = (int)Math.floor(flPosX);
-		int y = (int)Math.floor(flPosY);
-		
 		g.setColor(255.f, 255.f, 255.f, 127.f);
-		g.drawFilledRect(x, y, iBoundsY, iBoundsX);
+		g.drawFilledRect(getX(), getY(), getWidth(), getHeight());
 	}
 
 	@Override
@@ -90,6 +88,9 @@ public class Player extends GameObject {
 	}
 	
 	private void processFrame(Window window) {
+		iOldX = this.getX();
+		iOldY = this.getY();
+		
 		// Make sure we want movement to happen.
 		if(flSideMove == 0.f && flUpMove == 0.f) {
 			return;
@@ -102,5 +103,31 @@ public class Player extends GameObject {
 		// Finally adjust our players position.
 		flPosX += (PLAYER_MOVE_SPEED * window.getFrameTime()) * Math.sin(-flDirection);
 		flPosY += (PLAYER_MOVE_SPEED * window.getFrameTime()) * Math.cos(flDirection);
+		
+		// Update GameObject position.
+		this.setPos((int)Math.floor(flPosX), (int)Math.floor(flPosY));
+		
+		// Check if the player will collide with other obstacles.
+		for(StaticObject obstacle : ObjectList.getInstance().getStaticObjects()) {
+			if(willCollide(obstacle)) {
+				
+				// Block the player from moving any further this frame.
+				// Reset the players position to the previous frames.
+				this.block();
+			}
+		}
+	}
+
+	private void block() {
+		
+		// TODO: Check which coordinate we should specifically block.
+		// For example, if we are moving along the x axis and bump into an obstacle on the y axis
+		// then if we hold movement keys such that the x and y axis both push into an obstacle
+		// the player will become completely stuck, instead only the x axis should stop and still allow
+		// the y axis to advance.
+		
+		flPosX = iOldX;
+		flPosY = iOldY;
+		this.setPos(iOldX, iOldY);
 	}
 }

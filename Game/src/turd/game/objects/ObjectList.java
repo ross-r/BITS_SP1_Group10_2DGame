@@ -1,6 +1,8 @@
 package turd.game.objects;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import turd.game.Graphics;
 import turd.game.Window;
@@ -28,6 +30,11 @@ public class ObjectList {
 		}
 		
 		return instance;
+	}
+	
+	public StaticObject createStaticObject() {
+		this.objects.add(new StaticObject());
+		return (StaticObject) this.objects.getLast();
 	}
 	
 	public Player createPlayer() {
@@ -66,5 +73,10 @@ public class ObjectList {
 		for(GameObject entity : entities) {
 			entity.update(window, updateType);
 		}
+	}
+
+	public List<StaticObject> getStaticObjects() {
+		// https://stackoverflow.com/a/33570034
+		return objects.stream().map(n -> (StaticObject)n).collect(Collectors.toList());
 	}
 }

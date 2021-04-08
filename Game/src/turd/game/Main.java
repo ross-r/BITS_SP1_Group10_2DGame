@@ -2,7 +2,9 @@ package turd.game;
 
 import org.lwjgl.*;
 
+import turd.game.entities.Player;
 import turd.game.objects.ObjectList;
+import turd.game.objects.StaticObject;
 
 // We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
 // NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
@@ -27,6 +29,19 @@ public class Main {
 		
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
+		
+		// Setup an obstacle that the player cannot pass through.
+		StaticObject obstacle = ObjectList.getInstance().createStaticObject();
+		obstacle.setPos(0, 250);
+		obstacle.setBounds(200, 8);
+		
+		StaticObject obstacle1 = ObjectList.getInstance().createStaticObject();
+		obstacle1.setPos(300, 250);
+		obstacle1.setBounds(200, 8);
+		
+		StaticObject obstacle2 = ObjectList.getInstance().createStaticObject();
+		obstacle2.setPos(300, 0);
+		obstacle2.setBounds(8, 250);
 		
 		window.render(() -> {
 			
