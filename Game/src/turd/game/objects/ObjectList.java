@@ -40,6 +40,7 @@ public class ObjectList {
 	public Player createPlayer() {
 		this.entities.add(new Player());
 		return (Player) this.entities.getLast();
+	
 	}
 	
 	public AI createAI() {

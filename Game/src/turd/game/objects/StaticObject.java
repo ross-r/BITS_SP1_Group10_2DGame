@@ -7,7 +7,7 @@ public class StaticObject extends GameObject {
 
 	@Override
 	public void render(Window window, Graphics g) {
-		g.setColor(255.f, 0.f, 0.f, 255.f);
+		g.setColor(200.f, 200.f, 20.f, 200.f);
 		g.drawFilledRect(getX(), getY(), getWidth(), getHeight());
 	}
 

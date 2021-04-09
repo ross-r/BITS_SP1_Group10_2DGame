@@ -35,7 +35,7 @@ public class Player extends GameObject {
 	public Player() {
 		super();
 		
-		this.flPosX = 0.0;
+		this.flPosX = 0.0;  
 		this.flPosY = 0.0;
 				
 		this.flSideMove = 0.f;
