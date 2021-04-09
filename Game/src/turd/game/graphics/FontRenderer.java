@@ -1,8 +1,10 @@
-package turd.game;
+package turd.game.graphics;
 
 import java.nio.ByteBuffer;
 
 import org.lwjgl.opengl.GL11;
+
+import turd.game.Window;
 
 import static org.lwjgl.stb.STBEasyFont.*;
 import static org.lwjgl.opengl.GL11.*;

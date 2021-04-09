@@ -1,7 +1,7 @@
 package turd.game.entities;
 
-import turd.game.Graphics;
 import turd.game.Window;
+import turd.game.graphics.Graphics;
 import turd.game.objects.GameObject;
 
 public class AI extends GameObject {

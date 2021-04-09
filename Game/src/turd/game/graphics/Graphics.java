@@ -1,9 +1,11 @@
-package turd.game;
+package turd.game.graphics;
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL2.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.nanovg.NVGColor;
+
+import turd.game.Window;
 
 // TODO: Singleton.
 public class Graphics {

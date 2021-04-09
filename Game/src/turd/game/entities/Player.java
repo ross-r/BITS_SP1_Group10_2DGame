@@ -2,8 +2,8 @@ package turd.game.entities;
 
 import org.lwjgl.glfw.GLFW;
 
-import turd.game.Graphics;
 import turd.game.Window;
+import turd.game.graphics.Graphics;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;

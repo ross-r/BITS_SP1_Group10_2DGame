@@ -3,6 +3,7 @@ package turd.game;
 import org.lwjgl.*;
 
 import turd.game.entities.Player;
+import turd.game.graphics.Graphics;
 import turd.game.objects.ObjectList;
 import turd.game.objects.StaticObject;
 

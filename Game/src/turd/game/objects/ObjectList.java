@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import turd.game.Graphics;
 import turd.game.Window;
 import turd.game.entities.AI;
 import turd.game.entities.Player;
+import turd.game.graphics.Graphics;
 import turd.game.objects.GameObject.GAMEOBJ_UPDATE_TYPE;
 
 public class ObjectList {

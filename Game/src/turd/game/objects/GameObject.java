@@ -1,7 +1,7 @@
 package turd.game.objects;
 
-import turd.game.Graphics;
 import turd.game.Window;
+import turd.game.graphics.Graphics;
 
 public abstract class GameObject {
 	
