@@ -17,27 +17,27 @@ import org.lwjgl.openal.ALCCapabilities;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-public class SoundManager {
+public class AudioManager {
 
 	private long device;
 	
 	private long context;
 	
-	private SoundListener listener;
+	private AudioListener listener;
 	
-	private final List<SoundBuffer> buffers;
+	private final List<AudioBuffer> buffers;
 	
-	private final Map <String, SoundSource> soundSourceMap;
+	private final Map <String, AudioSource> soundSourceMap;
 	
 	private final Matrix4f cameraMatrix;
 	
-	private SoundBuffer laserBuffer;
+	private AudioBuffer laserBuffer;
 	
-	private SoundSource laserSource;
+	private AudioSource laserSource;
 	
 	private Vector3f position = new Vector3f(0, 0, 0);
 	
-	public SoundManager() throws Exception {
+	public AudioManager() throws Exception {
 		
 		init();
 		
@@ -79,14 +79,14 @@ public class SoundManager {
 	
 	public void addSoundsToList() throws Exception {
 		
-		laserBuffer = new SoundBuffer("/Laser.wav");
+		laserBuffer = new AudioBuffer("Laser.wav");
 		
 		buffers.add(laserBuffer);
 	}
 	
 	public void createListener(Vector3f position) {
 		
-		listener = new SoundListener();
+		listener = new AudioListener();
 		
 		listener.setPosition(position);
 		
@@ -94,7 +94,7 @@ public class SoundManager {
 	
 	public void createSources() {
 		
-		laserSource = new SoundSource(true, false);
+		laserSource = new AudioSource(true, false);
 	}
 	
 	public void addSourcesToMap() {
@@ -138,7 +138,7 @@ public class SoundManager {
 	public static void main(String[] args) {
 		
 		try {
-			SoundManager manager = new SoundManager();
+			AudioManager manager = new AudioManager();
 		} catch (Exception e) {
 			System.out.println("Error: Unable to generate sound controller.");
 			e.printStackTrace();

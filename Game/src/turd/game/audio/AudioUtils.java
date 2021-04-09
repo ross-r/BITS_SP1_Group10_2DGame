@@ -14,7 +14,7 @@ import org.lwjgl.BufferUtils;
 import static org.lwjgl.BufferUtils.*;
 
 // Sound package utilities.
-public class Utils {
+public class AudioUtils {
 	
 	//Load file to a Byte Buffer.
 	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
@@ -30,7 +30,7 @@ public class Utils {
 			}
 		} else {
 			try (
-					InputStream source = Utils.class.getResourceAsStream(resource);
+					InputStream source = AudioUtils.class.getResourceAsStream(resource);
 					ReadableByteChannel rbc = Channels.newChannel(source)) {
 						
 					buffer = createByteBuffer(bufferSize);
