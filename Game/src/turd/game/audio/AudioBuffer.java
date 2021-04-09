@@ -14,13 +14,13 @@ import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class SoundBuffer {
+public class AudioBuffer {
 
 	private final int bufferID;
 	private ByteBuffer vorbis = null;
 	private ShortBuffer wav = null;
 	
-	public SoundBuffer(String file) throws Exception {
+	public AudioBuffer(String file) throws Exception {
 		this.bufferID = alGenBuffers();
 		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
 			wav = readVorbis(file, 32 * 1024, info);
@@ -42,7 +42,7 @@ public class SoundBuffer {
 	
 	private ShortBuffer readVorbis(String resource, int bufferSize, STBVorbisInfo info) throws Exception {
 		try (MemoryStack stack = MemoryStack.stackPush()) {
-			vorbis = Utils.ioResourceToByteBuffer(resource, bufferSize);
+			vorbis = AudioUtils.ioResourceToByteBuffer(resource, bufferSize);
 			IntBuffer error = stack.mallocInt(1);
 			long decoder = stb_vorbis_open_memory(vorbis, error, null);
 

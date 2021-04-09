@@ -4,11 +4,11 @@ import org.joml.Vector3f;
 
 import static org.lwjgl.openal.AL10.*;
 
-public class SoundSource {
+public class AudioSource {
 	
 	private final int sourceID;
 	
-	public SoundSource(boolean loop, boolean relative) {
+	public AudioSource(boolean loop, boolean relative) {
 		
 		this.sourceID = alGenSources();
 		
