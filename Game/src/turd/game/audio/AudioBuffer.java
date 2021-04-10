@@ -14,54 +14,61 @@ import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 import static org.lwjgl.system.MemoryUtil.*;
 
+//Creates buffers to handle .wav I/O.
 public class AudioBuffer {
 
-	private final int bufferID;
-	private ByteBuffer vorbis = null;
-	private ShortBuffer wav = null;
+	private final int iBufferID;
+	private ByteBuffer bbVorbis = null;
+	private ShortBuffer sbWav = null;
 	
+	//Initializes a buffer. Encodes data using STBVorbis.
 	public AudioBuffer(String file) throws Exception {
-		this.bufferID = alGenBuffers();
+		this.iBufferID = alGenBuffers();
 		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
-			wav = readVorbis(file, 32 * 1024, info);
+			sbWav = readVorbis(file, 32 * 1024, info);
 			
-			AL10.alBufferData(AL_BUFFER, info.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, wav, info.sample_rate());
+			AL10.alBufferData(AL_BUFFER, info.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, sbWav, info.sample_rate());
 		}
 	}
 	
+	//Returns buffer ID.
 	public int getBufferID() {
-		return this.bufferID;
+		return this.iBufferID;
 	}
 	
+	//Deletes buffers to prevent open I/O.
 	public void cleanUp() {
-		AL10.alDeleteBuffers(this.bufferID);
-		if (wav != null) {
-			MemoryUtil.memFree(wav);
+		AL10.alDeleteBuffers(this.iBufferID);
+		if (sbWav != null) {
+			MemoryUtil.memFree(sbWav);
 		}
 	}
 	
+
+	//Reads .wav files and decodes using STBVorbis.
 	private ShortBuffer readVorbis(String resource, int bufferSize, STBVorbisInfo info) throws Exception {
 		try (MemoryStack stack = MemoryStack.stackPush()) {
-			vorbis = AudioUtils.ioResourceToByteBuffer(resource, bufferSize);
-			IntBuffer error = stack.mallocInt(1);
-			long decoder = stb_vorbis_open_memory(vorbis, error, null);
+			bbVorbis = AudioUtils.ioResourceToByteBuffer(resource, bufferSize);
+			
+			IntBuffer ibError = stack.mallocInt(1);
+			long lDecoder = stb_vorbis_open_memory(bbVorbis, ibError, null);
 
-			if (decoder == NULL) {
-				throw new RuntimeException("Failed to open Ogg. Vorbis file. Error: " + error.get(0));
+			if (lDecoder == NULL) {
+				throw new RuntimeException("Failed to open Ogg. Vorbis file. Error: " + ibError.get(0));
 			}
 			
-			stb_vorbis_get_info(decoder, info);
+			stb_vorbis_get_info(lDecoder, info);
 			
-			int channels = info.channels();
+			int iChannels = info.channels();
 			
-			int lengthSamples = stb_vorbis_stream_length_in_samples(decoder);
+			int iLengthSamples = stb_vorbis_stream_length_in_samples(lDecoder);
 			
-			wav = MemoryUtil.memAllocShort(lengthSamples);
+			sbWav = MemoryUtil.memAllocShort(iLengthSamples);
 			
-			wav.limit(stb_vorbis_get_samples_short_interleaved(decoder, channels, wav) * channels);
-			stb_vorbis_close(decoder);
+			sbWav.limit(stb_vorbis_get_samples_short_interleaved(lDecoder, iChannels, sbWav) * iChannels);
+			stb_vorbis_close(lDecoder);
 			
-			return wav;
+			return sbWav;
 		}
 	}
 }

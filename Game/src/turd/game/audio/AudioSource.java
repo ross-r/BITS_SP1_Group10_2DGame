@@ -4,77 +4,88 @@ import org.joml.Vector3f;
 
 import static org.lwjgl.openal.AL10.*;
 
+//Generates sources for playing buffered sounds
 public class AudioSource {
 	
-	private final int sourceID;
+	private final int iSourceID;
 	
+	//AudioSource constructor. Takes parameters to set whether source loops or plays once.
 	public AudioSource(boolean loop, boolean relative) {
 		
-		this.sourceID = alGenSources();
+		this.iSourceID = alGenSources();
 		
 		if (loop) {
-			alSourcei(sourceID, AL_LOOPING, AL_TRUE);
+			alSourcei(iSourceID, AL_LOOPING, AL_TRUE);
 		}
 		
 		if (relative) {
-			alSourcei(sourceID, AL_SOURCE_RELATIVE, AL_TRUE);
+			alSourcei(iSourceID, AL_SOURCE_RELATIVE, AL_TRUE);
 		}
 	}
 	
+	//Sets buffer to source
 	public void setBuffer(int bufferID) {
 		
 		stop();
 		
-		alSourcei(sourceID, AL_BUFFER, bufferID);
+		alSourcei(iSourceID, AL_BUFFER, bufferID);
 	}
 
+	//Sets playing position of source
 	public void setPosition(Vector3f position) {
 		
-		alSource3f(sourceID, AL_POSITION, position.x, position.y, position.z);
+		alSource3f(iSourceID, AL_POSITION, position.x, position.y, position.z);
 		
 	}
 	
+	//Sets gain (volume) of source
 	public void setGain(float gain) {
 		
-		alSourcef(sourceID, AL_GAIN, gain);
+		alSourcef(iSourceID, AL_GAIN, gain);
 	
 	}
 
+	//Plays source
 	public void play() {
 		
-		alSourcePlay(sourceID);
+		alSourcePlay(iSourceID);
 		
 	}
 	
+	//Returns if source is currently playing
 	public boolean isPlaying() {
 		
-		return alGetSourcei(sourceID, AL_SOURCE_STATE) == AL_PLAYING;
+		return alGetSourcei(iSourceID, AL_SOURCE_STATE) == AL_PLAYING;
 		
 	}
 	
+	//Pauses a source
 	public void pause() {
 		
-		alSourcePause(sourceID);
+		alSourcePause(iSourceID);
 		
 	}
 	
+	//Stops source
 	public void stop() {
 		
-		alSourceStop(sourceID);
+		alSourceStop(iSourceID);
 		
 	}
 	
+	//Deletes a source.
 	public void cleanUp() {
 		
 		stop();
 		
-		alDeleteSources(sourceID);
+		alDeleteSources(iSourceID);
 		
 	}
 	
+	//Returns source ID
 	public int getSourceID () {
 		
-		return this.sourceID;
+		return this.iSourceID;
 		
 	}
 }
