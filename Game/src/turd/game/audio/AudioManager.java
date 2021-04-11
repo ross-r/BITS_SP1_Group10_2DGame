@@ -20,124 +20,123 @@ import org.joml.Vector3f;
 public class AudioManager {
 
 	private long lDevice;
-	
+
 	private long lContext;
-	
+
 	private AudioListener alListener;
-	
+
 	private final List<AudioBuffer> liBuffers;
-	
-	private final Map <String, AudioSource> mpSoundSourceMap;
-	
+
+	private final Map<String, AudioSource> mpSoundSourceMap;
+
 	private final Matrix4f mxCameraMatrix;
-	
+
 	private AudioBuffer abLaserBuffer;
-	
+
 	private AudioSource asLaserSource;
-	
+
 	private Vector3f vrPosition = new Vector3f(0, 0, 0);
-	
+
 	public AudioManager() throws Exception {
-		
+
 		init();
-		
+
 		liBuffers = new ArrayList<>();
-		
+
 		mpSoundSourceMap = new HashMap<>();
-		
+
 		mxCameraMatrix = new Matrix4f();
-		
+
 		addSoundsToList();
-		
+
 		createListener(vrPosition);
-		
+
 		createSources();
-		
+
 		System.out.println(mpSoundSourceMap);
-		
+
 		Scanner in = new Scanner(System.in);
 		String entry = in.nextLine();
-		
+
 		while (entry != "q") {
-			
+
 			if (entry == "p") {
-				
+
 				System.out.println(mpSoundSourceMap);
-				
+
 				System.out.println("Enter name of sound to play: ");
-				
+
 				entry = in.next();
-				
+
 				playSource(entry);
-				
+
 			}
 		}
-		
+
 		abLaserBuffer.cleanUp();
 		asLaserSource.cleanUp();
 	}
-	
-	
+
 	public void addSoundsToList() throws Exception {
-		
+
 		abLaserBuffer = new AudioBuffer("Sweep.wav");
-		
+
 		liBuffers.add(abLaserBuffer);
 	}
-	
+
 	public void createListener(Vector3f position) {
-		
+
 		alListener = new AudioListener();
-		
+
 		alListener.setPosition(position);
-		
+
 	}
-	
+
 	public void createSources() {
-		
+
 		asLaserSource = new AudioSource(true, false);
 	}
-	
+
 	public void addSourcesToMap() {
-		
+
 		mpSoundSourceMap.put("sweep", asLaserSource);
-		
+
 	}
-	
+
 	public void playSource(String sourceName) {
-		
+
 		mpSoundSourceMap.get(sourceName).play();
-		
+
 	}
-	
+
 	public void init() throws Exception {
-		
+
 		this.lDevice = alcOpenDevice((ByteBuffer) null);
-		
+
 		if (lDevice == 0) {
-			
+
 			throw new IllegalStateException("Failed to open the default OpenAL device.");
-			
+
 		}
-		
+
 		ALCCapabilities deviceCaps = ALC.createCapabilities(lDevice);
-		
+
 		this.lContext = alcCreateContext(lDevice, (IntBuffer) null);
-		
+
 		if (lContext == 0) {
-			
+
 			throw new IllegalStateException("Failed to create OpenAL context.");
-			
+
 		}
-		
+
 		alcMakeContextCurrent(lContext);
-		
+
 		AL.createCapabilities(deviceCaps);
-		
+
 	}
-	
+
 	public static void main(String[] args) {
-		
+
 		try {
 			AudioManager manager = new AudioManager();
 		} catch (Exception e) {
