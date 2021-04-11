@@ -151,7 +151,7 @@ public class Window {
 		
 		// Enable v-sync.
 		// TODO: @Ross, make this optional.
-		glfwSwapInterval(0);
+		glfwSwapInterval(1);
 		
 		// Make the window visible.
 		glfwShowWindow(hHandle);

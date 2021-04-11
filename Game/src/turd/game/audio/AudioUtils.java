@@ -49,8 +49,13 @@ public class AudioUtils {
 		bbBuffer.flip();
 		return bbBuffer;
 	}
+<<<<<<< HEAD
 
 	// Resize a byte buffer
+=======
+	
+	//Resize a byte buffer
+>>>>>>> 70f92bb01329801f90ff8fc9972f5767101cb8c7
 	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
 
 		ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
