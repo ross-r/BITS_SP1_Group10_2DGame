@@ -80,7 +80,7 @@ public class AudioManager {
 	
 	public void addSoundsToList() throws Exception {
 		
-		abLaserBuffer = new AudioBuffer("Sweep.wav");
+		abLaserBuffer = new AudioBuffer("footsteps.ogg");
 		
 		liBuffers.add(abLaserBuffer);
 	}
@@ -137,9 +137,9 @@ public class AudioManager {
 	}
 	
 	public static void main(String[] args) {
-		
 		try {
 			AudioManager manager = new AudioManager();
+			manager.playSource("sweep");
 		} catch (Exception e) {
 			System.out.println("Error: Unable to generate sound controller.");
 			e.printStackTrace();
