@@ -79,4 +79,11 @@ public class Graphics {
 		nvgFillColor(vg, color);
 		nvgFill(vg);
 	}
+	
+	public void drawFilledCircle(float cx, float cy, float r) {
+		nvgBeginPath(vg);
+		nvgCircle(vg, cx, cy, r);
+		nvgFillColor(vg, color);
+		nvgFill(vg);
+	}
 }
