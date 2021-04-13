@@ -23,19 +23,17 @@ public class AudioManager {
 
 	private long lContext;
 
-	private AudioListener alListener;
-
 	private final List<AudioBuffer> liBuffers;
 
 	private final Map<String, AudioSource> mpSoundSourceMap;
 
-	private final Matrix4f mxCameraMatrix;
+	private AudioBuffer abFootstepsBuffer;
 
-	private AudioBuffer abLaserBuffer;
+	private AudioSource asFootsteps;
+	
+	private AudioListener alListener;
 
-	private AudioSource asLaserSource;
-
-	private Vector3f vrPosition = new Vector3f(0, 0, 0);
+	private Vector3f vrListenerPosition = new Vector3f(0, 0, 0);
 
 	public AudioManager() throws Exception {
 
@@ -45,49 +43,22 @@ public class AudioManager {
 
 		mpSoundSourceMap = new HashMap<>();
 
-		mxCameraMatrix = new Matrix4f();
-
 		addSoundsToList();
 
-		createListener(vrPosition);
+		createListener(vrListenerPosition);
 
 		createSources();
-
-		System.out.println(mpSoundSourceMap);
-
-		Scanner in = new Scanner(System.in);
-		String entry = in.nextLine();
-
-		while (entry != "q") {
-
-			if (entry == "p") {
-
-				System.out.println(mpSoundSourceMap);
-
-				System.out.println("Enter name of sound to play: ");
-
-				entry = in.next();
-
-				playSource(entry);
-
-			}
-		}
-
-		abLaserBuffer.cleanUp();
-		asLaserSource.cleanUp();
+		
+		asFootsteps.play();
+		abFootstepsBuffer.cleanUp();
+		asFootsteps.cleanUp();
 	}
 
 	public void addSoundsToList() throws Exception {
-<<<<<<< HEAD
 
-		abLaserBuffer = new AudioBuffer("Sweep.wav");
+		abFootstepsBuffer = new AudioBuffer("footsteps.ogg");
 
-=======
-		
-		abLaserBuffer = new AudioBuffer("footsteps.ogg");
-		
->>>>>>> 70f92bb01329801f90ff8fc9972f5767101cb8c7
-		liBuffers.add(abLaserBuffer);
+		liBuffers.add(abFootstepsBuffer);
 	}
 
 	public void createListener(Vector3f position) {
@@ -100,12 +71,15 @@ public class AudioManager {
 
 	public void createSources() {
 
-		asLaserSource = new AudioSource(true, false);
+		asFootsteps = new AudioSource(false, true);
+		
+		asFootsteps.setPosition(0, 0, 0);
+		asFootsteps.setGain(1);
 	}
 
 	public void addSourcesToMap() {
 
-		mpSoundSourceMap.put("sweep", asLaserSource);
+		mpSoundSourceMap.put("Footsteps", asFootsteps);
 
 	}
 
@@ -142,13 +116,8 @@ public class AudioManager {
 	}
 
 	public static void main(String[] args) {
-<<<<<<< HEAD
-
-=======
->>>>>>> 70f92bb01329801f90ff8fc9972f5767101cb8c7
 		try {
 			AudioManager manager = new AudioManager();
-			manager.playSource("sweep");
 		} catch (Exception e) {
 			System.out.println("Error: Unable to generate sound controller.");
 			e.printStackTrace();

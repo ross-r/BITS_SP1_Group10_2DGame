@@ -33,9 +33,9 @@ public class AudioSource {
 	}
 
 	// Sets playing position of source
-	public void setPosition(Vector3f position) {
+	public void setPosition(int x, int y, int z) {
 
-		alSource3f(iSourceID, AL_POSITION, position.x, position.y, position.z);
+		alSource3f(iSourceID, AL_POSITION, x, y, z);
 
 	}
 
