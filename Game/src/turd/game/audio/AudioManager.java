@@ -2,11 +2,6 @@ package turd.game.audio;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 
 import static org.lwjgl.openal.ALC10.*;
 
@@ -14,7 +9,6 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
 
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class AudioManager {
@@ -23,10 +17,6 @@ public class AudioManager {
 
 	private long lContext;
 
-	private final List<AudioBuffer> liBuffers;
-
-	private final Map<String, AudioSource> mpSoundSourceMap;
-
 	private AudioBuffer abFootstepsBuffer;
 
 	private AudioSource asFootsteps;
@@ -34,60 +24,60 @@ public class AudioManager {
 	private AudioListener alListener;
 
 	private Vector3f vrListenerPosition = new Vector3f(0, 0, 0);
+	
+	private Vector3f vrSourcePosition = new Vector3f(0, 0, 0);
 
 	public AudioManager() throws Exception {
 
 		init();
 
-		liBuffers = new ArrayList<>();
-
-		mpSoundSourceMap = new HashMap<>();
-
 		addSoundsToList();
 
-		createListener(vrListenerPosition);
-
-		createSources();
+		createSources(vrSourcePosition);
 		
-		asFootsteps.play();
+		createListener(vrListenerPosition);
+		
+		for (int i = 0; i < 10; i++) {
+			
+			System.out.println("Sound has played " + (i + 1) + " times.");
+			System.out.println(asFootsteps.getSourceID());
+			asFootsteps.play();
+		}
+		
 		abFootstepsBuffer.cleanUp();
 		asFootsteps.cleanUp();
 	}
 
 	public void addSoundsToList() throws Exception {
 
-		abFootstepsBuffer = new AudioBuffer("footsteps.ogg");
+		abFootstepsBuffer = new AudioBuffer("Laser.ogg");
 
-		liBuffers.add(abFootstepsBuffer);
 	}
 
 	public void createListener(Vector3f position) {
 
-		alListener = new AudioListener();
-
-		alListener.setPosition(position);
+		alListener = new AudioListener(position);
+		
+		alListener.setOrientation(position, position);
 
 	}
 
-	public void createSources() {
+	public void createSources(Vector3f position) {
 
 		asFootsteps = new AudioSource(false, true);
 		
-		asFootsteps.setPosition(0, 0, 0);
-		asFootsteps.setGain(1);
+		asFootsteps.setPosition(position);
+		
+		asFootsteps.setGain(10);
+		
+	}
+	
+	public void addBufferToSources() {
+		
+		asFootsteps.setBuffer(abFootstepsBuffer.getBufferID());
+		 
 	}
 
-	public void addSourcesToMap() {
-
-		mpSoundSourceMap.put("Footsteps", asFootsteps);
-
-	}
-
-	public void playSource(String sourceName) {
-
-		mpSoundSourceMap.get(sourceName).play();
-
-	}
 
 	public void init() throws Exception {
 
