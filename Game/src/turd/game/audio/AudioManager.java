@@ -2,13 +2,14 @@ package turd.game.audio;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-
-import static org.lwjgl.openal.ALC10.*;
-
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
-
+import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.system.MemoryUtil.*;
 import org.joml.Vector3f;
 
 public class AudioManager {
@@ -16,37 +17,31 @@ public class AudioManager {
 	private long lDevice;
 
 	private long lContext;
-
-	private AudioSource asFootsteps;
 	
 	private AudioListener alListener;
+	
+	private Map <String, AudioSource> soundMap = new HashMap<>();
 
 	private Vector3f vrListenerPosition = new Vector3f(0, 0, 0);
-	
-	private Vector3f vrSourcePosition = new Vector3f(0, 0, 0);
 
 	public AudioManager() throws Exception {
 
 		init();
 
 		createListener(vrListenerPosition);
-
-		//
-		asFootsteps = new AudioSource("footsteps.ogg", false, false);
-		asFootsteps.setPosition(new Vector3f(0,0,0));
-		asFootsteps.setGain(10);
-		asFootsteps.play();
-		//
 		
+		createSounds();
+
 		int i = 5;
 		while(i > 0) {
-			System.out.printf("playing: %b\n", asFootsteps.isPlaying());
 			
+			play("laser");
+			System.out.printf("playing: %b\n", soundMap.get("footsteps").isPlaying());
 			Thread.sleep(1000);
 			i--;
 		}
 		
-		//asFootsteps.cleanUp();
+		cleanUp();
 	}
 
 	public void createListener(Vector3f position) {
@@ -57,15 +52,34 @@ public class AudioManager {
 
 	}
 	
-	public void cleanup() {
-		asFootsteps.cleanUp();
+	public void createSounds() throws Exception {
+		
+		AudioSource footsteps = new AudioSource("footsteps.ogg", false, false, 1);
+		AudioSource laser = new AudioSource("Laser.ogg", false, false, 1);
+		soundMap.put("footsteps", footsteps);
+		soundMap.put("laser", laser);
+		
+	}
+	
+	public void cleanUp() {
+		
+		Iterator <String> it = soundMap.keySet().iterator();
+		
+		while (it.hasNext()) {
+			String temp = (String)it.next();
+			soundMap.get(temp).cleanUp();
+		}
+	}
+	
+	public void play(String name) {
+		soundMap.get(name).play();
 	}
 
 	public void init() throws Exception {
 
 		this.lDevice = alcOpenDevice((ByteBuffer) null);
 
-		if (lDevice == 0) {
+		if (lDevice == NULL) {
 
 			throw new IllegalStateException("Failed to open the default OpenAL device.");
 
@@ -75,7 +89,7 @@ public class AudioManager {
 
 		this.lContext = alcCreateContext(lDevice, (IntBuffer) null);
 
-		if (lContext == 0) {
+		if (lContext == NULL) {
 
 			throw new IllegalStateException("Failed to create OpenAL context.");
 
@@ -89,11 +103,14 @@ public class AudioManager {
 
 	public static void main(String[] args) {
 		try {
+			
 			AudioManager manager = new AudioManager();
 			
 		} catch (Exception e) {
+			
 			System.out.println("Error: Unable to generate sound controller.");
 			e.printStackTrace();
+			
 		}
 	}
 }

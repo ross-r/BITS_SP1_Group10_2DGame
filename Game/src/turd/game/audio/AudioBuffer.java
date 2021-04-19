@@ -60,7 +60,7 @@ public class AudioBuffer {
 	}
 	
 	// Deletes buffers to prevent open I/O.
-	public void cleanUp() {
+	public void bufferCleanUp() {
 		AL10.alDeleteBuffers(this.iBufferID);
 		if (this.vorbisBuffer != null) {
 			MemoryUtil.memFree(this.vorbisBuffer);

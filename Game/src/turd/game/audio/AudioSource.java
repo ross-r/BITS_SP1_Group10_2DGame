@@ -11,7 +11,7 @@ public class AudioSource extends AudioBuffer {
 
 	// AudioSource constructor. Takes parameters to set whether source loops or
 	// plays once.
-	public AudioSource(String file, boolean loop, boolean relative) throws Exception {
+	public AudioSource(String file, boolean loop, boolean relative, float gain) throws Exception {
 		
 		// Call AudioBuffer constructor.
 		// Step 1 - Generate Buffer ID.
@@ -26,6 +26,7 @@ public class AudioSource extends AudioBuffer {
 		// Set some default properties.
 		alSourcei(iSourceID, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
 		alSourcei(iSourceID, AL_SOURCE_RELATIVE, relative ? AL_TRUE : AL_FALSE);
+		alSourcef(iSourceID, AL_GAIN, gain);
 	}
 
 	// Sets playing position of source
@@ -66,6 +67,8 @@ public class AudioSource extends AudioBuffer {
 	// Deletes a source.
 	public void cleanUp() {
 
+		bufferCleanUp();
+		
 		stop();
 
 		alDeleteSources(iSourceID);
