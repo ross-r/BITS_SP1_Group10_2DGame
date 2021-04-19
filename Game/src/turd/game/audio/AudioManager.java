@@ -17,8 +17,6 @@ public class AudioManager {
 
 	private long lContext;
 
-	private AudioBuffer abFootstepsBuffer;
-
 	private AudioSource asFootsteps;
 	
 	private AudioListener alListener;
@@ -31,27 +29,24 @@ public class AudioManager {
 
 		init();
 
-		addSoundsToList();
-
-		createSources(vrSourcePosition);
-		
 		createListener(vrListenerPosition);
+
+		//
+		asFootsteps = new AudioSource("footsteps.ogg", false, false);
+		asFootsteps.setPosition(new Vector3f(0,0,0));
+		asFootsteps.setGain(10);
+		asFootsteps.play();
+		//
 		
-		for (int i = 0; i < 1; i++) {
+		int i = 5;
+		while(i > 0) {
+			System.out.printf("playing: %b\n", asFootsteps.isPlaying());
 			
-			System.out.println("Sound has played " + (i + 1) + " times.");
-			System.out.println(asFootsteps.getSourceID());
-			asFootsteps.play();
+			Thread.sleep(1000);
+			i--;
 		}
 		
-		abFootstepsBuffer.cleanUp();
-		asFootsteps.cleanUp();
-	}
-
-	public void addSoundsToList() throws Exception {
-
-		abFootstepsBuffer = new AudioBuffer("footsteps.ogg");
-
+		//asFootsteps.cleanUp();
 	}
 
 	public void createListener(Vector3f position) {
@@ -61,23 +56,10 @@ public class AudioManager {
 		alListener.setOrientation(position, position);
 
 	}
-
-	public void createSources(Vector3f position) {
-
-		asFootsteps = new AudioSource(false, true);
-		
-		asFootsteps.setPosition(position);
-		
-		asFootsteps.setGain(10);
-		
-	}
 	
-	public void addBufferToSources() {
-		
-		asFootsteps.setBuffer(abFootstepsBuffer.getBufferID());
-		 
+	public void cleanup() {
+		asFootsteps.cleanUp();
 	}
-
 
 	public void init() throws Exception {
 
@@ -108,8 +90,6 @@ public class AudioManager {
 	public static void main(String[] args) {
 		try {
 			AudioManager manager = new AudioManager();
-			
-			while(true) {}
 			
 		} catch (Exception e) {
 			System.out.println("Error: Unable to generate sound controller.");
