@@ -37,7 +37,7 @@ public class AudioManager {
 		
 		createListener(vrListenerPosition);
 		
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 1; i++) {
 			
 			System.out.println("Sound has played " + (i + 1) + " times.");
 			System.out.println(asFootsteps.getSourceID());
@@ -50,7 +50,7 @@ public class AudioManager {
 
 	public void addSoundsToList() throws Exception {
 
-		abFootstepsBuffer = new AudioBuffer("Laser.ogg");
+		abFootstepsBuffer = new AudioBuffer("footsteps.ogg");
 
 	}
 
@@ -108,6 +108,9 @@ public class AudioManager {
 	public static void main(String[] args) {
 		try {
 			AudioManager manager = new AudioManager();
+			
+			while(true) {}
+			
 		} catch (Exception e) {
 			System.out.println("Error: Unable to generate sound controller.");
 			e.printStackTrace();
