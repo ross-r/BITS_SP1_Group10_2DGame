@@ -71,6 +71,7 @@ public class Player extends GameObject {
 			
 		case FRAME:
 			processFrame(window);
+			gravity();
 			break;
 		}
 	}
@@ -102,8 +103,15 @@ public class Player extends GameObject {
 		
 		// Finally adjust our players position.
 		flPosX += (PLAYER_MOVE_SPEED * window.getFrameTime()) * Math.sin(-flDirection);
-		flPosY += (PLAYER_MOVE_SPEED * window.getFrameTime()) * Math.cos(flDirection);
 		
+		//Checking if down button pushed. If so then double down speed.
+		if(bInMoveDown == Boolean.TRUE)
+		{
+			flPosY += ((PLAYER_MOVE_SPEED * 2) * window.getFrameTime()) * Math.cos(flDirection);
+		}
+		else {
+			flPosY += (PLAYER_MOVE_SPEED * window.getFrameTime()) * Math.cos(flDirection);
+		}
 		// Update GameObject position.
 		this.setPos((int)Math.floor(flPosX), (int)Math.floor(flPosY));
 		
@@ -129,5 +137,11 @@ public class Player extends GameObject {
 		flPosX = iOldX;
 		flPosY = iOldY;
 		this.setPos(iOldX, iOldY);
+	}
+	
+	private void gravity() {
+		
+		//Fakes down input constantly to create gravity
+		flUpMove = bInMoveUp ? -1.f : Boolean.TRUE ? 1.f : 0.f;
 	}
 }
