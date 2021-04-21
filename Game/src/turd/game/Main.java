@@ -47,6 +47,8 @@ public class Main {
 
 		window.render(() -> {
 
+			GameState.getInstance().update(window);
+			
 			graphics.beginFrame();
 
 			// Draw FPS/Render time stats.
@@ -57,6 +59,19 @@ public class Main {
 			// Render all objects.
 			ObjectList.getInstance().render(window, graphics);
 
+			// ----------------------- PAUSE MENU HUD
+			if (GameState.getInstance().isPaused()) {
+				
+				// Draw a darker background that is on top of everything else.
+				graphics.setColor(0.f, 0.f, 0.f, 127.f);
+				graphics.drawFilledRect(0, 0, window.getWidth(), window.getHeight());
+				
+				// Draw text indicating the game is paused.
+				graphics.setColor(255.f, 255.f, 255.f, 255.f);
+				graphics.drawString("GAME PAUSED", 2, 2, 16.f);
+			}
+			// ----------------------- PAUSE MENU HUD
+			
 			graphics.endFrame();
 
 		}, 0.3F, 0.3F, 0.32F, 1.F);
