@@ -1,15 +1,36 @@
 package turd.game.graphics;
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL2.*;
+import static org.lwjgl.stb.STBImage.stbi_failure_reason;
+import static org.lwjgl.stb.STBImage.stbi_info_from_memory;
+import static org.lwjgl.stb.STBImage.stbi_is_hdr_from_memory;
+import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
+import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import org.lwjgl.nanovg.NVGColor;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
+import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.system.MemoryStack;
+
+//import sun.nio.ch.IOUtil;
 import turd.game.Window;
 
 // TODO: Singleton.
 public class Graphics {
 
+//	//byte buffer for the image rendering
+//    private final ByteBuffer image;
+//	
+//	//image height and width
+//    private final int iIWidth;
+//    private final int iIHeight;
+//    private final int iIComp;
+//    //private final String imageName;
+	
+	
 	// NanoVG handle.
 	// This must be passed to all NanoVG function calls.
 	private long vg;
@@ -19,6 +40,9 @@ public class Graphics {
 	private Window window;
 	private FontRenderer fontRenderer;
 	
+	//public Graphics(Window window, int flags, String imageName)
+	
+	//original constructor
 	public Graphics(Window window, int flags) {
 		this.vg = nvgCreate(flags);
 		this.window = window;
@@ -30,6 +54,55 @@ public class Graphics {
 	
 		this.color = NVGColor.create();
 	}
+	
+	
+//	//Graphics constructor mixed with image demo constructor for testing purposes
+//    public Graphics(Window window, int flags, String imagePath) {
+//		this.vg = nvgCreate(flags);
+//		this.window = window;
+//		this.fontRenderer = new FontRenderer(window);
+//		
+//		if (this.vg == NULL) {
+//			throw new RuntimeException("Could not create nanovg.");
+//        }
+//	
+//		this.color = NVGColor.create();
+//        ByteBuffer imageBuffer;
+//        try {
+//            imageBuffer = IOUtil.ioResourceToByteBuffer(imagePath, 8 * 1024);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        try (MemoryStack stack = stackPush()) {
+//            IntBuffer iIWidth    = stack.mallocInt(1);
+//            IntBuffer iIHeight    = stack.mallocInt(1);
+//            IntBuffer iIComp = stack.mallocInt(1);
+//
+//            // Use info to read image metadata without decoding the entire image.
+//            // We don't need this for this demo, just testing the API.
+//            if (!stbi_info_from_memory(imageBuffer, iIWidth, iIHeight, iIComp)) {
+//                throw new RuntimeException("Failed to read image information: " + stbi_failure_reason());
+//            } else {
+//                System.out.println("OK with reason: " + stbi_failure_reason());
+//            }
+//
+//            System.out.println("Image width: " + iIWidth.get(0));
+//            System.out.println("Image height: " + iIHeight.get(0));
+//            System.out.println("Image components: " + iIComp.get(0));
+//            System.out.println("Image HDR: " + stbi_is_hdr_from_memory(imageBuffer));
+//
+//            // Decode the image
+//            image = stbi_load_from_memory(imageBuffer, iIWidth, iIHeight, iIComp, 0);
+//            if (image == null) {
+//                throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
+//            }
+//
+//            this.iIWidth = iIWidth.get(0);
+//            this.iIHeight = iIHeight.get(0);
+//            this.iIComp = iIComp.get(0);
+//        }
+//    }
 	
 	public void terminate() {
 		nvgDelete(vg);
@@ -62,6 +135,22 @@ public class Graphics {
 		this.fontRenderer.setColor(this.color.r(), this.color.g(), this.color.b(), this.color.a());
 	}
 	
+	//leo attempting stbi load
+	//createImage makes a new object of Image
+	public void createImage(java.nio.ByteBuffer imageName, int[] x, int[] y, int[] channels_in_file,
+            int desired_channels) {
+		new Image("dfa.jpg").run();		
+	}		
+	
+	public void createPlayer() {
+		String imagePath = "player.png";
+		new Image(imagePath).run();
+		
+		
+		
+	}
+	
+	
 	public void translate(int x, int y) {
 		nvgTranslate(vg, x, y);
 		
@@ -86,4 +175,6 @@ public class Graphics {
 		nvgFillColor(vg, color);
 		nvgFill(vg);
 	}
+	
+	
 }

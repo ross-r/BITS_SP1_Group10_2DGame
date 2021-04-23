@@ -76,6 +76,7 @@ public class Player extends GameObject {
 	public void render(Window window, Graphics g) {		
 		g.setColor(255.f, 255.f, 255.f, 127.f);
 		g.drawFilledRect(getX(), getY(), getWidth(), getHeight());
+		//g.createPlayer();
 	}
 
 	@Override
