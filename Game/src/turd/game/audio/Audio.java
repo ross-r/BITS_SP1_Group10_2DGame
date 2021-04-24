@@ -12,7 +12,7 @@ import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import org.joml.Vector3f;
 
-public class AudioManager {
+public class Audio {
 
 	private long lDevice;
 
@@ -24,24 +24,23 @@ public class AudioManager {
 
 	private Vector3f vrListenerPosition = new Vector3f(0, 0, 0);
 
-	public AudioManager() throws Exception {
+	public Audio(){
 
-		init();
+		try {
+			init();
+		} catch (Exception e) {
+			System.out.println("Error: Could not initialize audio device.");
+			e.printStackTrace();
+		}
 
 		createListener(vrListenerPosition);
 		
-		createSounds();
-
-		int i = 5;
-		while(i > 0) {
-			
-			play("laser");
-			System.out.printf("playing: %b\n", soundMap.get("footsteps").isPlaying());
-			Thread.sleep(1000);
-			i--;
+		try {
+			createSounds();
+		} catch (Exception e) {
+			System.out.println("Error: Could not create audio library.");
+			e.printStackTrace();
 		}
-		
-		cleanUp();
 	}
 
 	public void createListener(Vector3f position) {
@@ -61,7 +60,7 @@ public class AudioManager {
 		
 	}
 	
-	public void cleanUp() {
+	public void terminate() {
 		
 		Iterator <String> it = soundMap.keySet().iterator();
 		
@@ -69,6 +68,9 @@ public class AudioManager {
 			String temp = (String)it.next();
 			soundMap.get(temp).cleanUp();
 		}
+		
+		alcCloseDevice(lDevice);
+		alcDestroyContext(lContext);
 	}
 	
 	public void play(String name) {
@@ -98,19 +100,5 @@ public class AudioManager {
 		alcMakeContextCurrent(lContext);
 
 		AL.createCapabilities(deviceCaps);
-
-	}
-
-	public static void main(String[] args) {
-		try {
-			
-			AudioManager manager = new AudioManager();
-			
-		} catch (Exception e) {
-			
-			System.out.println("Error: Unable to generate sound controller.");
-			e.printStackTrace();
-			
-		}
 	}
 }

@@ -2,6 +2,7 @@ package turd.game;
 
 import org.lwjgl.*;
 
+import turd.game.audio.Audio;
 import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
 import turd.game.objects.ObjectList;
@@ -18,6 +19,7 @@ public class Main {
 
 	private Window window;
 	private Graphics graphics;
+	private Audio audio;
 
 	public void start() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -27,6 +29,9 @@ public class Main {
 
 		// Create graphics.
 		graphics = new Graphics(window, NVG_ANTIALIAS);
+		
+		// Create audio.
+		audio = new Audio();
 
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
@@ -44,6 +49,8 @@ public class Main {
 		StaticObject obstacle2 = ObjectList.getInstance().createStaticObject();
 		obstacle2.setPos(700, 460);
 		obstacle2.setBounds(300, 200);
+		
+		audio.play("laser");
 
 		window.render(() -> {
 
@@ -80,6 +87,7 @@ public class Main {
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
+		audio.terminate();
 	}
 
 	public static void main(String[] args) {
