@@ -69,6 +69,7 @@ public class Main {
 				// Draw text indicating the game is paused.
 				graphics.setColor(255.f, 255.f, 255.f, 255.f);
 				graphics.drawString("GAME PAUSED", 2, 2, 16.f);
+				
 			}
 			// ----------------------- PAUSE MENU HUD
 			
