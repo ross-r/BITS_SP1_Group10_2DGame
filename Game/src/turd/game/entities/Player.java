@@ -27,6 +27,7 @@ public class Player extends GameObject {
 	private boolean bInMoveRight;
 	private boolean bInMoveUp;
 	private boolean bInMoveDown;
+	private boolean bInMoveSpeed;
 	
 	private double flDirection;
 	private double flRotation;
@@ -36,6 +37,9 @@ public class Player extends GameObject {
 	
 	public Player() {
 		super();
+		
+		// Initialize physics for this entity.
+		this.physics = new Physics(this);
 		
 		this.flSideMove = 0.f;
 		this.flUpMove = 0.f;
@@ -57,6 +61,7 @@ public class Player extends GameObject {
 		bInMoveRight = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_D);
 		bInMoveUp = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_W);
 		bInMoveDown = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_S);
+		bInMoveSpeed = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_J);
 		
 		// Update movement directions.
 		flSideMove = bInMoveLeft ? -1.f : bInMoveRight ? 1.f : 0.f;
@@ -65,8 +70,8 @@ public class Player extends GameObject {
 
 	@Override
 	public void render(Window window, Graphics g) {		
-		g.setColor(255.f, 255.f, 255.f, 127.f);
-		g.drawFilledRect(x, y, PLAYER_BOUNDS, PLAYER_BOUNDS);
+		g.setColor(255.f, 255.f, 255.f, 255.f);
+		g.drawFilledRect((int)aabb.p0.x, (int)aabb.p0.y, (int)aabb.p1.x, (int)aabb.p1.y);
 		//g.createPlayer();
 	}
 	
@@ -74,10 +79,10 @@ public class Player extends GameObject {
 	public void tick(Window w) {
 		input();
 		
-		//
+		this.physics.gravity();
 		
-		// Update aabb (x,y is player position).
-		this.aabb.init(x, y, PLAYER_BOUNDS, PLAYER_BOUNDS);
+		float PLAYER_SPEED = bInMoveSpeed ? 12.f : 4.f;
+		this.physics.move(this.aabb.p0.x + ( flSideMove * PLAYER_SPEED ), this.aabb.p0.y + ( flUpMove * PLAYER_SPEED ));
 	}
 	
 }

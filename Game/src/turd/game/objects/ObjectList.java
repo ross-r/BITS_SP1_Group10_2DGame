@@ -31,9 +31,13 @@ public class ObjectList {
 		return instance;
 	}
 	
-	public StaticObject createStaticObject() {
-		this.objects.add(new StaticObject());
-		return (StaticObject) this.objects.getLast();
+	//public StaticObject createStaticObject() {
+	//	this.objects.add(new StaticObject());
+	//	return (StaticObject) this.objects.getLast();
+	//}
+	
+	public void registerStaticObject(StaticObject object) {
+		this.objects.add(object);
 	}
 	
 	public Player createPlayer() {

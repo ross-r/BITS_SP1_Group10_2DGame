@@ -1,21 +1,19 @@
 package turd.game;
 
+//We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
+//NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
+import static org.lwjgl.nanovg.NanoVGGL2.*;
+
 import org.lwjgl.*;
 import org.lwjgl.glfw.GLFW;
 
 import turd.game.audio.Audio;
-import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
-import turd.game.objects.StaticObject;
-
 import turd.game.physics.AABB;
-import turd.game.physics.Point;
-
-// We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
-// NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
-import static org.lwjgl.nanovg.NanoVGGL2.*;
+import turd.game.platform.LongPlatform;
+import turd.game.platform.SmallSquare;
 
 public class Main {
 
@@ -24,6 +22,7 @@ public class Main {
 
 	private Window window;
 	private Graphics graphics;
+
 	private Audio audio;
 	
 	private Runnable _render = new Runnable() {
@@ -128,7 +127,7 @@ public class Main {
 		/*
 		 * START AABB TESTINIG
 		 */
-		render_aabb();
+		//render_aabb();
 		/*
 		 * END AABB TESTING
 		 */
@@ -160,7 +159,7 @@ public class Main {
 		
 		//System.out.println("tick");
 		
-		test_aabb();
+		//test_aabb();
 	}
 	
 	public void start() {
@@ -171,28 +170,20 @@ public class Main {
 
 		// Create graphics.
 		graphics = new Graphics(window, NVG_ANTIALIAS);
-		
+
 		// Create audio.
 		audio = new Audio();
 
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
 
-		// Setup an obstacle that the player cannot pass through.
- 
-		/*
-		StaticObject obstacle0 = ObjectList.getInstance().createStaticObject();
-		obstacle0.setPos(0, 660);
-		obstacle0.setBounds(1280, 60);
+		// (Length , Height)
+		// Window size
+		// 720
+		// 1280
 
-		StaticObject obstacle1 = ObjectList.getInstance().createStaticObject();
-		obstacle1.setPos(0, 260);
-		obstacle1.setBounds(60, 400);
-
-		StaticObject obstacle2 = ObjectList.getInstance().createStaticObject();
-		obstacle2.setPos(700, 460);
-		obstacle2.setBounds(300, 200);
-		*/
+		new LongPlatform(0, 660);
+		new SmallSquare(0, 200);
 		
 		bbox = new AABB();
 		bbox1 = new AABB();

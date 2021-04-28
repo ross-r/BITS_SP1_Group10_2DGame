@@ -5,7 +5,7 @@ import turd.game.graphics.Graphics;
 import turd.game.physics.AABB;
 
 public abstract class GameObject {
-	protected AABB aabb;
+	public AABB aabb;
 	
 	protected GameObject() {
 		this.aabb = new AABB();
@@ -14,4 +14,8 @@ public abstract class GameObject {
 	public abstract void render(Window w, Graphics g);
 	
 	public abstract void tick(Window w);
+	
+	public boolean collides(GameObject object) {
+		return this.aabb.collides(object.aabb);
+	}
 }
