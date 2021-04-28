@@ -1,15 +1,14 @@
 package turd.game;
-
+//import static org.lwjgl.nanovg.NanoVG.*;
+import static org.lwjgl.nanovg.NanoVGGL2.*;
+//import static org.lwjgl.system.MemoryUtil.NULL;
 import org.lwjgl.*;
-
-import turd.game.entities.Player;
+//import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
 import turd.game.objects.ObjectList;
-import turd.game.objects.StaticObject;
-
-// We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
-// NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
-import static org.lwjgl.nanovg.NanoVGGL2.*;
+//import turd.game.objects.StaticObject;
+import turd.game.platform.LongPlatform;
+import turd.game.platform.SmallSquare;
 
 public class Main {
 
@@ -18,7 +17,7 @@ public class Main {
 
 	private Window window;
 	private Graphics graphics;
-
+	
 	public void start() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
@@ -33,18 +32,18 @@ public class Main {
 
 		// Setup an obstacle that the player cannot pass through.
 
-		StaticObject obstacle0 = ObjectList.getInstance().createStaticObject();
-		obstacle0.setPos(0, 660);
-		obstacle0.setBounds(1280, 60);
-
-		StaticObject obstacle1 = ObjectList.getInstance().createStaticObject();
-		obstacle1.setPos(0, 260);
-		obstacle1.setBounds(60, 400);
-
-		StaticObject obstacle2 = ObjectList.getInstance().createStaticObject();
-		obstacle2.setPos(700, 460);
-		obstacle2.setBounds(300, 200);
-
+		// (Length , Height)
+		// Window size
+		// 720
+		// 1280
+		
+		new LongPlatform(0, 660);
+		new SmallSquare(0, 200);
+		
+		
+		
+		
+	
 		window.render(() -> {
 
 			graphics.beginFrame();

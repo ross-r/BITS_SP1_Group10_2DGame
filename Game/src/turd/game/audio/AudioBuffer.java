@@ -18,6 +18,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 // Creates buffers to handle .wav I/O.
 public class AudioBuffer {
 	
+<<<<<<< Updated upstream
 	/*
 	static void checkALError() {
 		int err = alGetError();
@@ -26,6 +27,22 @@ public class AudioBuffer {
 		}
 	}
 	*/
+=======
+	private ByteBuffer bbVorbis = null;
+	private ShortBuffer sbWav = null;
+<<<<<<< HEAD
+
+	 Initializes a buffer. Encodes data using STBVorbis.
+	public AudioBuffer(String file) throws Exception {
+		this.iBufferID = alGenBuffers();
+		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
+			sbWav = readVorbis(file, 32 * 1024, info);
+
+			AL10.alBufferData(AL_BUFFER, info.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, sbWav,
+					info.sample_rate());
+		}
+//=======
+>>>>>>> Stashed changes
 	
 	protected final int iBufferID;
 	protected final ShortBuffer vorbisBuffer;	
