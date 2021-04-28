@@ -7,12 +7,12 @@ import turd.game.objects.GameObject;
 public class AI extends GameObject {
 
 	@Override
-	public void render(Window window, Graphics g) {
+	public void render(Window w, Graphics g) {
 		
 	}
 
 	@Override
-	public void update(Window window, GAMEOBJ_UPDATE_TYPE updateType) {
+	public void tick(Window w) {
 		
 	}
 

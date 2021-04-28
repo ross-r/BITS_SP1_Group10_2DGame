@@ -16,6 +16,15 @@ import java.nio.IntBuffer;
 
 public class Window {
 
+	// How many nano-seconds are in a second.
+	public static final double NS_PER_SECOND = 1000000.0;
+	
+	// How many ticks are in a second.
+	public static final double NS_PER_TICK = NS_PER_SECOND / 60.0;
+	
+	// Conversion metric for milliseconds to nanoseconds.
+	public static final double MS_TO_NS = 1e+6;
+	
 	// The handle to our window.
 	private long hHandle;
 	
@@ -42,17 +51,37 @@ public class Window {
 	private int iMSAAQuality;
 	
 	// The frame time between rendering cycles.
+	private double flLastFrameTime;
 	private double flFrameTime;
+	
+	// The time remaining once all tick divisions have been calculated per frame.
+	private double flTickRemainder;
 
-	// The frames per second.
-	// 1/flFrameTime
-	private double flFps;
+	private double flMouseX;
+	private double flMouseY;
+	
+	//
+	// Frame metrics.
+	//
+	private double flLastSecond;
+	private int iFrames;
+	private int iTicks;
+	
+	// Amount of frames per second. 
+	private int iFps;
+	
+	// Amount of ticks per second.
+	private int iTps;
 	
 	public Window(String title, int w, int h) {
 		this.sTitle = title;
 		this.iWidth = w;
 		this.iHeight = h;
-
+		this.flMouseX = 0.f;
+		this.flMouseY = 0.f;
+		this.iTicks = 0;
+		this.flTickRemainder = 0.0;
+		
 		//
 		// Default properties.
 		//
@@ -179,41 +208,63 @@ public class Window {
 		// Setup a cursor position callback.
 		// This will notify us of where our mouse is within the winow.
 		glfwSetCursorPosCallback(hHandle, (window, x, y) -> {
-			
-			// x, y are doubles.
-			
+			this.flMouseX = x;
+			this.flMouseY = y;
 		});
 	}
 	
-	public void render(Runnable callback, float r, float g, float b, float a) {
-		
-		if(this.hHandle == NULL) {
+	public void loop(Runnable render, Runnable tick) {
+		if (this.hHandle == NULL) {
 			throw new RuntimeException("Invalid window handle in Window::render");
 		}
 		
-		// Set a baseline time.
 		glfwSetTime(0);
 		
-		// This variable will be used inside the main loop to get execution time between iterations.
-		double prevt = glfwGetTime();
-		
-		while(!glfwWindowShouldClose(hHandle)) {
-		
-			// Get the current time at the point of this loop execution.
-			double time = glfwGetTime();
+		while ( !glfwWindowShouldClose(hHandle) ) {
+
+			// If you're confused about the multiplication being performed here, it's just
+			// converting milliseconds into nanoseconds.
+			// 
+			// Using nanoseconds for timing is easier when it comes to implementing ticks per second.
+			double now = ( glfwGetTime() * MS_TO_NS );
 			
-			// Get the time between now and the previously stored off time.
-			// This is the delta time between loop iterations and measures how long the loop takes to execute a cycle.
-			flFrameTime = time - prevt;
-            
-			// Calculate the fps.
-			flFps = 1.0 / flFrameTime;
+			flFrameTime = now - flLastFrameTime;
+			flLastFrameTime = now;
 			
-			// Store the current time for comparison on the next loop execution.
-			prevt = time;
+			// Update frame metrics once per second.
+			if (now - flLastSecond > NS_PER_SECOND) {
+				iFps = iFrames;
+				iTps = iTicks;
+				iFrames = 0;
+				iTicks = 0;
+				flLastSecond = now;
+			}
+			
+			double flTickTime = flFrameTime + flTickRemainder;
+			
+			// While the frame time exceeds the ticks per second time
+			// we have tick updates remaining, since frame time and tick time
+			// cannot be perfectly in sync, that is, frame time is not always
+			// divisible by the factor of our ticks per second, we will have a remainder,
+			// so we take into account this remainder to allow for lost ticks on a previous
+			// frame to be executed on the next.
+			while (flTickTime > NS_PER_TICK) {
+				iTicks++;
+
+				if(tick != null) {
+					tick.run();
+				}
+				
+				flTickTime -= NS_PER_TICK;
+			}
+			
+			// Our tick remainder is simply what ever is left once the loop condition exits out.
+			flTickRemainder = Math.max(flTickTime, 0.0);
+			
+			// TODO: update function here for key input updates etc.
 			
 			// Set the clear color.
-			glClearColor(r, g, b, a);
+			glClearColor(0.f, 0.f, 0.f, 0.f);
 			
 			// Clear a couple buffers that NanoVG and other libraries may touch.
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -222,8 +273,9 @@ public class Window {
 			glViewport(0, 0, this.iFrameBufferWidth, this.iFrameBufferHeight);
 			
 			// If we have a render callback execute it now.
-			if(callback != null) {
-				callback.run();
+			if (render != null) {
+				iFrames++;
+				render.run();
 			}
 			
 			glfwSwapBuffers(hHandle);
@@ -272,8 +324,20 @@ public class Window {
 	public double getFrameTime() {
 		return flFrameTime;
 	}
+
+	public double getMouseX() {
+		return flMouseX;
+	}
+
+	public double getMouseY() {
+		return flMouseY;
+	}
 	
-	public double getFps() {
-		return flFps;
+	public int getFps() {
+		return iFps;
+	}
+	
+	public int getTicks() {
+		return iTps;
 	}
 }

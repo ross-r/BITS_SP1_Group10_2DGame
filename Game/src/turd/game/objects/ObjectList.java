@@ -8,7 +8,6 @@ import turd.game.Window;
 import turd.game.entities.AI;
 import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
-import turd.game.objects.GameObject.GAMEOBJ_UPDATE_TYPE;
 
 public class ObjectList {
 	private static ObjectList instance = null;
@@ -52,27 +51,21 @@ public class ObjectList {
 		// Render regular objects first as these are usually world objects and we want our entities to be on top.
 		for(GameObject object : objects) {
 			object.render(window, g);
-			
-			// Notify the update function that this is a frame update.
-			object.update(window, GAMEOBJ_UPDATE_TYPE.FRAME);
 		}
 		
 		// Now render our entities on top of the non-interactable objects.
 		for(GameObject entity : entities) {
 			entity.render(window, g);
-			
-			// Notify the update function that this is a frame update.
-			entity.update(window, GAMEOBJ_UPDATE_TYPE.FRAME);
 		}
 	}
 	
-	public void update(Window window, GAMEOBJ_UPDATE_TYPE updateType) {
+	public void tick(Window window) {
 		for(GameObject object : objects) {
-			object.update(window, updateType);
+			object.tick(window);
 		}
 		
 		for(GameObject entity : entities) {
-			entity.update(window, updateType);
+			entity.tick(window);
 		}
 	}
 

@@ -6,13 +6,12 @@ import turd.game.graphics.Graphics;
 public class StaticObject extends GameObject {
 
 	@Override
-	public void render(Window window, Graphics g) {
-		g.setColor(200.f, 200.f, 20.f, 200.f);
-		g.drawFilledRect(getX(), getY(), getWidth(), getHeight());
+	public void render(Window w, Graphics g) {
+		
 	}
 
 	@Override
-	public void update(Window window, GAMEOBJ_UPDATE_TYPE updateType) {
+	public void tick(Window w) {
 		
 	}
 

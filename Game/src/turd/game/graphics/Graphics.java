@@ -139,12 +139,12 @@ public class Graphics {
 	//createImage makes a new object of Image
 	public void createImage(java.nio.ByteBuffer imageName, int[] x, int[] y, int[] channels_in_file,
             int desired_channels) {
-		new Image("dfa.jpg").run();		
+		//new Image("dfa.jpg").run();		
 	}		
 	
 	public void createPlayer() {
 		String imagePath = "player.png";
-		new Image(imagePath).run();
+		//new Image(imagePath).run();
 		
 		
 		
