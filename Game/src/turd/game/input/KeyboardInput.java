@@ -1,5 +1,8 @@
 package turd.game.input;
 
+import org.lwjgl.glfw.GLFW;
+
+import turd.game.GameState;
 import turd.game.Window;
 import turd.game.objects.ObjectList;
 import turd.game.objects.GameObject.GAMEOBJ_UPDATE_TYPE;
@@ -7,7 +10,7 @@ import turd.game.objects.GameObject.GAMEOBJ_UPDATE_TYPE;
 public class KeyboardInput {
 	private static KeyboardInput instance = null;
 	
-	private static final int MAX_KEYS = 256;
+	private static final int MAX_KEYS = 256 + 1;
 
 	private int keyStates[] = new int[MAX_KEYS];
 	
@@ -32,12 +35,21 @@ public class KeyboardInput {
 		
 		this.keyStates[key] = action;
 		
+    	// Toggle paused game state.
+    	if (isKeyClicked(GLFW.GLFW_KEY_ESCAPE)) {
+    		GameState.getInstance().setPaused(!GameState.getInstance().isPaused());
+    	}
+		
 		// Update all entities/objects.
 		ObjectList.getInstance().update(window, GAMEOBJ_UPDATE_TYPE.KEYBOARD);
 	}
 	
+	public boolean isKeyClicked(int key) {
+		return this.keyStates[key] == 1;
+	}
+	
 	public boolean isKeyDown(int key) {
-		return this.keyStates[key] == 1 || this.keyStates[key] == 2;
+		return isKeyClicked(key) || this.keyStates[key] == 2;
 	}
 
 	public boolean isKeyHeld(int key) {

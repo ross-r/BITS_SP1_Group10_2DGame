@@ -2,6 +2,7 @@ package turd.game.entities;
 
 import org.lwjgl.glfw.GLFW;
 
+import turd.game.GameState;
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.input.KeyboardInput;
@@ -10,8 +11,16 @@ import turd.game.objects.ObjectList;
 import turd.game.objects.StaticObject;
 
 public class Player extends GameObject {
-	private final int PLAYER_MOVE_SPEED = 500;
+	private final double DIRECTION_DOWN = 270.f;
+	private final double DIRECTION_UP = 90.f;
+	
+	private final int PLAYER_MOVE_SPEED = 200;
 	private final int PLAYER_BOUNDS = 64;
+	
+	//
+	private final float PLAYER_BASE_GRAVITY = 200.f;
+	private final float PLAYER_JUMP_DECAY = 200.f;
+	private final float PLAYER_JUMP_HEIGHT = 200.f;
 	
 	// Absolute position that isn't restricted to pixels.
 	private double flPosX;
@@ -29,8 +38,17 @@ public class Player extends GameObject {
 	private boolean bInMoveUp;
 	private boolean bInMoveDown;
 	
+	// Jumping.
+	private boolean bInJump;
+	private float flJumpImpulse;
+	
 	private double flDirection;
 	private double flRotation;
+	
+	//
+	private double flFrameTime;
+	
+	private double flSpeedModifier = 1.f;
 	
 	public Player() {
 		super();
@@ -48,14 +66,17 @@ public class Player extends GameObject {
 		
 		this.flDirection = 0.0;
 		this.flRotation = 0.0;
+		
+		this.flFrameTime = 0.0;
 	
 		this.setBounds(PLAYER_BOUNDS, PLAYER_BOUNDS);
 	}
 	
 	@Override
-	public void render(Window window, Graphics g) {
+	public void render(Window window, Graphics g) {		
 		g.setColor(255.f, 255.f, 255.f, 127.f);
 		g.drawFilledRect(getX(), getY(), getWidth(), getHeight());
+		//g.createPlayer();
 	}
 
 	@Override
@@ -83,14 +104,32 @@ public class Player extends GameObject {
 		bInMoveUp = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_W);
 		bInMoveDown = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_S);
 		
+		// Jumping.
+		bInJump = KeyboardInput.getInstance().isKeyClicked(GLFW.GLFW_KEY_SPACE);
+		if (bInJump) {
+			
+			// The jump impulse is the upwards momentum that will be given.
+			// If this impulse is not depleted, then the player should not jump again.
+			if (flJumpImpulse <= 0.f) {
+				
+				// Some bogus initial jump impulse for the time being.
+				// We can modify this later to alter jump height based on other attributes.
+				flJumpImpulse = 200.f;
+			}
+			
+		}
+		
 		// Update movement directions.
 		flSideMove = bInMoveLeft ? -1.f : bInMoveRight ? 1.f : 0.f;
 		flUpMove = bInMoveUp ? -1.f : bInMoveDown ? 1.f : 0.f;
 	}
 	
 	private void processFrame(Window window) {
-		iOldX = this.getX();
-		iOldY = this.getY();
+		int iOldX = this.getX();
+		double flOldX = flPosX;
+		
+		// Update frame time from the game state (this handles pausing for us)
+		this.flFrameTime = GameState.getInstance().getFrameTime();
 		
 		// Make sure we want movement to happen.
 		if(flSideMove == 0.f && flUpMove == 0.f) {
@@ -102,46 +141,77 @@ public class Player extends GameObject {
 		flRotation = Math.toDegrees(flDirection);
 		
 		// Finally adjust our players position.
-		flPosX += (PLAYER_MOVE_SPEED * window.getFrameTime()) * Math.sin(-flDirection);
+		flPosX += ((PLAYER_MOVE_SPEED * this.flSpeedModifier) * this.flFrameTime) * Math.sin(-flDirection);
 		
-		//Checking if down button pushed. If so then double down speed.
-		if(bInMoveDown == Boolean.TRUE)
-		{
-			flPosY += ((PLAYER_MOVE_SPEED * 2) * window.getFrameTime()) * Math.cos(flDirection);
-		}
-		else {
-			flPosY += (PLAYER_MOVE_SPEED * window.getFrameTime()) * Math.cos(flDirection);
-		}
 		// Update GameObject position.
-		this.setPos((int)Math.floor(flPosX), (int)Math.floor(flPosY));
+		this.setX((int)Math.floor(flPosX));
 		
-		// Check if the player will collide with other obstacles.
-		for(StaticObject obstacle : ObjectList.getInstance().getStaticObjects()) {
-			if(willCollide(obstacle)) {
-				
-				// Block the player from moving any further this frame.
-				// Reset the players position to the previous frames.
-				this.block();
-			}
+		// Now that the y coordinate was updated we can check for collisions.
+		if (this.checkCollisions()) {
+			
+			// A collision has happened.
+			// We need to restore our coordinates to the state prior to when we modified them.
+			
+			flPosX = flOldX;
+			this.setX(iOldX);
+			
+			return;
 		}
-	}
-
-	private void block() {
 		
-		// TODO: Check which coordinate we should specifically block.
-		// For example, if we are moving along the x axis and bump into an obstacle on the y axis
-		// then if we hold movement keys such that the x and y axis both push into an obstacle
-		// the player will become completely stuck, instead only the x axis should stop and still allow
-		// the y axis to advance.
-		
-		flPosX = iOldX;
-		flPosY = iOldY;
-		this.setPos(iOldX, iOldY);
+		this.setX((int)Math.floor(flPosX));
 	}
 	
-	private void gravity() {
+	private boolean checkCollisions() {
+		for(StaticObject obstacle : ObjectList.getInstance().getStaticObjects()) {
+			if (willCollide(obstacle)) {
+				return true;
+			}
+		}
 		
-		//Fakes down input constantly to create gravity
-		flUpMove = bInMoveUp ? -1.f : Boolean.TRUE ? 1.f : 0.f;
+		return false;
+	}
+
+	private void gravity() {
+		int iOldY = this.getY();
+		double flOldY = flPosY;
+		
+		// Check if we should be jumping.
+		if (this.flJumpImpulse > 0.F) {
+			
+			// (PLAYER_MOVE_SPEED * this.flSpeedModifier)
+			
+			final double flJumpSpeedModifier = 2.f;
+			final double flJumpHeightModifier = 1.f;			
+			final double flJumpHeight = (PLAYER_JUMP_HEIGHT * this.flSpeedModifier) * flJumpHeightModifier;
+			final double flJumpSpeed = flJumpSpeedModifier;
+			
+			flPosY += ((flJumpHeight * this.flFrameTime) * Math.cos(DIRECTION_UP)) * flJumpSpeedModifier;
+			
+			// Decay the jump impulse over some fixed time span.
+			this.flJumpImpulse -= (PLAYER_JUMP_DECAY * this.flFrameTime);
+		}
+		else {
+		
+			// Apply gravity to the players y coordinate.
+			// Continuously moves them downwards.
+			flPosY += (PLAYER_BASE_GRAVITY * this.flFrameTime) * Math.cos(DIRECTION_DOWN);
+		}
+		
+		// Update internal y coordinate since that is used in collision detections.
+		this.setY((int)Math.floor(flPosY));
+		
+		// Now that the y coordinate was updated we can check for collisions.
+		if (this.checkCollisions()) {
+			
+			// A collision has happened.
+			// We need to restore our coordinates to the state prior to when we modified them.
+			
+			flPosY = flOldY;
+			this.setY(iOldY);
+			
+			return;
+		}
+		
+		this.setY((int)Math.floor(flPosY));
 	}
 }

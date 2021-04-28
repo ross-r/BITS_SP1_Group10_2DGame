@@ -2,11 +2,20 @@ package turd.game.audio;
 
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
+
+import static org.lwjgl.BufferUtils.createByteBuffer;
 import static org.lwjgl.openal.AL10.*;
 
 import org.lwjgl.stb.STBVorbisInfo;
@@ -18,7 +27,6 @@ import static org.lwjgl.system.MemoryUtil.*;
 // Creates buffers to handle .wav I/O.
 public class AudioBuffer {
 	
-<<<<<<< Updated upstream
 	/*
 	static void checkALError() {
 		int err = alGetError();
@@ -27,22 +35,6 @@ public class AudioBuffer {
 		}
 	}
 	*/
-=======
-	private ByteBuffer bbVorbis = null;
-	private ShortBuffer sbWav = null;
-<<<<<<< HEAD
-
-	 Initializes a buffer. Encodes data using STBVorbis.
-	public AudioBuffer(String file) throws Exception {
-		this.iBufferID = alGenBuffers();
-		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
-			sbWav = readVorbis(file, 32 * 1024, info);
-
-			AL10.alBufferData(AL_BUFFER, info.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, sbWav,
-					info.sample_rate());
-		}
-//=======
->>>>>>> Stashed changes
 	
 	protected final int iBufferID;
 	protected final ShortBuffer vorbisBuffer;	
@@ -87,7 +79,7 @@ public class AudioBuffer {
 	// Reads .ogg files and decodes using STBVorbis.
 	private ShortBuffer readVorbis(String resource, int bufferSize, STBVorbisInfo info) throws Exception {
 		try {
-			this.resourceBuffer = AudioUtils.ioResourceToByteBuffer(resource, bufferSize);
+			this.resourceBuffer = ioResourceToByteBuffer(resource, bufferSize);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -109,5 +101,50 @@ public class AudioBuffer {
 		stb_vorbis_close(decoder);
 		
 		return pcm;
+	}
+	
+	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
+
+		ByteBuffer bbBuffer;
+
+		Path path = Paths.get(resource);
+
+		if (Files.isReadable(path)) {
+			try (SeekableByteChannel fc = Files.newByteChannel(path)) {
+				bbBuffer = BufferUtils.createByteBuffer((int) fc.size() + 1);
+				while (fc.read(bbBuffer) != -1);
+			}
+		} else {
+			try (InputStream source = AudioBuffer.class.getResourceAsStream(resource);
+					ReadableByteChannel rbc = Channels.newChannel(source)) {
+
+				bbBuffer = createByteBuffer(bufferSize);
+
+				while (true) {
+					int bytes = rbc.read(bbBuffer);
+					if (bytes == -1) {
+						break;
+					}
+					if (bbBuffer.remaining() == 0) {
+						bbBuffer = resizeBuffer(bbBuffer, bbBuffer.capacity() * 2);
+					}
+				}
+			}
+		}
+
+		bbBuffer.flip();
+		return bbBuffer;
+	}
+	
+	//Resize a byte buffer.
+	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
+
+		ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
+
+		buffer.flip();
+
+		newBuffer.put(buffer);
+		return newBuffer;
+
 	}
 }
