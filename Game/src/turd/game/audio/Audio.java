@@ -5,6 +5,8 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
+
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
@@ -41,6 +43,29 @@ public class Audio {
 			System.out.println("Error: Could not create audio library.");
 			e.printStackTrace();
 		}
+		
+		Scanner in = new Scanner(System.in);
+		
+		String entry;
+		
+		do {
+			System.out.println("Enter sound to play \n 1 = Laser \n 1 = footsteps \n q = quit. ");
+			System.out.println("Enter: ");
+			
+			entry = in.next();
+			switch(entry) {
+			case "1":
+				play("laser");
+			break;
+			case "2":
+				play("footsteps");
+			break;
+			case "q":
+			return;
+			}
+		} while (entry != "q");
+		
+		terminate();
 	}
 
 	public void createListener(Vector3f position) {
@@ -100,5 +125,9 @@ public class Audio {
 		alcMakeContextCurrent(lContext);
 
 		AL.createCapabilities(deviceCaps);
+	}
+	
+	public static void main(String args[]) {
+		Audio audio = new Audio();
 	}
 }
