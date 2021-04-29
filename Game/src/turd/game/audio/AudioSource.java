@@ -16,7 +16,7 @@ public class AudioSource extends AudioBuffer {
 		// Call AudioBuffer constructor.
 		// Step 1 - Generate Buffer ID.
 		super(file);
-
+		
 		// Step 2 - Generate Source ID.
 		this.iSourceID = alGenSources();
 

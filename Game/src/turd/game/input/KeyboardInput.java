@@ -5,7 +5,6 @@ import org.lwjgl.glfw.GLFW;
 import turd.game.GameState;
 import turd.game.Window;
 import turd.game.objects.ObjectList;
-import turd.game.objects.GameObject.GAMEOBJ_UPDATE_TYPE;
 
 public class KeyboardInput {
 	private static KeyboardInput instance = null;
@@ -41,7 +40,7 @@ public class KeyboardInput {
     	}
 		
 		// Update all entities/objects.
-		ObjectList.getInstance().update(window, GAMEOBJ_UPDATE_TYPE.KEYBOARD);
+		//ObjectList.getInstance().update(window, GAMEOBJ_UPDATE_TYPE.KEYBOARD);
 	}
 	
 	public boolean isKeyClicked(int key) {

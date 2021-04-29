@@ -58,6 +58,9 @@ public class FontRenderer {
 	public void drawString(String text, int x, int y, float scale) {
 		glPushMatrix();
 		
+		// TODO: NanoVG sets some OpenGL states which causes text rendering to be underneath NanoVG calls.
+		// Dunno how to fix yet.
+		
 		// Allow transparency.
 		glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		
