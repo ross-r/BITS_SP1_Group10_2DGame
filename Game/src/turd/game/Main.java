@@ -23,6 +23,7 @@ public class Main {
 	private Window window;
 	private Graphics graphics;
 
+	//Leo
 	private Audio audio;
 	
 	private Runnable _render = new Runnable() {
@@ -171,6 +172,7 @@ public class Main {
 		// Create graphics.
 		graphics = new Graphics(window, NVG_ANTIALIAS);
 
+		//Leo
 		// Create audio.
 		audio = new Audio();
 
@@ -198,6 +200,7 @@ public class Main {
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
+		//Leo
 		audio.terminate();
 	}
 

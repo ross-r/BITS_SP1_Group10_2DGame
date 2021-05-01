@@ -1,4 +1,4 @@
-package turd.game.graphics;
+ package turd.game.graphics;
 
 
 import static java.lang.Math.*; //for science ;)
@@ -19,17 +19,23 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.Callback;
 import org.lwjgl.system.MemoryStack;
 
+import turd.game.Window;
+
 public class Image {
 	//byte buffer for the image rendering
   private final ByteBuffer image;
 	
 	//image height and width
-  private final int iIWidth;
-  private final int iIHeight;
+  private int iIWidth;
+  private int iIHeight;
   private final int iIComp;
   
-  private int iWWidth = 1280; //temporarily setting the window sizes, need to research further
-  private int iWHeight = 720;
+//temporarily setting the window sizes, need to research further before retrieving from other package
+  private final int iWWidth = 1200;
+  private final int iWHeight = 720;
+  
+  //private int iWWidth = Window.getScaledWidth(); 
+  //private int iWHeight = Window.getScaledHeight();
   
   private Callback debugProc;
   
@@ -41,15 +47,15 @@ public class Image {
 		
       ByteBuffer imageBuffer;
       try {
-          imageBuffer = IOUtil.ioResourceToByteBuffer(imagePath, 8 * 1024);
+          imageBuffer = IOUtil.ioResourceToByteBuffer(imagePath, 10000 * 1024);
       } catch (IOException e) {
           throw new RuntimeException(e);
       }
 
       try (MemoryStack stack = stackPush()) {
-          IntBuffer iIWidth    = stack.mallocInt(1);
-          IntBuffer iIHeight    = stack.mallocInt(1);
-          IntBuffer iIComp = stack.mallocInt(1);
+          IntBuffer iIWidth  = stack.mallocInt(1);
+          IntBuffer iIHeight = stack.mallocInt(1);
+          IntBuffer iIComp   = stack.mallocInt(1);
 
           // Unused in demo
           if (!stbi_info_from_memory(imageBuffer, iIWidth, iIHeight, iIComp)) {
@@ -58,10 +64,10 @@ public class Image {
               System.out.println("OK with reason: " + stbi_failure_reason());
           }
 
-          System.out.println("Image width: " + iIWidth.get(0));
-          System.out.println("Image height: " + iIHeight.get(0));
-          System.out.println("Image components: " + iIComp.get(0));
-          System.out.println("Image HDR: " + stbi_is_hdr_from_memory(imageBuffer));
+//          System.out.println("Image width: " + iIWidth.get(0));
+//          System.out.println("Image height: " + iIHeight.get(0));
+//          System.out.println("Image components: " + iIComp.get(0));
+//          System.out.println("Image HDR: " + stbi_is_hdr_from_memory(imageBuffer));
 
           // Decode the image
           image = stbi_load_from_memory(imageBuffer, iIWidth, iIHeight, iIComp, 0);
@@ -78,8 +84,7 @@ public class Image {
 	
     public void run() {
         try {
-        	//I think this is unneeded, need to check others if they are needed
-        	//and what needs to be changed
+        	//init is used primarily for creating window - therefor unused
 //            init(); //glfw window
 
             loop();
@@ -92,15 +97,15 @@ public class Image {
         }
     }
     //TODO
-    //Change from putting image on invisible square to object that calls image creation
 //    private static void framebufferSizeChanged(long window, int width, int height) {
 //    	//glViewport specifies the affine transformation of x and y from normalized device coordinates to window coordinates
 //    	glViewport(0, 0, width, height);
 //    }
+    
 	
-    private void setScale(int scale) {
-        this.scale = max(-9, scale);
-    }
+//    private void setScale(int scale) {
+//        this.scale = max(-9, scale);
+//    }
     
     //requires a google
     private void premultiplyAlpha() {
@@ -130,6 +135,7 @@ public class Image {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+        //this checks if this image is transparent or not, then chooses the appropriate format
         int format;
         if (iIComp == 3) {
             if ((iIWidth & 3) != 0) {

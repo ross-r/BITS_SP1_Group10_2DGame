@@ -72,7 +72,7 @@ public class Player extends GameObject {
 	public void render(Window window, Graphics g) {		
 		g.setColor(255.f, 255.f, 255.f, 255.f);
 		g.drawFilledRect((int)aabb.p0.x, (int)aabb.p0.y, (int)aabb.p1.x, (int)aabb.p1.y);
-		//g.createPlayer();
+		//g.createPlayerTexture();
 	}
 	
 	@Override
