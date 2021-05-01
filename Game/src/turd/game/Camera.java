@@ -18,9 +18,9 @@ public class Camera {
 				.perspective((float) Math.toRadians(GameState.getInstance().getCameraFOV()), 1.f, 0.01f, 100.f)
 				.ortho(-1.f, 1.f, -1.f, 1.f, 0.01f, 100.f)
 				.lookAt(
-				new Vector3f(flCameraX, flCameraY, 1.f),	// camera position
-				new Vector3f(flCameraX, flCameraY, 0.f),	// target position
-				new Vector3f(0.f, 1.f, 0.f)					// camera direction
+					new Vector3f(flCameraX, flCameraY, 1.f),	// camera position
+					new Vector3f(flCameraX, flCameraY, 0.f),	// target position
+					new Vector3f(0.f, 1.f, 0.f)					// camera direction
 			);
 	}
 	

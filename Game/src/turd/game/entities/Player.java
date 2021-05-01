@@ -27,6 +27,8 @@ public class Player extends GameObject {
 	private boolean bInMoveSpeed;
 	private boolean bInJump;
 	
+	private boolean bOnGround;
+	
 	private float flJumpTime;
 	
 	private double flDirection;
@@ -66,9 +68,9 @@ public class Player extends GameObject {
 		
 		// Update movement directions.
 		flSideMove = bInMoveLeft ? -1.f : bInMoveRight ? 1.f : 0.f;
-		flUpMove = bInMoveUp ? -1.f : bInMoveDown ? 1.f : 0.f;
+		flUpMove = 0.f;//bInMoveUp ? -1.f : bInMoveDown ? 1.f : 0.f;
 		
-		if ( bInJump && flJumpTime <= 0.f ) {
+		if ( this.bOnGround && bInJump && flJumpTime <= 0.f ) {
 			// How many ticks we should jump for.
 			final int iNumJumpTicks = 20;
 			flJumpTime = ( 1.f / 60.f ) * iNumJumpTicks;
@@ -85,6 +87,9 @@ public class Player extends GameObject {
 	@Override
 	public void tick(Window w) {
 		input();
+		
+		// 'physics.gravity()' returns false when a collision has happened.
+		this.bOnGround = !this.physics.gravity();
 		
 		this.physics.gravity();
 

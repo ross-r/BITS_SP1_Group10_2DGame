@@ -15,7 +15,7 @@ public class Physics {
 	}
 	
 	// Applies gravity to a point.
-	public void gravity() {
+	public boolean gravity() {
 		float y = this.gameObject.aabb.p0.y;
 		
 		this.gameObject.aabb.p0.y += GRAVITY;
@@ -24,8 +24,12 @@ public class Physics {
 		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
 			if (this.gameObject.collides(staticObject)) {
 				this.gameObject.aabb.p0.y = y;
+				
+				return false;
 			}
 		}
+		
+		return true;
 	}
 	
 	public void move(float flNewX, float flNewY) {
