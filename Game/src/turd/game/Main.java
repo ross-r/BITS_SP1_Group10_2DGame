@@ -5,8 +5,11 @@ package turd.game;
 import static org.lwjgl.nanovg.NanoVGGL2.*;
 
 import org.lwjgl.*;
+import org.lwjgl.glfw.GLFW;
+
 import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
+import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
 import turd.game.platform.LongPlatform;
 import turd.game.platform.SmallSquare;
@@ -82,6 +85,19 @@ public class Main {
 		if (GameState.getInstance().isPaused()) {
 			return;
 		}
+		
+		// Zoom the camera in/out.
+		float flCameraFOV = GameState.getInstance().getCameraFOV();
+		
+		if ( KeyboardInput.getInstance().isKeyClicked(GLFW.GLFW_KEY_DOWN) ) {
+			flCameraFOV += 1.F;
+		}
+		
+		if ( KeyboardInput.getInstance().isKeyClicked(GLFW.GLFW_KEY_UP) ) {
+			flCameraFOV -= 1.F;
+		}
+		
+		GameState.getInstance().setCameraFOV(flCameraFOV);
 		
 		ObjectList.getInstance().tick(window);
 	}

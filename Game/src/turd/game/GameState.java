@@ -19,6 +19,9 @@ public class GameState {
     private float flCameraX;
     private float flCameraY;
     
+    // Allows for the camera to be zoomed in/out.
+    private float flCameraFOV;
+    
     private double flFrameTime;
     
     public GameState() {
@@ -28,6 +31,8 @@ public class GameState {
     	bOverrideCamera = false;
     	flCameraX = 0.f;
     	flCameraY = 0.f;
+    	
+    	setCameraFOV(90.f);
     	
     	flFrameTime = 0.f;
     }
@@ -76,5 +81,13 @@ public class GameState {
 
 	public float getOverridenCameraY() {
 		return flCameraY;
+	}
+
+	public float getCameraFOV() {
+		return flCameraFOV;
+	}
+
+	public void setCameraFOV(float flCameraFOV) {
+		this.flCameraFOV = flCameraFOV;
 	}
 }

@@ -4,12 +4,11 @@ import org.lwjgl.glfw.GLFW;
 
 import turd.game.GameState;
 import turd.game.Window;
-import turd.game.objects.ObjectList;
 
 public class KeyboardInput {
 	private static KeyboardInput instance = null;
 	
-	private static final int MAX_KEYS = 256 + 1;
+	private static final int MAX_KEYS = GLFW.GLFW_KEY_LAST + 1;
 
 	private int keyStates[] = new int[MAX_KEYS];
 	
