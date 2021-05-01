@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import turd.game.Camera;
 import turd.game.Window;
 import turd.game.entities.AI;
 import turd.game.entities.Player;
@@ -21,7 +22,11 @@ public class ObjectList {
 	// world objects, etc...
 	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
-	private ObjectList() {}
+	private Camera camera;
+	
+	private ObjectList() {
+		this.camera = null;
+	}
 	
 	public static ObjectList getInstance() {
 		if(instance == null) {
@@ -42,6 +47,13 @@ public class ObjectList {
 	
 	public Player createPlayer() {
 		this.entities.add(new Player());
+		
+		// Initialize the camrea object once a player is created.
+		// Assume that only one player will ever be created.
+		if ( this.camera == null ) {
+			this.camera = new Camera( (Player) this.entities.getLast() );
+		}
+		
 		return (Player) this.entities.getLast();
 	
 	}
@@ -52,15 +64,22 @@ public class ObjectList {
 	}
 
 	public void render(Window window, Graphics g) {
+		g.beginFrame();
+		
+		// Project the camera matrix into NanoVG's graphic states.
+		camera.project(window, g);
+		
 		// Render regular objects first as these are usually world objects and we want our entities to be on top.
-		for(GameObject object : objects) {
+		for(GameObject object : objects) {	
 			object.render(window, g);
 		}
-		
+
 		// Now render our entities on top of the non-interactable objects.
 		for(GameObject entity : entities) {
 			entity.render(window, g);
 		}
+
+		g.endFrame();
 	}
 	
 	public void tick(Window window) {

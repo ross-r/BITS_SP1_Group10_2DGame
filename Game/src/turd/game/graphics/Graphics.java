@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.system.MemoryStack;
 
 //import sun.nio.ch.IOUtil;
@@ -176,5 +177,14 @@ public class Graphics {
 		nvgFill(vg);
 	}
 	
+	public void drawLine(float x, float y) {
+		nvgBeginPath(vg);
+		nvgLineTo(vg, x, y);
+		nvgFillColor(vg, color);
+		nvgFill(vg);
+	}
 	
+	public long vg() {
+		return this.vg;
+	}
 }

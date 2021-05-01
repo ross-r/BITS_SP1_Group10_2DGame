@@ -2,13 +2,10 @@ package turd.game.entities;
 
 import org.lwjgl.glfw.GLFW;
 
-import turd.game.GameState;
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.GameObject;
-import turd.game.objects.ObjectList;
-import turd.game.objects.StaticObject;
 import turd.game.physics.Physics;
 
 public class Player extends GameObject {
@@ -28,6 +25,9 @@ public class Player extends GameObject {
 	private boolean bInMoveUp;
 	private boolean bInMoveDown;
 	private boolean bInMoveSpeed;
+	private boolean bInJump;
+	
+	private float flJumpTime;
 	
 	private double flDirection;
 	private double flRotation;
@@ -62,10 +62,17 @@ public class Player extends GameObject {
 		bInMoveUp = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_W);
 		bInMoveDown = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_S);
 		bInMoveSpeed = KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_J);
+		bInJump = KeyboardInput.getInstance().isKeyClicked(GLFW.GLFW_KEY_SPACE);
 		
 		// Update movement directions.
 		flSideMove = bInMoveLeft ? -1.f : bInMoveRight ? 1.f : 0.f;
 		flUpMove = bInMoveUp ? -1.f : bInMoveDown ? 1.f : 0.f;
+		
+		if ( bInJump && flJumpTime <= 0.f ) {
+			// How many ticks we should jump for.
+			final int iNumJumpTicks = 20;
+			flJumpTime = ( 1.f / 60.f ) * iNumJumpTicks;
+		}
 	}
 
 	@Override
@@ -80,9 +87,25 @@ public class Player extends GameObject {
 		input();
 		
 		this.physics.gravity();
-		
+
 		float PLAYER_SPEED = bInMoveSpeed ? 12.f : 4.f;
-		this.physics.move(this.aabb.p0.x + ( flSideMove * PLAYER_SPEED ), this.aabb.p0.y + ( flUpMove * PLAYER_SPEED ));
-	}
-	
+		float PLAYER_JUMP_SPEED = bInMoveSpeed ? 8.f : 4.f;
+		
+		if ( flJumpTime > 0.f ) {
+			flJumpTime -= ( 1.f / 60.f );
+			
+			// Negative value here since we want to go upwards.
+			flUpMove = -2.f;
+			
+			// Negate regular movement speed and multiply by desired jump speed.
+			flUpMove /= PLAYER_SPEED;
+			flUpMove *= PLAYER_JUMP_SPEED;
+		}
+		
+		// This is really bad lol
+		// The reason these calls are separated is because both x and y are checked in collision and if ONE of them fails
+		// both are ignored for the current tick, if they are separate calls then this *issue* is *avoided*.
+		this.physics.move(this.aabb.p0.x + ( flSideMove * PLAYER_SPEED ), this.aabb.p0.y);
+		this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( flUpMove * PLAYER_SPEED ));
+	}	
 }

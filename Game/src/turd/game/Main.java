@@ -1,17 +1,13 @@
 package turd.game;
 
-//We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
-//NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
+// We have to use NanoVG OpenGL 2 for Mac users as OpenGL 3 is not supported.
+// NanoVG uses shader version 150 in OpenGL 3 context which cannot compile under Mac.
 import static org.lwjgl.nanovg.NanoVGGL2.*;
 
 import org.lwjgl.*;
-import org.lwjgl.glfw.GLFW;
-
 import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
-import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
-import turd.game.physics.AABB;
 import turd.game.platform.LongPlatform;
 import turd.game.platform.SmallSquare;
 
@@ -42,111 +38,42 @@ public class Main {
 		}
 		
 	};
-
-	private AABB bbox;
-	private AABB bbox1;
 	
-	private void test_aabb_gravity() {
-		final float gravity = 4.f;
-		
-		float y = bbox1.p0.y;
-		bbox1.p0.y += gravity;
-		
-		// cant move any further, set to last y coordinate.
-		if (bbox1.collides(bbox)) {
-			bbox1.p0.y = y;
-		}
-	}
-	
-	private void test_aabb() {
-		// TODO: Test physics stuff
-		
-		test_aabb_gravity();
-		
-		// Try move down once per tick until collision happens.
-		float x = bbox1.p0.x;
-		float y = bbox1.p0.y;
-		
-		if (KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_A)) {
-			bbox1.p0.x -= 4.f;
-		}
-		
-		if (KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_D)) {
-			bbox1.p0.x += 4.f;
-		}
-		
-		if (KeyboardInput.getInstance().isKeyDown(GLFW.GLFW_KEY_W)) {
-			bbox1.p0.y -= 8.f;
-		}
-		
-		// cant move any further, set to last y coordinate.
-		if (bbox1.collides(bbox)) {
-			bbox1.p0.x = x;
-			bbox1.p0.y = y;
-		}
-	}
-	
-	private void render_aabb() {
-		//bbox1.init((float)window.getMouseX(), (float)window.getMouseY(), 30.f, 30.f);
-		
-		graphics.setColor(0.f, 155.f, 60.f, 255.f);
-		graphics.drawFilledRect((int)bbox.p0.x, (int)bbox.p0.y, (int)bbox.p1.x, (int)bbox.p1.y);
-		
-		graphics.setColor(255.f, 255.f, 255.f, 255.f);
-		graphics.drawFilledRect((int)bbox1.p0.x, (int)bbox1.p0.y, (int)bbox1.p1.x, (int)bbox1.p1.y);
-		
-		/*
-		Point cursor = new Point( (float)window.getMouseX(), (float)window.getMouseY() );
-		if ( bbox.collides( bbox1 ) ) {
-			
-			AABB intersection = bbox.intersection(bbox1);
-			
-			graphics.setColor(255.f, 0.f, 0.f, 255.f);
-			graphics.drawFilledRect((int)intersection.p0.x, (int)intersection.p0.y, (int)intersection.p1.x, (int)intersection.p1.y);
-
-			graphics.setColor(0.f, 255.f, 0.f, 255.f);
-			graphics.drawFilledRect((int)intersection.p0.x, (int)intersection.p0.y, 8, 8);
-			
-		}
-		*/
-	}
-	
-	public void render() {
-		GameState.getInstance().update(window);
-		
+	private void renderHUD() {
 		graphics.beginFrame();
-
+		
 		// Draw FPS/Render time stats.
 		graphics.setColor(255.f, 255.f, 255.f, 255.f);
 		graphics.drawString(String.format("Trash Unit Response Droid (T.U.R.D)\nFPS: %d\nTPS: %d",
 				window.getFps(), window.getTicks()), 2, 2, 1.f);
 
-		// Render all objects.
-		ObjectList.getInstance().render(window, graphics);
-
-		/*
-		 * START AABB TESTINIG
-		 */
-		//render_aabb();
-		/*
-		 * END AABB TESTING
-		 */
-		
 		// ----------------------- PAUSE MENU HUD
 		if (GameState.getInstance().isPaused()) {
 			
 			// Draw a darker background that is on top of everything else.
 			graphics.setColor(0.f, 0.f, 0.f, 127.f);
 			graphics.drawFilledRect(0, 0, window.getWidth(), window.getHeight());
-			
+
 			// Draw text indicating the game is paused.
 			graphics.setColor(255.f, 255.f, 255.f, 255.f);
 			graphics.drawString("GAME PAUSED", 2, 2, 16.f);
-			
 		}
 		// ----------------------- PAUSE MENU HUD
 		
 		graphics.endFrame();
+	}
+	
+	public void render() {
+		GameState.getInstance().update(window);
+		
+		// We need to separate things into multiple frames so that translations don't mess stuff up.
+		// The first frame will be our "hud".
+		
+		// Render all objects.
+		ObjectList.getInstance().render(window, graphics);
+		
+		// Render HUD (this will overlap the world)
+		renderHUD();
 	}
 	
 	public void tick() {
@@ -156,10 +83,6 @@ public class Main {
 		}
 		
 		ObjectList.getInstance().tick(window);
-		
-		//System.out.println("tick");
-		
-		//test_aabb();
 	}
 	
 	public void start() {
@@ -174,6 +97,16 @@ public class Main {
 		// Create audio.
 		audio = new Audio();
 
+		// If you would like to disable the camera projection do so here.
+		// This may be useful when placing around more objects.
+		//GameState.getInstance().setUseCamera(false);
+		
+		// If you want to move the camera manually you can enter the position here.
+		// You can place this function call inside of tick(...) or render(...) methods
+		// and feed in the cursor x/y from window.getMouseX/Y methods to make the camera
+		// follow the mouse - as an example.
+		//GameState.getInstance().setCameraPos(1000.f, 100.f);
+		
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
 
@@ -183,13 +116,9 @@ public class Main {
 		// 1280
 
 		new LongPlatform(0, 660);
+		new LongPlatform(300, 560);
+		new LongPlatform(600, 460);
 		new SmallSquare(0, 200);
-		
-		bbox = new AABB();
-		bbox1 = new AABB();
-		
-		bbox.init(40.f, 250.f, 600.f, 2.f);
-		bbox1.init(55.f, 35.f, 30.f, 30.f);
 		
 		//audio.play("laser");
 

@@ -1,9 +1,5 @@
 package turd.game;
 
-import org.lwjgl.glfw.GLFW;
-
-import turd.game.input.KeyboardInput;
-
 public class GameState {
 	private static GameState instance = null;
 
@@ -16,10 +12,23 @@ public class GameState {
     }
 
     private boolean bIsPaused;
+    private boolean bUseCamera;
+    
+    // Allows for the camera coordinates to be overriden.
+    private boolean bOverrideCamera;
+    private float flCameraX;
+    private float flCameraY;
+    
     private double flFrameTime;
     
     public GameState() {
     	bIsPaused = false;
+    	bUseCamera = true;
+    	
+    	bOverrideCamera = false;
+    	flCameraX = 0.f;
+    	flCameraY = 0.f;
+    	
     	flFrameTime = 0.f;
     }
     
@@ -31,11 +40,41 @@ public class GameState {
     	return this.bIsPaused;
     }
     
+    public boolean isUsingCamera() {
+    	return bUseCamera;
+    }
+    
     public void setPaused(boolean bIsPaused) {
     	this.bIsPaused = bIsPaused;
+    }
+    
+    public void setUseCamera(boolean bUseCamera) {
+    	this.bUseCamera = bUseCamera;
     }
     
     public double getFrameTime() {
     	return this.bIsPaused ? 0.f : this.flFrameTime;
     }
+
+	public boolean isCameraOverridden() {
+		return bOverrideCamera;
+	}
+
+	public void setCameraOverride(boolean bOverrideCamera) {
+		this.bOverrideCamera = bOverrideCamera;
+	}
+	
+	public void setCameraPos(float x, float y) {
+		this.bOverrideCamera = true;
+		this.flCameraX = x;
+		this.flCameraY = y;
+	}
+
+	public float getOverridenCameraX() {
+		return flCameraX;
+	}
+
+	public float getOverridenCameraY() {
+		return flCameraY;
+	}
 }
