@@ -13,7 +13,7 @@ import turd.game.physics.Physics;
 
 public class Player extends GameObject {
 	private final double DIRECTION_DOWN = 270.f;
-	private final double DIRECTION_UP = 90.f;
+	private final double DIRECTION_UP = 20.f;
 
 	private final int PLAYER_BOUNDS = 64;
 	
