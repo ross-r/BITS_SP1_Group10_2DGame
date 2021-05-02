@@ -13,7 +13,9 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.NativeType;
 
 //import sun.nio.ch.IOUtil;
 import turd.game.Window;
@@ -142,13 +144,21 @@ public class Graphics {
 		//new Image("dfa.jpg").run();		
 	}		
 	
-	public void createPlayer() {
-		String imagePath = "player.png";
-		//new Image(imagePath).run();
-		
-		
-		
+	public void createPlayerTexture() {
+//		String imagePath = "player.png";
+		String imagePath = "dfa.jpg";
+		new Image(imagePath).run();
 	}
+	
+//	nvglCreateImageFromHandleGL2()
+	
+	
+//	 public static int nvgCreateImageMem(@NativeType("NVGcontext *") long ctx, int imageFlags, @NativeType("unsigned char *") ByteBuffer data) {
+//	        if (CHECKS) {
+//	            check(ctx);
+//	        }
+//	        return nnvgCreateImageMem(ctx, imageFlags, memAddress(data), data.remaining());
+//	    }
 	
 	
 	public void translate(int x, int y) {
@@ -176,5 +186,14 @@ public class Graphics {
 		nvgFill(vg);
 	}
 	
+	public void drawLine(float x, float y) {
+		nvgBeginPath(vg);
+		nvgLineTo(vg, x, y);
+		nvgFillColor(vg, color);
+		nvgFill(vg);
+	}
 	
+	public long vg() {
+		return this.vg;
+	}
 }
