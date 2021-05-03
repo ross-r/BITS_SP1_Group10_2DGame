@@ -73,8 +73,10 @@ public class FontRenderer {
 		int quads = stb_easy_font_print(x, y, text, null, buffer);
 		
 		// Set scale.
-		glScalef(scale, scale, 1.f);
-		
+        //glTranslatef(x * 0.5f, y * 0.5f, 0.0f);
+        glScalef(scale, scale, 1.f);
+        //glTranslatef(-x * 0.5f, -y * 0.5f, 0.0f);
+				
 		// Set translation.
 		// Relative to original coordinates.
 		glTranslatef(x + this.iTranslateX, y + this.iTranslateY, 0);

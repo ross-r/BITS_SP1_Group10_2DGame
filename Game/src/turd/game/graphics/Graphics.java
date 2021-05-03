@@ -42,8 +42,6 @@ public class Graphics {
 	private Window window;
 	private FontRenderer fontRenderer;
 	
-	//public Graphics(Window window, int flags, String imageName)
-	
 	//original constructor
 	public Graphics(Window window, int flags) {
 		this.vg = nvgCreate(flags);
@@ -56,55 +54,6 @@ public class Graphics {
 	
 		this.color = NVGColor.create();
 	}
-	
-	
-//	//Graphics constructor mixed with image demo constructor for testing purposes
-//    public Graphics(Window window, int flags, String imagePath) {
-//		this.vg = nvgCreate(flags);
-//		this.window = window;
-//		this.fontRenderer = new FontRenderer(window);
-//		
-//		if (this.vg == NULL) {
-//			throw new RuntimeException("Could not create nanovg.");
-//        }
-//	
-//		this.color = NVGColor.create();
-//        ByteBuffer imageBuffer;
-//        try {
-//            imageBuffer = IOUtil.ioResourceToByteBuffer(imagePath, 8 * 1024);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try (MemoryStack stack = stackPush()) {
-//            IntBuffer iIWidth    = stack.mallocInt(1);
-//            IntBuffer iIHeight    = stack.mallocInt(1);
-//            IntBuffer iIComp = stack.mallocInt(1);
-//
-//            // Use info to read image metadata without decoding the entire image.
-//            // We don't need this for this demo, just testing the API.
-//            if (!stbi_info_from_memory(imageBuffer, iIWidth, iIHeight, iIComp)) {
-//                throw new RuntimeException("Failed to read image information: " + stbi_failure_reason());
-//            } else {
-//                System.out.println("OK with reason: " + stbi_failure_reason());
-//            }
-//
-//            System.out.println("Image width: " + iIWidth.get(0));
-//            System.out.println("Image height: " + iIHeight.get(0));
-//            System.out.println("Image components: " + iIComp.get(0));
-//            System.out.println("Image HDR: " + stbi_is_hdr_from_memory(imageBuffer));
-//
-//            // Decode the image
-//            image = stbi_load_from_memory(imageBuffer, iIWidth, iIHeight, iIComp, 0);
-//            if (image == null) {
-//                throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
-//            }
-//
-//            this.iIWidth = iIWidth.get(0);
-//            this.iIHeight = iIHeight.get(0);
-//            this.iIComp = iIComp.get(0);
-//        }
-//    }
 	
 	public void terminate() {
 		nvgDelete(vg);
@@ -146,22 +95,16 @@ public class Graphics {
 		//new Image("dfa.jpg").run();		
 	}		
 	
+	public Image playerImage;
+	
 	public void createPlayerTexture() {
-//		String imagePath = "player.png";
-		String imagePath = "dfa.jpg";
-		new Image(imagePath).run();
+		String imagePath = "player.png";
+		playerImage = new Image( imagePath );
 	}
 	
-//	nvglCreateImageFromHandleGL2()
-	
-	
-//	 public static int nvgCreateImageMem(@NativeType("NVGcontext *") long ctx, int imageFlags, @NativeType("unsigned char *") ByteBuffer data) {
-//	        if (CHECKS) {
-//	            check(ctx);
-//	        }
-//	        return nnvgCreateImageMem(ctx, imageFlags, memAddress(data), data.remaining());
-//	    }
-	
+	public void drawPlayerTexture() {
+		playerImage.render(20, 20, 64, 64);
+	}
 	
 	public void translate(int x, int y) {
 		nvgTranslate(vg, x, y);
