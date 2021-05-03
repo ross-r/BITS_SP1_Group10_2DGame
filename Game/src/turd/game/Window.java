@@ -208,8 +208,11 @@ public class Window {
 		// Setup a cursor position callback.
 		// This will notify us of where our mouse is within the winow.
 		glfwSetCursorPosCallback(hHandle, (window, x, y) -> {
+			
+		
 			this.flMouseX = x;
 			this.flMouseY = y;
+			
 		});
 	}
 	

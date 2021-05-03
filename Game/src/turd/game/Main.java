@@ -113,7 +113,7 @@ public class Main {
 
 		//Leo
 		// Create audio.
-		audio = new Audio();
+		//audio = new Audio();
 
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
@@ -146,7 +146,7 @@ public class Main {
 		window.terminate();
 		graphics.terminate();
 		//Leo
-		audio.terminate();
+		//audio.terminate();
 	}
 
 	public static void main(String[] args) {

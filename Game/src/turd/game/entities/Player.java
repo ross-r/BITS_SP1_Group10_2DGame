@@ -82,6 +82,9 @@ public class Player extends GameObject {
 	public void render(Window window, Graphics g) {		
 		g.setColor(255.f, 255.f, 255.f, 255.f);
 		g.drawFilledRect((int)aabb.p0.x, (int)aabb.p0.y, (int)aabb.p1.x, (int)aabb.p1.y);
+		
+		//Draws aiming line from centre of player to mouse position
+		g.drawLine((int)((aabb.p0.x) + (aabb.p1.x / 2)), (int)((aabb.p0.y) + (aabb.p1.y / 2)), MouseInput.getInstance().getXPosition(window, this), (int)MouseInput.getInstance().getYPosition(window, this));
 		//g.createPlayerTexture();
 	}
 	

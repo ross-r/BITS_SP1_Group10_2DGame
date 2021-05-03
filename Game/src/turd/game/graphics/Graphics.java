@@ -188,12 +188,14 @@ public class Graphics {
 		nvgFill(vg);
 	}
 	
-	public void drawLine(float x, float y) {
+	public void drawLine(int iX1, int iY1, int iX2, int iY2) {
 		nvgBeginPath(vg);
-		nvgLineTo(vg, x, y);
-		nvgFillColor(vg, color);
+		nvgMoveTo(vg, iX1, iY1);
+		nvgLineTo(vg, iX2, iY2);
+		nvgStroke(vg);
 		nvgFill(vg);
 	}
+	
 	
 	public long vg() {
 		return this.vg;
