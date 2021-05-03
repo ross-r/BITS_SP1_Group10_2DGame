@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW;
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.input.KeyboardInput;
+import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
 import turd.game.physics.Physics;
 

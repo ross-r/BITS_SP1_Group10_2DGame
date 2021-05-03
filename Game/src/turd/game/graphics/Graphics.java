@@ -135,6 +135,8 @@ public class Graphics {
 		this.color.a(a / 255.f);
 		
 		this.fontRenderer.setColor(this.color.r(), this.color.g(), this.color.b(), this.color.a());
+		//Set colour for lines
+		nvgStrokeColor(vg, color);
 	}
 	
 	//leo attempting stbi load
