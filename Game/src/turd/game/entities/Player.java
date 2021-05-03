@@ -111,6 +111,9 @@ public class Player extends GameObject {
 			flUpMove *= PLAYER_JUMP_SPEED;
 		}
 		
+		if(MouseInput.getInstance().getMouseClicked() == Boolean.TRUE) {
+			System.out.println("Clicked " + MouseInput.getInstance().getXPosition(w, this));
+		}
 		// This is really bad lol
 		// The reason these calls are separated is because both x and y are checked in collision and if ONE of them fails
 		// both are ignored for the current tick, if they are separate calls then this *issue* is *avoided*.
