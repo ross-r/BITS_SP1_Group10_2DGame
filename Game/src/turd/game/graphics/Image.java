@@ -30,21 +30,11 @@ public class Image {
   private int iIHeight;
   private final int iIComp;
   
-//temporarily setting the window sizes, need to research further before retrieving from other package
-  private final int iWWidth = 1200;
-  private final int iWHeight = 720;
-  
-  //private int iWWidth = Window.getScaledWidth(); 
-  //private int iWHeight = Window.getScaledHeight();
-  
-  private Callback debugProc;
+  private int iTexID;
   
   private int scale;
 	
 	public Image (String imagePath) {
-		
-		//iWHeight = Window.getHeight();
-		
       ByteBuffer imageBuffer;
       try {
           imageBuffer = IOUtil.ioResourceToByteBuffer(imagePath, 10000 * 1024);
@@ -79,34 +69,10 @@ public class Image {
           this.iIHeight = iIHeight.get(0);
           this.iIComp = iIComp.get(0);
       }
+      
+      this.createTexture();
   }
 	
-	
-    public void run() {
-        try {
-        	//init is used primarily for creating window - therefor unused
-//            init(); //glfw window
-
-            loop();
-        } finally {
-            try {
-                destroy();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    //TODO
-//    private static void framebufferSizeChanged(long window, int width, int height) {
-//    	//glViewport specifies the affine transformation of x and y from normalized device coordinates to window coordinates
-//    	glViewport(0, 0, width, height);
-//    }
-    
-	
-//    private void setScale(int scale) {
-//        this.scale = max(-9, scale);
-//    }
-    
     //requires a google
     private void premultiplyAlpha() {
         int stride = iIWidth * 4;
@@ -122,14 +88,14 @@ public class Image {
         }
     }
     
-    private int createTexture() {
+    public int createTexture() {
     	//glGenTextures returns n texture names in textures. There is no guarantee that the names form a contiguous set of integers; however, it is guaranteed that none of the returned names was in use immediately before the call to glGenTextures.
         //The generated textures have no dimensionality; they assume the dimensionality of the texture target to which they are first bound (see glBindTexture).
         //Texture names returned by a call to glGenTextures are not returned by subsequent calls, unless they are first deleted with glDeleteTextures.
-        int texID = glGenTextures();
+        this.iTexID = glGenTextures();
         //glBindTexture lets you create or use a named texture. Calling glBindTexture with target set to GL_TEXTURE_2D and texture set to the name of the new texture binds the texture name to the target. When a texture is bound to a target, the previous binding for that target is automatically broken.
         
-        glBindTexture(GL_TEXTURE_2D, texID);
+        glBindTexture(GL_TEXTURE_2D, this.iTexID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -151,6 +117,8 @@ public class Image {
             glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
             format = GL_RGBA;
+            
+            System.out.println("texture is rgba format");
         }
 
         glTexImage2D(GL_TEXTURE_2D, 0, format, iIWidth, iIHeight, 0, format, GL_UNSIGNED_BYTE, image);
@@ -159,6 +127,7 @@ public class Image {
         int        input_w      = iIWidth;
         int        input_h      = iIHeight;
         int        mipmapLevel  = 0;
+        
         while (1 < input_w || 1 < input_h) {
             int output_w = Math.max(1, input_w >> 1);
             int output_h = Math.max(1, input_h >> 1);
@@ -185,40 +154,29 @@ public class Image {
             input_w = output_w;
             input_h = output_h;
         }
+        
         if (mipmapLevel == 0) {
             stbi_image_free(image);
         } else {
             memFree(input_pixels);
         }
 
-        return texID;
+        return this.iTexID;
     }
     
-    private void loop() {
-        int texID = createTexture();
-
-        glEnable(GL_TEXTURE_2D);
-        glClearColor(43f / 255f, 43f / 255f, 43f / 255f, 0f);
-//TODO check window stuff here to see if its all to be deleted or remade
-//        //checks for if the window should close or not
-//        while (!glfwWindowShouldClose(window)) {
-//            glfwPollEvents();
-//            render();
-//        }
-
-        glDisable(GL_TEXTURE_2D);
-        glDeleteTextures(texID);
-    }
-  
-    private void render() {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        float scaleFactor = 1.0f + scale * 0.1f;
+    public void render( int x, int y, int iWidth, int iHeight ) {
+        float scaleFactor = 1.0f;
 
         glPushMatrix();
-        glTranslatef(iWWidth * 0.5f, iWHeight * 0.5f, 0.0f);
-        glScalef(scaleFactor, scaleFactor, 1f);
-        glTranslatef(-iIWidth * 0.5f, -iIHeight * 0.5f, 0.0f);
+        
+        glEnable(GL_TEXTURE_2D);
+        
+        glBindTexture(GL_TEXTURE_2D, this.iTexID);
+        
+        glTranslatef(x, y, 0.0f);
+        
+        //glScalef(scaleFactor, scaleFactor, 1f);
+        //glTranslatef(-iHeight * 0.5f, -iIHeight * 0.5f, 0.0f);
 
         glBegin(GL_QUADS);
         {
@@ -226,34 +184,18 @@ public class Image {
             glVertex2f(0.0f, 0.0f);
 
             glTexCoord2f(1.0f, 0.0f);
-            glVertex2f(iIWidth, 0.0f);
+            glVertex2f(iWidth, 0.0f);
 
             glTexCoord2f(1.0f, 1.0f);
-            glVertex2f(iIWidth, iIHeight);
+            glVertex2f(iWidth, iHeight);
 
             glTexCoord2f(0.0f, 1.0f);
-            glVertex2f(0.0f, iIHeight);
+            glVertex2f(0.0f, iHeight);
         }
         glEnd();
 
+        glDisable(GL_TEXTURE_2D);
+        
         glPopMatrix();
-
-//        glfwSwapBuffers(window);
     }
-    
-    //..	//window
-    private void destroy() {
-        GL.setCapabilities(null);
-
-        if (debugProc != null) {
-            debugProc.free();
-        }
-
- //       glfwFreeCallbacks(window);
- //       glfwDestroyWindow(window);
-        glfwTerminate();
-        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
-    }
-    
-    
 }

@@ -60,7 +60,7 @@ public class Main {
 
 			// Draw text indicating the game is paused.
 			graphics.setColor(255.f, 255.f, 255.f, 255.f);
-			graphics.drawString("GAME PAUSED", 2, 2, 16.f);
+			graphics.drawString("GAME PAUSED", 2, 2, 8.f);
 		}
 		// ----------------------- PAUSE MENU HUD
 		
@@ -78,6 +78,8 @@ public class Main {
 		
 		// Render HUD (this will overlap the world)
 		renderHUD();
+		
+		graphics.drawPlayerTexture();
 	}
 	
 	public void tick() {
@@ -140,6 +142,8 @@ public class Main {
 		
 		//audio.play("laser");
 
+		graphics.createPlayerTexture();
+		
 		window.loop(_render, _tick);
 
 		// Terminate the window and cleanup NanoVG context.

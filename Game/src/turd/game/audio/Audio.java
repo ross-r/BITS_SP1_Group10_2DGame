@@ -49,7 +49,7 @@ public class Audio {
 		String entry;
 		
 		do {
-			System.out.println("Enter sound to play \n 1 = Laser \n 1 = footsteps \n q = quit. ");
+			System.out.println("Enter sound to play \n 1 = Laser \n 2 = footsteps \n q = quit. ");
 			System.out.println("Enter: ");
 			
 			entry = in.next();
@@ -128,6 +128,6 @@ public class Audio {
 	}
 	
 	public static void main(String args[]) {
-		Audio audio = new Audio();
+		new Audio();
 	}
 }

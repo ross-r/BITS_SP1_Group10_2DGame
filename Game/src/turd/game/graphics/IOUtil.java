@@ -26,7 +26,7 @@ public final class IOUtil {
         newBuffer.put(buffer);
         return newBuffer;
     }
-
+    
     /**
      * Reads the specified resource and returns the raw data as a ByteBuffer.
      *
@@ -41,6 +41,9 @@ public final class IOUtil {
         ByteBuffer buffer;
 
         Path path = Paths.get(resource);
+        
+        System.out.println(path.toString());
+        
         if (Files.isReadable(path)) {
             try (SeekableByteChannel fc = Files.newByteChannel(path)) {
                 buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
@@ -50,7 +53,7 @@ public final class IOUtil {
             }
         } else {
             try (
-                InputStream source = IOUtil.class.getClassLoader().getResourceAsStream(resource);
+                InputStream source = IOUtil.class.getResourceAsStream(resource);
                 ReadableByteChannel rbc = Channels.newChannel(source)
             ) {
                 buffer = createByteBuffer(bufferSize);
