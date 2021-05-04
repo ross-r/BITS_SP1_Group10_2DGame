@@ -5,14 +5,14 @@ import turd.game.objects.ObjectList;
 public class SmallPlatform extends Platform {
 
 	private static final int PLATFORM_WIDTH = 128;
-	private static final int PLATFORM_HEIGHT = 60;
+	private static final int PLATFORM_HEIGHT = 64;
 
 	public SmallPlatform(int x, int y) { // pass in paramiters
 		super();
 		
 		this.aabb.init(x, y, PLATFORM_WIDTH, PLATFORM_HEIGHT);
 
-		this.type = PLATFORM_TYPE.MEDIUM;
+		this.type = PLATFORM_TYPE.SHORT;
 
 		this.sImage = "res/long_platform.png";
 
