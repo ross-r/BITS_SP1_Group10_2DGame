@@ -29,7 +29,7 @@ public class Projectile extends GameObject{
 		
 		flProjectileSpeed = 20;
 		
-		System.out.println("Projectile Created");
+		//System.out.println("Projectile Created");
 	}
 
 	@Override
@@ -64,6 +64,14 @@ public class Projectile extends GameObject{
 			this.flProjectileSpeed = 0;
 			System.out.println("Collsion Deleted");
 		}
+		if(this.aabb.p0.x >= this.iDestinationX - 20 && this.aabb.p0.x <= this.iDestinationX + 20 ) {
+			this.flProjectileSpeed = 0;
+			System.out.println("Horizontal Delte");
+		}
+		if(this.aabb.p0.y >= this.iDestinationY - 20 && this.aabb.p0.y <= this.iDestinationY + 20 ) {
+			this.flProjectileSpeed = 0;
+			System.out.println("Vert Delte");
+		}
 		
 		
 		
@@ -86,6 +94,7 @@ public class Projectile extends GameObject{
 		this.iDestinationX = iDesX;
 		this.iDestinationY = iDesY;
 		
+		//Trig to extend the line out to keep going
 		flLength = (float)Math.sqrt(Math.pow(this.iOriginX - this.iDestinationX, 2) + Math.pow(this.iOriginY - this.iDestinationY, 2));
 		flXExtended =(float)this.iDestinationX + (this.iDestinationX - this.iOriginX) / flLength * 500;
 		flYExtended = (float)this.iDestinationY + (this.iDestinationY - this.iOriginY) / flLength * 500;
