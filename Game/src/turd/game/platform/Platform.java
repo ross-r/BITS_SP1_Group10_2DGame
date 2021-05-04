@@ -10,12 +10,22 @@ import turd.game.objects.StaticObject;
 public class Platform extends StaticObject {
 	
 	public enum PLATFORM_TYPE {
+		
+		// platforms horizontal
 		LONG,
 		MEDIUM,
 		SHORT,
 		HAZARD,
 		SMALLSQ,
 		MEDIUMSQ,
+		// platforms vertical
+		LONG_VERT,
+		MED_VERT,
+		// hazards
+		SPIKES,
+		PIT,
+		FALLING_PLATFORMS,
+	
 	}
 	
 	// Indicates the type of platform this class should handle.

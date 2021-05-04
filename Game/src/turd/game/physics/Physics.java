@@ -22,6 +22,10 @@ public class Physics {
 		
 		// Perform collision detection on all other static objects.
 		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
+		
+			// if instance of ....
+			
+			
 			if (this.gameObject.collides(staticObject)) {
 				this.gameObject.aabb.p0.y = y;
 				
