@@ -63,6 +63,7 @@ public class ObjectList {
 		return (AI) this.entities.getLast();
 	}
 
+	
 	public void render(Window window, Graphics g) {
 		g.beginFrame();
 		

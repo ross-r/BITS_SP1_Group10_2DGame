@@ -8,6 +8,7 @@ import turd.game.input.KeyboardInput;
 import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
 import turd.game.physics.Physics;
+import turd.game.entities.Projectile;
 
 public class Player extends GameObject {
 	private final double DIRECTION_DOWN = 270.f;
@@ -37,6 +38,8 @@ public class Player extends GameObject {
 	
 	private int x;
 	private int y;
+	
+	Projectile projectile;
 	
 	public Player() {
 		super();
@@ -86,6 +89,10 @@ public class Player extends GameObject {
 		//Draws aiming line from centre of player to mouse position
 		g.drawLine((int)((aabb.p0.x) + (aabb.p1.x / 2)), (int)((aabb.p0.y) + (aabb.p1.y / 2)), MouseInput.getInstance().getXPosition(window, this), (int)MouseInput.getInstance().getYPosition(window, this));
 		//g.createPlayerTexture();
+		
+		if(projectile != null) {
+			projectile.render(window, g);
+		}
 	}
 	
 	@Override
@@ -111,13 +118,35 @@ public class Player extends GameObject {
 			flUpMove *= PLAYER_JUMP_SPEED;
 		}
 		
-		if(MouseInput.getInstance().getMouseClicked() == Boolean.TRUE) {
-			System.out.println("Clicked " + MouseInput.getInstance().getXPosition(w, this));
-		}
 		// This is really bad lol
 		// The reason these calls are separated is because both x and y are checked in collision and if ONE of them fails
 		// both are ignored for the current tick, if they are separate calls then this *issue* is *avoided*.
 		this.physics.move(this.aabb.p0.x + ( flSideMove * PLAYER_SPEED ), this.aabb.p0.y);
 		this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( flUpMove * PLAYER_SPEED ));
+		
+		if(MouseInput.getInstance().getMouseClicked() == true) {
+			if(projectile == null) {
+				System.out.println("Projectile");
+				projectile = new Projectile();
+				
+				System.out.println("Player:" + (this.aabb.p0.x - (this.aabb.p1.x /2) + " " + ( this.aabb.p0.y - (this.aabb.p1.y / 2))));
+				projectile.initialise((int)(this.aabb.p0.x - (this.aabb.p1.x /2)),(int)( this.aabb.p0.y - (this.aabb.p1.y / 2)),
+						(int)MouseInput.getInstance().getXPosition(w, this), (int)MouseInput.getInstance().getYPosition(w, this));
+			}
+		}
+		
+		//delete projectile if it stopped
+		if(this.projectile != null) {
+			
+			
+			if(this.projectile.getProjectileSpeed() == 0) {
+				System.out.println("Projectile Deleted");
+				projectile = null;
+			}
+			else {
+				projectile.tick(w);
+			}
+		}
+		
 	}	
 }
