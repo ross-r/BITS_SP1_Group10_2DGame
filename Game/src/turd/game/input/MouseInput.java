@@ -33,7 +33,7 @@ public class MouseInput {
 		return (int)(window.getMouseX() + flCameraX);
 	}
 	
-	public double getYPosition(Window window, Player player) {
+	public int getYPosition(Window window, Player player) {
 		
 		//Finds the centre of the camera and normalises line to that
 		float flCenterY = player.aabb.p0.y + (player.aabb.p1.y / 2.f);

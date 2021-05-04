@@ -47,8 +47,6 @@ public class Projectile extends GameObject{
 		float flOldX = this.aabb.p0.x;
 		float flOldY = this.aabb.p0.y;
 		
-		// The reason these calls are separated is because both x and y are checked in collision and if ONE of them fails
-		// both are ignored for the current tick, if they are separate calls then this *issue* is *avoided*.
 		
 		//Math for getting angle to move along
 		float flxDirection = 0;
@@ -62,16 +60,37 @@ public class Projectile extends GameObject{
 		
 		if(flOldX == this.aabb.p0.x && flOldY == this.aabb.p0.y) {
 			this.flProjectileSpeed = 0;
-			System.out.println("Collsion Deleted");
+			//System.out.println("Collsion Deleted");
 		}
-		if(this.aabb.p0.x >= this.iDestinationX - 20 && this.aabb.p0.x <= this.iDestinationX + 20 ) {
-			this.flProjectileSpeed = 0;
-			System.out.println("Horizontal Delte");
+		
+		//Deleteing projectile if it moves off screen
+		if(this.iDestinationX >= 0) {
+			if(this.aabb.p0.x >= w.getWidth()) {
+				this.flProjectileSpeed = 0;
+				//System.out.println(" Right Horizontal Delte");
+			}
 		}
-		if(this.aabb.p0.y >= this.iDestinationY - 20 && this.aabb.p0.y <= this.iDestinationY + 20 ) {
-			this.flProjectileSpeed = 0;
-			System.out.println("Vert Delte");
+		if(this.iDestinationY >= 0) {
+			
+			if(this.aabb.p0.y >= w.getHeight() ) {
+				
+				this.flProjectileSpeed = 0;
+				//System.out.println("down Vert Delte");
+			}
 		}
+		if(this.iDestinationX <= 0) {
+			if(this.aabb.p0.x <= -w.getWidth()) {
+				this.flProjectileSpeed = 0;
+				//System.out.println(" Left Horizontal Delte");
+			}
+		}
+		if(this.iDestinationY <= 0) {
+			if(this.aabb.p0.y <= -w.getHeight()){
+				this.flProjectileSpeed = 0;
+				//System.out.println(" up Horizontal Delte");
+			}
+		}
+		
 		
 		
 		
@@ -90,17 +109,19 @@ public class Projectile extends GameObject{
 		iStartX = this.iOriginX;
 		iStartY = this.iOriginY;
 		
-		
+		System.out.println("X1: " + iStartX + " Y1: " + iStartY + " X2: " + iDesX +  " Y2: " + iDesY);
 		this.iDestinationX = iDesX;
 		this.iDestinationY = iDesY;
 		
 		//Trig to extend the line out to keep going
 		flLength = (float)Math.sqrt(Math.pow(this.iOriginX - this.iDestinationX, 2) + Math.pow(this.iOriginY - this.iDestinationY, 2));
-		flXExtended =(float)this.iDestinationX + (this.iDestinationX - this.iOriginX) / flLength * 500;
-		flYExtended = (float)this.iDestinationY + (this.iDestinationY - this.iOriginY) / flLength * 500;
+		flXExtended =(float)this.iDestinationX + ((this.iDestinationX - this.iOriginX))/ flLength * 1000;
+		flYExtended = (float)this.iDestinationY + ((this.iDestinationY - this.iOriginY)) / flLength * 1000;
 		
 		this.iDestinationX = (int)flXExtended;
 		this.iDestinationY = (int)flYExtended;
+		
+		System.out.println("X1: " + this.iOriginX + " Y1: " + this.iOriginY + " X2: " + this.iDestinationX  +  " Y2: " + this.iDestinationY);
 		
 	}
 	
