@@ -130,7 +130,7 @@ public class Player extends GameObject {
 				
 				System.out.println("Player:" + (this.aabb.p0.x - (this.aabb.p1.x /2) + " " + ( this.aabb.p0.y - (this.aabb.p1.y / 2))));
 				
-				projectile.initialise((int)(this.aabb.p0.x - (this.aabb.p1.x /2)),(int)( this.aabb.p0.y - (this.aabb.p1.y / 2)),
+				projectile.initialise((int)((aabb.p0.x) + (aabb.p1.x / 2)),(int)((aabb.p0.y) + (aabb.p1.y / 2)),
 						(int)MouseInput.getInstance().getXPosition(w, this), (int)MouseInput.getInstance().getYPosition(w, this));
 			}
 		}

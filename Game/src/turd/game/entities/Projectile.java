@@ -19,6 +19,8 @@ public class Projectile extends GameObject{
 	
 	private final int PLAYER_BOUNDS = 16;
 	
+	private int iTimeonScreen;
+	
 	Physics physics;
 
 	public Projectile() {
@@ -29,6 +31,7 @@ public class Projectile extends GameObject{
 		
 		flProjectileSpeed = 20;
 		
+		this.iTimeonScreen = 0;
 		//System.out.println("Projectile Created");
 	}
 
@@ -60,36 +63,15 @@ public class Projectile extends GameObject{
 		
 		if(flOldX == this.aabb.p0.x && flOldY == this.aabb.p0.y) {
 			this.flProjectileSpeed = 0;
-			//System.out.println("Collsion Deleted");
+			System.out.println("Collsion Deleted");
 		}
 		
-		//Deleteing projectile if it moves off screen
-		if(this.iDestinationX >= 0) {
-			if(this.aabb.p0.x >= w.getWidth()) {
-				this.flProjectileSpeed = 0;
-				//System.out.println(" Right Horizontal Delte");
-			}
+		if(this.iTimeonScreen == 2000) {
+			this.flProjectileSpeed = 0;
+			System.out.println("Projectile Time Deleted");
 		}
-		if(this.iDestinationY >= 0) {
-			
-			if(this.aabb.p0.y >= w.getHeight() ) {
-				
-				this.flProjectileSpeed = 0;
-				//System.out.println("down Vert Delte");
-			}
-		}
-		if(this.iDestinationX <= 0) {
-			if(this.aabb.p0.x <= -w.getWidth()) {
-				this.flProjectileSpeed = 0;
-				//System.out.println(" Left Horizontal Delte");
-			}
-		}
-		if(this.iDestinationY <= 0) {
-			if(this.aabb.p0.y <= -w.getHeight()){
-				this.flProjectileSpeed = 0;
-				//System.out.println(" up Horizontal Delte");
-			}
-		}
+		
+		this.iTimeonScreen = this.iTimeonScreen + (int)this.flProjectileSpeed;
 		
 		
 		
@@ -103,7 +85,7 @@ public class Projectile extends GameObject{
 		float flYExtended = 0;
 		
 		
-		this.aabb.init(iStartX, iStartY, PLAYER_BOUNDS, PLAYER_BOUNDS);
+		this.aabb.init(iStartX - (PLAYER_BOUNDS / 2), iStartY - (PLAYER_BOUNDS / 2), PLAYER_BOUNDS, PLAYER_BOUNDS);
 		
 		
 		iStartX = this.iOriginX;
@@ -113,16 +95,25 @@ public class Projectile extends GameObject{
 		this.iDestinationX = iDesX;
 		this.iDestinationY = iDesY;
 		
+		System.out.println(getRotation());
 		//Trig to extend the line out to keep going
+		float flRotation = getRotation();
 		flLength = (float)Math.sqrt(Math.pow(this.iOriginX - this.iDestinationX, 2) + Math.pow(this.iOriginY - this.iDestinationY, 2));
-		flXExtended =(float)this.iDestinationX + ((this.iDestinationX - this.iOriginX))/ flLength * 1000;
-		flYExtended = (float)this.iDestinationY + ((this.iDestinationY - this.iOriginY)) / flLength * 1000;
+		
+		flLength = flLength * 10.0f;
+		
+		flXExtended = (float)(flLength * Math.sin(Math.toRadians(getRotation())));
+		flYExtended = (float)(Math.cos(Math.toRadians(getRotation())) * -flLength);
+		//flXExtended =(float)this.iDestinationX + ((this.iDestinationX - this.iOriginX))/ flLength * 400;
+		//flYExtended = (float)this.iDestinationY + ((this.iDestinationY - this.iOriginY)) / flLength * 400;
+		//flXExtended = (float)(this.iDestinationX + 500 * Math.sin(getRotation()));
+		//flYExtended = (float)(this.iDestinationY + 500 * Math.cos(getRotation()));
 		
 		this.iDestinationX = (int)flXExtended;
 		this.iDestinationY = (int)flYExtended;
 		
 		System.out.println("X1: " + this.iOriginX + " Y1: " + this.iOriginY + " X2: " + this.iDestinationX  +  " Y2: " + this.iDestinationY);
-		
+		System.out.println(getRotation());
 	}
 	
 	public float getProjectileSpeed() {
