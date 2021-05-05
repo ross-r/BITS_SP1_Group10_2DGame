@@ -2,23 +2,23 @@ package turd.game.platform;
 
 import turd.game.objects.ObjectList;
 
-public class SmallSquare extends Platform {
+public class Pit extends Platform {
 
-	private static final int PLATFORM_WIDTH = 64;
+	private static final int PLATFORM_WIDTH = 400;
 	private static final int PLATFORM_HEIGHT = 64;
 	
-	public SmallSquare(int x, int y) { // pass in paramiters 
+	public Pit(int x, int y) { // pass in paramiters 
 		super();
 		
 		this.aabb.init(x, y, PLATFORM_WIDTH, PLATFORM_HEIGHT);
 		
-		this.type = PLATFORM_TYPE.SMALLSQ;
+		this.type = PLATFORM_TYPE.PIT;
 		
 		this.sImage = "res/long_platform.png";
 		
-		// red
-		this.r = 255.f;
-		this.g = 0.f;
+		// blue
+		this.r = 0.f;
+		this.g = 255.f;
 		this.b = 0.f;
 		this.a = 255.f;
 		

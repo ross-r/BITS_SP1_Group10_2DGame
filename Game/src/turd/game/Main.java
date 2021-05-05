@@ -11,8 +11,14 @@ import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
+import turd.game.platform.FallingPlat;
 import turd.game.platform.LongPlatform;
+import turd.game.platform.MediumPlatform;
+import turd.game.platform.MediumSquare;
+import turd.game.platform.MediumVertical;
+import turd.game.platform.Pit;
 import turd.game.platform.SmallSquare;
+import turd.game.platform.Spikes;
 
 public class Main {
 
@@ -134,14 +140,23 @@ public class Main {
 		// Window size
 		// 720
 		// 1280
-
-		new LongPlatform(0, 660);
-		new LongPlatform(300, 560);
-		new LongPlatform(600, 460);
-		new SmallSquare(0, 200);
+		new LongPlatform(-80, 144);
+		new SmallSquare(-80, 80);
+		new SmallSquare(656, 80);
+		new Spikes(720, 100);
+		new LongPlatform(850, 144);
+		new SmallSquare(850, 80);
+		new SmallSquare(1820, 144);
+		new MediumPlatform(2046, 144);
+		new Pit(1650, 240);
+		new FallingPlat(2450,144);
+		new FallingPlat(2520,144);
+		new FallingPlat(2590,144);
+		new FallingPlat(2660,144);
+		new FallingPlat(2730,144);
+		new MediumPlatform(2800, 144);
 		
 		//audio.play("laser");
-
 		graphics.createPlayerTexture();
 		
 		window.loop(_render, _tick);
