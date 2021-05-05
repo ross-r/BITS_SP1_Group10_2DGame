@@ -42,7 +42,7 @@ public class Scrap extends GameObject {
 	@Override
 	public void render(Window window, Graphics g) {	
 		
-		System.out.println("Scrap Rendered");
+		//System.out.println("Scrap Rendered");
 		g.setColor(255.f, 255.f, 255.f, 255.f);
 		g.drawFilledRect((int)aabb.p0.x, (int)aabb.p0.y, (int)aabb.p1.x, (int)aabb.p1.y);
 		
@@ -51,7 +51,7 @@ public class Scrap extends GameObject {
 	@Override
 	public void tick(Window w) {
 		
-		System.out.println("Scrap Tick");
+		//System.out.println("Scrap Tick");
 		// 'physics.gravity()' returns false when a collision has happened.
 		this.bInAir = this.physics.gravity();
 		
@@ -77,6 +77,20 @@ public class Scrap extends GameObject {
 	public void setScrapSpeed(int iSpeed) {
 		this.flScrapSpeed = iSpeed;
 	}
+	
+	public boolean pickedUp(GameObject player) {
+		
+		if(this.collides(player)) {
+			System.out.println("Pickup");
+			setScrapSpeed(0);
+		}
+		return this.collides(player);
+		
+		
+	}
 
+	public float getScrapSpeed() {
+		return this.flScrapSpeed;
+	}
 	
 }

@@ -41,6 +41,8 @@ public class Player extends GameObject {
 	
 	private int x;
 	private int y;
+	private static int MAX_AMMO = 10;
+	private int iCurrentAmmo = 0;
 	
 	Projectile projectile;
 	
@@ -60,6 +62,8 @@ public class Player extends GameObject {
 		
 		this.flDirection = 0.0;
 		this.flRotation = 0.0;
+		
+		this.iCurrentAmmo = 1;
 		
 		this.aabb.init(0.f, 0.f, PLAYER_BOUNDS, PLAYER_BOUNDS);
 		
@@ -132,13 +136,14 @@ public class Player extends GameObject {
 		this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( flUpMove * PLAYER_SPEED ));
 		
 		if(MouseInput.getInstance().getMouseClicked() == true) {
-			if(projectile == null) {
+			if(projectile == null && this.iCurrentAmmo != 0) {
 				projectile = new Projectile();
 				
 				System.out.println("Player:" + (this.aabb.p0.x - (this.aabb.p1.x /2) + " " + ( this.aabb.p0.y - (this.aabb.p1.y / 2))));
 				
 				projectile.initialise((int)((aabb.p0.x) + (aabb.p1.x / 2)),(int)((aabb.p0.y) + (aabb.p1.y / 2)),
 						(int)MouseInput.getInstance().getXPosition(w, this), (int)MouseInput.getInstance().getYPosition(w, this));
+				this.iCurrentAmmo -= 1;
 			}
 		}
 		
@@ -157,9 +162,19 @@ public class Player extends GameObject {
 			}
 		}
 		
-		if(this.tempScrap != null) {
-			this.tempScrap.tick(w);
-		}
+		
+		  if(this.tempScrap != null) { this.tempScrap.tick(w);
+		  
+		  if(this.tempScrap.pickedUp(this)) {
+			  
+			  if(this.iCurrentAmmo != MAX_AMMO) {
+				  this.iCurrentAmmo += 1;
+			  }
+			  
+		  }
+		  if(this.tempScrap.getScrapSpeed() == 0) {
+		  System.out.println("Scrap Deleted"); this.tempScrap = null; } }
+		 
 		
 	}	
 }
