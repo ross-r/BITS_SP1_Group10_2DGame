@@ -4,7 +4,9 @@ package turd.game.entities;
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.objects.GameObject;
+import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
+
 
 
 public class Projectile extends GameObject{
@@ -65,6 +67,7 @@ public class Projectile extends GameObject{
 		if(flOldX == this.aabb.p0.x && flOldY == this.aabb.p0.y) {
 			this.flProjectileSpeed = 0;
 			System.out.println("Collsion Deleted");
+			
 		}
 		
 		//If it times out or goes off screen delete
