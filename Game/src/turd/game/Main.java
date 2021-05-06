@@ -79,7 +79,7 @@ public class Main {
 		// Render HUD (this will overlap the world)
 		renderHUD();
 		
-		graphics.drawPlayerTexture();
+		//graphics.drawPlayerTexture();
 	}
 	
 	public void tick() {
@@ -139,6 +139,7 @@ public class Main {
 		new LongPlatform(300, 560);
 		new LongPlatform(600, 460);
 		new SmallSquare(0, 200);
+		new SmallSquare(800, 300);
 		
 		//audio.play("laser");
 

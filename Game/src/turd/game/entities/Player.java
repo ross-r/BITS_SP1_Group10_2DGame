@@ -37,6 +37,7 @@ public class Player extends GameObject {
 	
 	private int x;
 	private int y;
+	private int iFallTicks;
 	
 	public Player() {
 		super();
@@ -73,7 +74,7 @@ public class Player extends GameObject {
 		
 		if ( this.bOnGround && bInJump && flJumpTime <= 0.f ) {
 			// How many ticks we should jump for.
-			final int iNumJumpTicks = 20;
+			final int iNumJumpTicks = 48;
 			flJumpTime = ( 1.f / 60.f ) * iNumJumpTicks;
 		}
 	}
@@ -83,7 +84,48 @@ public class Player extends GameObject {
 		g.setColor(255.f, 255.f, 255.f, 255.f);
 		g.drawFilledRect((int)aabb.p0.x, (int)aabb.p0.y, (int)aabb.p1.x, (int)aabb.p1.y);
 		
+		final int trail = 5;
+		
+		// trail - 1 because the last trail is 0 opacity.
+		for( int i = 0; i < trail - 1; i++ ) {
+			int x = (int)aabb.p0.x;
+			int y = (int)aabb.p0.y;
+			
+			float flNewUpMove = this.flUpMove;
+			if( !this.bOnGround ) {
+				
+				if( !this.bInJump ) {
+					flNewUpMove = 1.F;
+				}
+			} 
+			
+			if( flNewUpMove < -1.F ) {
+				flNewUpMove = -1.F;
+			}
+			
+			if( flNewUpMove > 1.F ) {
+				flNewUpMove = 1.F;
+			}
+			
+			//System.out.printf("%f %f\n", this.flSideMove, flNewUpMove);
+			
+			int offsetX = ( ( i + 1 ) * ( PLAYER_BOUNDS / 4 ) ) * ( int )this.flSideMove;
+			int offsetY = ( ( i + 1 ) * ( PLAYER_BOUNDS / 4 ) ) * ( int )flNewUpMove;
+			
+			x += offsetX * -1;
+			y += offsetY * -1;
+			
+			float alpha = 255.f - (( i + 1 ) * (255.f/trail));
+			//System.out.printf("%f\n", alpha);
+						
+			g.setColor(255.f, 255.f, 255.f, alpha);
+			g.drawFilledRect(x, y, (int)aabb.p1.x, (int)aabb.p1.y);
+			
+			g.drawPlayerTexture(x, y);
+		}
+		
 		//Draws aiming line from centre of player to mouse position
+		g.setColor(255.f, 255.f, 255.f, 255.f);
 		g.drawLine((int)((aabb.p0.x) + (aabb.p1.x / 2)), (int)((aabb.p0.y) + (aabb.p1.y / 2)), MouseInput.getInstance().getXPosition(window, this), (int)MouseInput.getInstance().getYPosition(window, this));
 		//g.createPlayerTexture();
 	}
@@ -95,7 +137,22 @@ public class Player extends GameObject {
 		// 'physics.gravity()' returns false when a collision has happened.
 		this.bOnGround = !this.physics.gravity();
 		
-		this.physics.gravity();
+		if( !this.bOnGround ) {
+			iFallTicks++;
+		}
+		else {
+			iFallTicks = 0;
+		}
+		
+		// If we are falling for more than 4 seconds (60 ticks per second)
+		// reset our position so we don't stay off-screen.
+		if( iFallTicks >= 60*4 ) {
+			this.aabb.p0.x = 0;
+			this.aabb.p0.y = 0;
+			iFallTicks = 0;
+		}
+		
+		//this.physics.gravity();
 
 		float PLAYER_SPEED = bInMoveSpeed ? 12.f : 4.f;
 		float PLAYER_JUMP_SPEED = bInMoveSpeed ? 8.f : 4.f;

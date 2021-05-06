@@ -102,8 +102,8 @@ public class Graphics {
 		playerImage = new Image( imagePath );
 	}
 	
-	public void drawPlayerTexture() {
-		playerImage.render(20, 20, 64, 64);
+	public void drawPlayerTexture(int x, int y) {
+		playerImage.render(x, y, 64, 64);
 	}
 	
 	public void translate(int x, int y) {

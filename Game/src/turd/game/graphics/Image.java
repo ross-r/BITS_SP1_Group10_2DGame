@@ -165,7 +165,7 @@ public class Image {
     }
     
     public void render( int x, int y, int iWidth, int iHeight ) {
-        float scaleFactor = 1.0f;
+        //float scaleFactor = 1.0f;
 
         glPushMatrix();
         
@@ -175,8 +175,9 @@ public class Image {
         
         glTranslatef(x, y, 0.0f);
         
+        //glTranslatef(iWidth * 0.5f, iHeight * 0.5f, 0.0f);
         //glScalef(scaleFactor, scaleFactor, 1f);
-        //glTranslatef(-iHeight * 0.5f, -iIHeight * 0.5f, 0.0f);
+        //glTranslatef(-iWidth * 0.5f, -iHeight * 0.5f, 0.0f);
 
         glBegin(GL_QUADS);
         {
