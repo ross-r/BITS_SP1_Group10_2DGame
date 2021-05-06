@@ -14,8 +14,6 @@ import turd.game.objects.ObjectList;
 import turd.game.platform.FallingPlat;
 import turd.game.platform.LongPlatform;
 import turd.game.platform.MediumPlatform;
-import turd.game.platform.MediumSquare;
-import turd.game.platform.MediumVertical;
 import turd.game.platform.Pit;
 import turd.game.platform.SmallSquare;
 import turd.game.platform.Spikes;
@@ -84,8 +82,6 @@ public class Main {
 		
 		// Render HUD (this will overlap the world)
 		renderHUD();
-		
-		graphics.drawPlayerTexture();
 	}
 	
 	public void tick() {
@@ -140,6 +136,7 @@ public class Main {
 		// Window size
 		// 720
 		// 1280
+
 		new LongPlatform(-80, 144);
 		new SmallSquare(-80, 80);
 		new SmallSquare(656, 80);
@@ -157,7 +154,6 @@ public class Main {
 		new MediumPlatform(2800, 144);
 		
 		//audio.play("laser");
-		graphics.createPlayerTexture();
 		
 		window.loop(_render, _tick);
 
