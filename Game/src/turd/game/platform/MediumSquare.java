@@ -4,8 +4,8 @@ import turd.game.objects.ObjectList;
 
 public class MediumSquare extends Platform {
 
-	private static final int PLATFORM_WIDTH = 128;
-	private static final int PLATFORM_HEIGHT = 128;
+	private static final int PLATFORM_WIDTH = 200;
+	private static final int PLATFORM_HEIGHT = 200;
 	
 	public MediumSquare(int x, int y) { // pass in paramiters 
 		super();

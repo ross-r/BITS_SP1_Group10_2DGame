@@ -4,8 +4,8 @@ import turd.game.objects.ObjectList;
 
 public class FallingPlat extends Platform {
 
-	private static final int PLATFORM_WIDTH = 64;
-	private static final int PLATFORM_HEIGHT = 64;
+	private static final int PLATFORM_WIDTH = 100;
+	private static final int PLATFORM_HEIGHT = 100;
 	
 	public FallingPlat(int x, int y) { // pass in paramiters 
 		super();

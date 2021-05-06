@@ -7,10 +7,8 @@ import turd.game.graphics.Graphics;
 import turd.game.input.KeyboardInput;
 import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
-import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
 import turd.game.entities.Projectile;
-import turd.game.entities.Scrap;
 
 public class Player extends GameObject {
 	private final double DIRECTION_DOWN = 270.f;
@@ -18,7 +16,6 @@ public class Player extends GameObject {
 
 	private final int PLAYER_BOUNDS = 64;
 	
-	Scrap tempScrap;
 	Physics physics;
 	
 	// Movement related properties.
@@ -62,7 +59,6 @@ public class Player extends GameObject {
 		this.flRotation = 0.0;
 		
 		this.aabb.init(0.f, 0.f, PLAYER_BOUNDS, PLAYER_BOUNDS);
-		
 	}
 
 	private void input() {
@@ -97,9 +93,6 @@ public class Player extends GameObject {
 		if(projectile != null) {
 			projectile.render(window, g);
 		}
-		if(this.tempScrap != null) {
-			this.tempScrap.render(window, g);
-		}
 	}
 	
 	@Override
@@ -133,11 +126,11 @@ public class Player extends GameObject {
 		
 		if(MouseInput.getInstance().getMouseClicked() == true) {
 			if(projectile == null) {
+				System.out.println("Projectile");
 				projectile = new Projectile();
 				
 				System.out.println("Player:" + (this.aabb.p0.x - (this.aabb.p1.x /2) + " " + ( this.aabb.p0.y - (this.aabb.p1.y / 2))));
-				
-				projectile.initialise((int)((aabb.p0.x) + (aabb.p1.x / 2)),(int)((aabb.p0.y) + (aabb.p1.y / 2)),
+				projectile.initialise((int)(this.aabb.p0.x - (this.aabb.p1.x /2)),(int)( this.aabb.p0.y - (this.aabb.p1.y / 2)),
 						(int)MouseInput.getInstance().getXPosition(w, this), (int)MouseInput.getInstance().getYPosition(w, this));
 			}
 		}
@@ -148,17 +141,11 @@ public class Player extends GameObject {
 			
 			if(this.projectile.getProjectileSpeed() == 0) {
 				System.out.println("Projectile Deleted");
-				this.tempScrap = new Scrap((int)this.projectile.aabb.p0.x, (int)this.projectile.aabb.p0.y);
-				//ObjectList.getInstance().createScrap((int)this.projectile.aabb.p0.x, (int)this.projectile.aabb.p0.y);
 				projectile = null;
 			}
 			else {
 				projectile.tick(w);
 			}
-		}
-		
-		if(this.tempScrap != null) {
-			this.tempScrap.tick(w);
 		}
 		
 	}	
