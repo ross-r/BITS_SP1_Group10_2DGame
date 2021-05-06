@@ -49,7 +49,7 @@ public class Audio {
 		String entry;
 		
 		do {
-			System.out.println("Enter sound to play \n 1 = Laser \n 1 = footsteps \n q = quit. ");
+			System.out.println("Enter sound to play \n 1 = Laser \n 2 = footsteps \n 3 = Jump \n q = quit. ");
 			System.out.println("Enter: ");
 			
 			entry = in.next();
@@ -59,6 +59,9 @@ public class Audio {
 			break;
 			case "2":
 				play("footsteps");
+			break;
+			case "3":
+				play("jump");
 			break;
 			case "q":
 			return;
@@ -80,9 +83,10 @@ public class Audio {
 		
 		AudioSource footsteps = new AudioSource("footsteps.ogg", false, false, 1);
 		AudioSource laser = new AudioSource("Laser.ogg", false, false, 1);
+		AudioSource jump = new AudioSource("jump.ogg", false, false, 20);
 		soundMap.put("footsteps", footsteps);
 		soundMap.put("laser", laser);
-		
+		soundMap.put("jump", jump);		
 	}
 	
 	public void terminate() {
@@ -128,6 +132,6 @@ public class Audio {
 	}
 	
 	public static void main(String args[]) {
-		Audio audio = new Audio();
+		new Audio();
 	}
 }

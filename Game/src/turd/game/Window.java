@@ -4,6 +4,7 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import turd.game.input.KeyboardInput;
+import turd.game.input.MouseInput;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -205,11 +206,18 @@ public class Window {
 			updateWindowSizes();
 		});
 		
+		//See if mouse is clicked
+		
+		
+		glfwSetMouseButtonCallback(hHandle, (window, button, action, mods) -> {
+			MouseInput.getInstance().updateMouse(this, button, action, mods);
+		});
+		
 		// Setup a cursor position callback.
 		// This will notify us of where our mouse is within the winow.
 		glfwSetCursorPosCallback(hHandle, (window, x, y) -> {
 			
-		
+			
 			this.flMouseX = x;
 			this.flMouseY = y;
 			

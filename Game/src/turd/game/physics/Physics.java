@@ -23,6 +23,10 @@ public class Physics {
 		
 		// Perform collision detection on all other static objects.
 		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
+		
+			// if instance of ....
+			
+			
 			if (this.gameObject.collides(staticObject)) {
 				
 				// SmallSquare extends Platform which extends StaticObject

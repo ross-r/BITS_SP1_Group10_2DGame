@@ -10,6 +10,7 @@ import turd.game.entities.Player;
 public class MouseInput {
 
 	private static MouseInput instance = null;
+	private boolean bIsClicked = false;
 	
 	//Singleton
 	private MouseInput() {}
@@ -32,7 +33,7 @@ public class MouseInput {
 		return (int)(window.getMouseX() + flCameraX);
 	}
 	
-	public double getYPosition(Window window, Player player) {
+	public int getYPosition(Window window, Player player) {
 		
 		//Finds the centre of the camera and normalises line to that
 		float flCenterY = player.aabb.p0.y + (player.aabb.p1.y / 2.f);
@@ -41,4 +42,21 @@ public class MouseInput {
 
 		return (int)(window.getMouseY() + flCameraY);
 	}
+	
+	
+	public void updateMouse(Window window, int button, int action, int mods) {
+		
+		if(button == GLFW.GLFW_MOUSE_BUTTON_1 && action == GLFW.GLFW_PRESS) {
+			this.bIsClicked = true;
+		}
+		else {
+			this.bIsClicked = false;
+		}
+	}
+	
+	public boolean getMouseClicked() {
+		return this.bIsClicked;
+	}
+	
 }
+

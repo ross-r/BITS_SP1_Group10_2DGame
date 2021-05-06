@@ -2,17 +2,21 @@ package turd.game.platform;
 
 import turd.game.objects.ObjectList;
 
-public class SmallSquare extends Platform {
+public class LongVertical extends Platform {
 
-	private static final int PLATFORM_WIDTH = 64;
-	private static final int PLATFORM_HEIGHT = 64;
+	// final = const
+	// const means it cannot change after initialization (e.g, inline/constrcutor)
+	// pixels sizing
 	
-	public SmallSquare(int x, int y) { // pass in paramiters 
+	private static final int PLATFORM_WIDTH = 64;
+	private static final int PLATFORM_HEIGHT = 800;
+	
+	public LongVertical(int x, int y) { // pass in paramiters 
 		super();
 		
 		this.aabb.init(x, y, PLATFORM_WIDTH, PLATFORM_HEIGHT);
 		
-		this.type = PLATFORM_TYPE.SMALLSQ;
+		this.type = PLATFORM_TYPE.LONG_VERT;
 		
 		this.sImage = "res/long_platform.png";
 		
@@ -28,4 +32,5 @@ public class SmallSquare extends Platform {
 		// Register this platform.
 		ObjectList.getInstance().registerStaticObject(this);
 	}
+	
 }
