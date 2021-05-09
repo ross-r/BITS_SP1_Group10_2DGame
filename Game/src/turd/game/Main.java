@@ -69,7 +69,7 @@ public class Main {
 			graphics.drawString("GAME PAUSED", 2, 2, 8.f);
 		}
 		// ----------------------- PAUSE MENU HUD
-//LEO
+
 		hud.render(window, graphics);
 		graphics.endFrame();
 	}
@@ -118,12 +118,11 @@ public class Main {
 		// Create graphics.
 		graphics = new Graphics(window, NVG_ANTIALIAS);
 		
-//LEO	//create hud
+		//create hud.
 		hud = new HUD(window, graphics);
 
-		//Leo
 		// Create audio.
-		audio = new Audio();
+		//audio = new Audio();
 
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
@@ -159,16 +158,14 @@ public class Main {
 		new FallingPlat(2730,144);
 		new MediumPlatform(2800, 144);
 		
-		//leo
-		audio.play("laser");
+		//audio.play("laser");
 		
 		window.loop(_render, _tick);
 
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
-		//Leo
-		audio.terminate();
+		//audio.terminate();
 
 //LEO	HUD.terminate();
 	}
