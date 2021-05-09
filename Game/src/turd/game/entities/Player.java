@@ -39,12 +39,17 @@ public class Player extends GameObject {
 	private float flJumpTime;
 
 	private int iFallTicks;
+	private int iAnimateTicks; //leo - used for temporarily animating wheels
+	
+	private static int iScrapValue; //leo - used for temporarily counting projectiles
 
 	Projectile projectile;
 
 	Texture texPlayerIdle;
-	Texture texPlayerLeft;
-	Texture texPlayerRight;
+	Texture texPlayerLeft1;
+	Texture texPlayerLeft2;
+	Texture texPlayerRight1;
+	Texture texPlayerRight2;
 	Texture texPlayerJumpLeft;
 	Texture texPlayerJumpRight;
 	Texture texture;
@@ -69,11 +74,16 @@ public class Player extends GameObject {
 
 		// Create textures.
 		texPlayerIdle = new Texture( Graphics.nvgHandle(), "player_idle.png" );
-		texPlayerLeft = new Texture( Graphics.nvgHandle(), "player_left.png");
-		texPlayerRight = new Texture( Graphics.nvgHandle(), "player_right.png");
+		texPlayerLeft1 = new Texture( Graphics.nvgHandle(), "player_left1.png");
+		texPlayerLeft2 = new Texture( Graphics.nvgHandle(), "player_left2.png");
+		texPlayerRight1 = new Texture( Graphics.nvgHandle(), "player_right1.png");
+		texPlayerRight2 = new Texture( Graphics.nvgHandle(), "player_right2.png");
 		texPlayerJumpLeft = new Texture( Graphics.nvgHandle(), "player_jump_left.png");
 		texPlayerJumpRight = new Texture( Graphics.nvgHandle(), "player_jump_right.png");
 		texture = this.texPlayerIdle;
+		
+		//temporary health/ammo value
+		iScrapValue = 7;
 	}
 
 	private void input() {
@@ -133,21 +143,35 @@ public class Player extends GameObject {
 				texPlayerIdle.render(newX, newY, w, h, alpha);
 			}
 		}
+		
+		//need to update per FPS not Ticks
+		//window.getFps();
+		iAnimateTicks ++;
+		if (iAnimateTicks == 2) {
+			iAnimateTicks = 0;
+			}
 		if (bInMoveLeft) {
 			if (bInJump) {
 				texture = texPlayerJumpLeft;
 			} else {
-				texture = texPlayerLeft;
+				if (iAnimateTicks == 1) {
+					texture = texPlayerLeft1;
+				} else if (iAnimateTicks == 0) {
+					texture = texPlayerLeft2;
+				}
 			}
-			
 		} else if (bInMoveRight) {
 			if (bInJump) {
 				texture = texPlayerJumpRight;
 			} else {
-				texture = texPlayerRight;
+				if (iAnimateTicks == 1) {
+					texture = texPlayerRight1;
+				} else if (iAnimateTicks == 0) {
+					texture = texPlayerRight2;
+				}
 			}
 		} else {
-			texture = texPlayerIdle;
+			//texture = texPlayerIdle;
 		}		
 		texture.render(x, y, w, h, 255.f);
 
@@ -220,6 +244,8 @@ public class Player extends GameObject {
 				System.out.println("Player:" + (this.aabb.p0.x - (this.aabb.p1.x /2) + " " + ( this.aabb.p0.y - (this.aabb.p1.y / 2))));
 				projectile.initialise((int)(this.aabb.p0.x - (this.aabb.p1.x /2)),(int)( this.aabb.p0.y - (this.aabb.p1.y / 2)),
 						(int)MouseInput.getInstance().getXPosition(w, this), (int)MouseInput.getInstance().getYPosition(w, this));
+			
+				iScrapValue --; //leo, temporarily de-incrementing how many scrap the player has
 			}
 		}
 
@@ -236,5 +262,10 @@ public class Player extends GameObject {
 			}
 		}
 
+	}
+	
+	//players health/ammunition value (scrap)
+	public static int getScrapValue() {
+		return iScrapValue;
 	}
 }
