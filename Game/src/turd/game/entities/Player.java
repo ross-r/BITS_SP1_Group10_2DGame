@@ -43,6 +43,11 @@ public class Player extends GameObject {
 	Projectile projectile;
 
 	Texture texPlayerIdle;
+	Texture texPlayerLeft;
+	Texture texPlayerRight;
+	Texture texPlayerJumpLeft;
+	Texture texPlayerJumpRight;
+	Texture texture;
 
 	public Player() {
 		super();
@@ -63,7 +68,12 @@ public class Player extends GameObject {
 		this.aabb.init(0.f, 0.f, PLAYER_BOUNDS, PLAYER_BOUNDS);
 
 		// Create textures.
-		texPlayerIdle = new Texture( Graphics.nvgHandle(), "player.png" );
+		texPlayerIdle = new Texture( Graphics.nvgHandle(), "player_idle.png" );
+		texPlayerLeft = new Texture( Graphics.nvgHandle(), "player_left.png");
+		texPlayerRight = new Texture( Graphics.nvgHandle(), "player_right.png");
+		texPlayerJumpLeft = new Texture( Graphics.nvgHandle(), "player_jump_left.png");
+		texPlayerJumpRight = new Texture( Graphics.nvgHandle(), "player_jump_right.png");
+		texture = this.texPlayerIdle;
 	}
 
 	private void input() {
@@ -123,8 +133,23 @@ public class Player extends GameObject {
 				texPlayerIdle.render(newX, newY, w, h, alpha);
 			}
 		}
-
-		texPlayerIdle.render(x, y, w, h, 255.f);
+		if (bInMoveLeft) {
+			if (bInJump) {
+				texture = texPlayerJumpLeft;
+			} else {
+				texture = texPlayerLeft;
+			}
+			
+		} else if (bInMoveRight) {
+			if (bInJump) {
+				texture = texPlayerJumpRight;
+			} else {
+				texture = texPlayerRight;
+			}
+		} else {
+			texture = texPlayerIdle;
+		}		
+		texture.render(x, y, w, h, 255.f);
 
 		// Draws aiming line from centre of player to mouse position
 		g.setColor(255.f, 255.f, 255.f, 255.f);

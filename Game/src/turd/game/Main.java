@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFW;
 
 import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
+import turd.game.graphics.HUD;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
 import turd.game.platform.FallingPlat;
@@ -26,7 +27,8 @@ public class Main {
 	private Window window;
 	private Graphics graphics;
 
-	//Leo
+	private HUD hud;
+	
 	private Audio audio;
 	
 	private Runnable _render = new Runnable() {
@@ -54,7 +56,7 @@ public class Main {
 		graphics.setColor(255.f, 255.f, 255.f, 255.f);
 		graphics.drawString(String.format("Trash Unit Response Droid (T.U.R.D)\nFPS: %d\nTPS: %d",
 				window.getFps(), window.getTicks()), 2, 2, 1.f);
-
+		
 		// ----------------------- PAUSE MENU HUD
 		if (GameState.getInstance().isPaused()) {
 			
@@ -67,7 +69,8 @@ public class Main {
 			graphics.drawString("GAME PAUSED", 2, 2, 8.f);
 		}
 		// ----------------------- PAUSE MENU HUD
-		
+//LEO
+		hud.render(window, graphics);
 		graphics.endFrame();
 	}
 	
@@ -114,10 +117,13 @@ public class Main {
 
 		// Create graphics.
 		graphics = new Graphics(window, NVG_ANTIALIAS);
+		
+//LEO	//create hud
+		hud = new HUD(window, graphics);
 
 		//Leo
 		// Create audio.
-		//audio = new Audio();
+		audio = new Audio();
 
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
@@ -153,7 +159,8 @@ public class Main {
 		new FallingPlat(2730,144);
 		new MediumPlatform(2800, 144);
 		
-		//audio.play("laser");
+		//leo
+		audio.play("laser");
 		
 		window.loop(_render, _tick);
 
@@ -161,7 +168,9 @@ public class Main {
 		window.terminate();
 		graphics.terminate();
 		//Leo
-		//audio.terminate();
+		audio.terminate();
+
+//LEO	HUD.terminate();
 	}
 
 	public static void main(String[] args) {
