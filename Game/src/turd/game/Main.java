@@ -29,7 +29,7 @@ public class Main {
 
 	private HUD hud;
 	
-	private Audio audio;
+//	private Audio audio;
 	
 	private Runnable _render = new Runnable() {
 

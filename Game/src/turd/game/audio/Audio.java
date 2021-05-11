@@ -50,63 +50,63 @@ public class Audio {
 			e.printStackTrace();
 		}
 		
-		Scanner in = new Scanner(System.in);
-		
-		String entry;
-		
-		//For testing sounds. Delete in final version.
-		System.out.println("***Audio Testing***");
-		do {
-			System.out.println("");
-			System.out.println("Enter sound to play");
-			System.out.println("1 = Player Jump.");
-			System.out.println("2 = Player Rev Up.");
-			System.out.println("3 = Player Move.");
-			System.out.println("4 = Player Shoot.");
-			System.out.println("5 = Player Pick Up Scrap.");
-			System.out.println("6 = Player Damage.");
-			System.out.println("7 = Enemy Damage.");
-			System.out.println("8 = Enemy Move.");
-			System.out.println("9 = Pause/Play.");
-			System.out.println("q = quit. ");
-			System.out.print("Enter: ");
-			
-			entry = in.next();
-			switch(entry) {
-			case "1":
-				play("jump");
-			break;
-			case "2":
-				play("playerRevUp");
-			break;
-			case "3":
-				play("playerMove");
-			break;
-			case "4":
-				play("playerShoot");
-			break;
-			case "5":
-				play("playerPickUp");
-			break;
-			case "6":
-				play("playerDamage");
-			break;
-			case "7":
-				play("enemyDamage");
-			break;
-			case "8":
-				play("enemyMove");
-			break;
-			case "9":
-				play("pausePlay");
-			break;
-			case "q":
-			return;
-			}
-		} while (entry != "q");
-		
-		//Terminate audio devices.
-		terminate();
+//		Scanner in = new Scanner(System.in);
+//		
+//		String entry;
+//		
+//		//For testing sounds. Delete in final version.
+//		System.out.println("***Audio Testing***");
+//		do {
+//			System.out.println("");
+//			System.out.println("Enter sound to play");
+//			System.out.println("1 = Player Jump.");
+//			System.out.println("2 = Player Rev Up.");
+//			System.out.println("3 = Player Move.");
+//			System.out.println("4 = Player Shoot.");
+//			System.out.println("5 = Player Pick Up Scrap.");
+//			System.out.println("6 = Player Damage.");
+//			System.out.println("7 = Enemy Damage.");
+//			System.out.println("8 = Enemy Move.");
+//			System.out.println("9 = Pause/Play.");
+//			System.out.println("q = quit. ");
+//			System.out.print("Enter: ");
+//			
+//			entry = in.next();
+//			switch(entry) {
+//			case "1":
+//				play("jump");
+//			break;
+//			case "2":
+//				play("playerRevUp");
+//			break;
+//			case "3":
+//				play("playerMove");
+//			break;
+//			case "4":
+//				play("playerShoot");
+//			break;
+//			case "5":
+//				play("playerPickUp");
+//			break;
+//			case "6":
+//				play("playerDamage");
+//			break;
+//			case "7":
+//				play("enemyDamage");
+//			break;
+//			case "8":
+//				play("enemyMove");
+//			break;
+//			case "9":
+//				play("pausePlay");
+//			break;
+//			case "q":
+//			return;
+//			}
+//		} while (entry != "q");
+//		
+//		//Terminate audio devices.
+//		terminate();
 	}
 
 	//Generate listener with neutral values
@@ -208,7 +208,7 @@ public class Audio {
 	}
 	
 	//Main method for audio testing.
-	public static void main(String args[]) {
-		new Audio();
-	}
+//	public static void main(String args[]) {
+//		new Audio();
+//	}
 }
