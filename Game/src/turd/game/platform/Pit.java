@@ -5,7 +5,7 @@ import turd.game.objects.ObjectList;
 public class Pit extends Platform {
 
 	private static final int PLATFORM_WIDTH = 400;
-	private static final int PLATFORM_HEIGHT = 64;
+	private static final int PLATFORM_HEIGHT = 100;
 	
 	public Pit(int x, int y) { // pass in paramiters 
 		super();
