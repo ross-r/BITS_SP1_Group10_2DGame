@@ -10,6 +10,9 @@ import java.util.Scanner;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
+
+import turd.game.entities.Player;
+
 import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import org.joml.Vector3f;
@@ -49,19 +52,22 @@ public class Audio {
 		String entry;
 		
 		do {
-			System.out.println("Enter sound to play \n 1 = Laser \n 2 = footsteps \n 3 = Jump \n q = quit. ");
+			System.out.println("Enter sound to play \n 1 = Jump \n 2 = Player Move \n q = quit. ");
 			System.out.println("Enter: ");
 			
 			entry = in.next();
 			switch(entry) {
 			case "1":
-				play("laser");
+				play("jump");
 			break;
 			case "2":
-				play("footsteps");
+				play("playerRevUp");
 			break;
 			case "3":
-				play("jump");
+				play("playerMove");
+			break;
+			case "4":
+				play("playerShoot");
 			break;
 			case "q":
 			return;
@@ -81,12 +87,16 @@ public class Audio {
 	
 	public void createSounds() throws Exception {
 		
-		AudioSource footsteps = new AudioSource("footsteps.ogg", false, false, 1);
-		AudioSource laser = new AudioSource("Laser.ogg", false, false, 1);
-		AudioSource jump = new AudioSource("jump.ogg", false, false, 20);
-		soundMap.put("footsteps", footsteps);
-		soundMap.put("laser", laser);
-		soundMap.put("jump", jump);		
+		AudioSource jump = new AudioSource("jump.ogg", false, false, 1);
+		AudioSource playerRevUp = new AudioSource("playerRevUp.ogg", false, false, 20);
+		AudioSource playerMove = new AudioSource("playerMove.ogg", false, false, 20);
+		AudioSource playerShoot = new AudioSource("playerShoot.ogg", false, false, 1);
+		soundMap.put("playerRevUp", playerRevUp);
+		soundMap.put("playerMove", playerMove);
+		soundMap.put("jump", jump);	
+		soundMap.put("playerShoot", playerShoot);
+		
+		soundMap.get("playerShoot").setGain(10000);
 	}
 	
 	public void terminate() {
@@ -104,6 +114,10 @@ public class Audio {
 	
 	public void play(String name) {
 		soundMap.get(name).play();
+	}
+	
+	public void stop(String name) {
+		soundMap.get(name).stop();
 	}
 
 	public void init() throws Exception {

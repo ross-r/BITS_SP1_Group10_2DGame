@@ -3,6 +3,7 @@ package turd.game.entities;
 import org.lwjgl.glfw.GLFW;
 
 import turd.game.Window;
+import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
 import turd.game.input.KeyboardInput;
@@ -30,6 +31,8 @@ public class Player extends GameObject {
 	private boolean bInMoveRight;
 	private boolean bInMoveSpeed;
 	private boolean bInJump;
+	
+	private boolean isMoving;
 
 	private boolean bOnGround;
 
@@ -53,6 +56,8 @@ public class Player extends GameObject {
 	Texture texPlayerJumpLeft;
 	Texture texPlayerJumpRight;
 	Texture texture;
+	
+	Audio playerAudio;
 
 	public Player() {
 		super();
@@ -81,6 +86,8 @@ public class Player extends GameObject {
 		texPlayerJumpLeft = new Texture( Graphics.nvgHandle(), "player_jump_left.png");
 		texPlayerJumpRight = new Texture( Graphics.nvgHandle(), "player_jump_right.png");
 		texture = this.texPlayerIdle;
+		
+		playerAudio = new Audio();
 		
 		//temporary health/ammo value
 		iScrapValue = 7;
@@ -261,8 +268,24 @@ public class Player extends GameObject {
 				projectile.tick(w);
 			}
 		}
-
 	}
+	
+//	private void moveAudio() {
+//		playerAudio.play("playerRevUp");
+//		isMoving = false;
+//		while (this.bInMoveLeft || this.bInMoveRight) {
+//			playerAudio.play("playerMove");
+//			
+//			if (!this.bInMoveLeft || this.bInMoveRight) {
+//				playerAudio.stop("playerMove");
+//			}
+//		}
+//	}
+//	
+//	private void jumpAudio() {
+//		playerAudio.play("jump");
+//	}
+	
 	
 	//players health/ammunition value (scrap)
 	public static int getScrapValue() {
