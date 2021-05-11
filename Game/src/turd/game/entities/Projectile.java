@@ -68,6 +68,7 @@ public class Projectile extends GameObject{
 			this.flProjectileSpeed = 0;
 			System.out.println("Collsion Deleted");
 			
+			
 		}
 		
 		//If it times out or goes off screen delete

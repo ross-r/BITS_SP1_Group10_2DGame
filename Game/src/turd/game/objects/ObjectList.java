@@ -9,6 +9,7 @@ import turd.game.Window;
 import turd.game.entities.AI;
 import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
+import turd.game.entities.Scrap;
 
 public class ObjectList {
 	private static ObjectList instance = null;
@@ -62,7 +63,17 @@ public class ObjectList {
 		this.entities.add(new AI());
 		return (AI) this.entities.getLast();
 	}
-
+	
+	public Scrap createScrap(int iX, int iY){
+		
+		if(this.entities.add(new Scrap(iX, iY))) {
+			System.out.println("Created right");
+			System.out.println(this.entities.size());
+			System.out.println(this.entities);
+		}
+		
+		return (Scrap) this.entities.getLast();
+	}
 	
 	public void render(Window window, Graphics g) {
 		g.beginFrame();
