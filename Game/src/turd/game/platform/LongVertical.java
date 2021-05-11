@@ -8,7 +8,7 @@ public class LongVertical extends Platform {
 	// const means it cannot change after initialization (e.g, inline/constrcutor)
 	// pixels sizing
 	
-	private static final int PLATFORM_WIDTH = 64;
+	private static final int PLATFORM_WIDTH = 100;
 	private static final int PLATFORM_HEIGHT = 800;
 	
 	public LongVertical(int x, int y) { // pass in paramiters 

@@ -9,13 +9,12 @@ import org.lwjgl.glfw.GLFW;
 
 import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
+import turd.game.graphics.HUD;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
 import turd.game.platform.FallingPlat;
 import turd.game.platform.LongPlatform;
 import turd.game.platform.MediumPlatform;
-import turd.game.platform.MediumSquare;
-import turd.game.platform.MediumVertical;
 import turd.game.platform.Pit;
 import turd.game.platform.SmallSquare;
 import turd.game.platform.Spikes;
@@ -28,7 +27,8 @@ public class Main {
 	private Window window;
 	private Graphics graphics;
 
-	//Leo
+	private HUD hud;
+	
 	private Audio audio;
 	
 	private Runnable _render = new Runnable() {
@@ -56,7 +56,7 @@ public class Main {
 		graphics.setColor(255.f, 255.f, 255.f, 255.f);
 		graphics.drawString(String.format("Trash Unit Response Droid (T.U.R.D)\nFPS: %d\nTPS: %d",
 				window.getFps(), window.getTicks()), 2, 2, 1.f);
-
+		
 		// ----------------------- PAUSE MENU HUD
 		if (GameState.getInstance().isPaused()) {
 			
@@ -69,7 +69,8 @@ public class Main {
 			graphics.drawString("GAME PAUSED", 2, 2, 8.f);
 		}
 		// ----------------------- PAUSE MENU HUD
-		
+
+		hud.render(window, graphics);
 		graphics.endFrame();
 	}
 	
@@ -84,8 +85,6 @@ public class Main {
 		
 		// Render HUD (this will overlap the world)
 		renderHUD();
-		
-		graphics.drawPlayerTexture();
 	}
 	
 	public void tick() {
@@ -118,8 +117,10 @@ public class Main {
 
 		// Create graphics.
 		graphics = new Graphics(window, NVG_ANTIALIAS);
+		
+		//create hud.
+		hud = new HUD(window, graphics);
 
-		//Leo
 		// Create audio.
 		//audio = new Audio();
 
@@ -140,6 +141,7 @@ public class Main {
 		// Window size
 		// 720
 		// 1280
+
 		new LongPlatform(-80, 144);
 		new SmallSquare(-80, 80);
 		new SmallSquare(656, 80);
@@ -157,15 +159,15 @@ public class Main {
 		new MediumPlatform(2800, 144);
 		
 		//audio.play("laser");
-		graphics.createPlayerTexture();
 		
 		window.loop(_render, _tick);
 
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
-		//Leo
 		//audio.terminate();
+
+//LEO	HUD.terminate();
 	}
 
 	public static void main(String[] args) {
