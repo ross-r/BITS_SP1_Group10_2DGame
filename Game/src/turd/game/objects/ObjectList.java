@@ -84,10 +84,6 @@ public class ObjectList {
 		// Render regular objects first as these are usually world objects and we want our entities to be on top.
 		for(GameObject object : objects) {	
 			object.render(window, g);
-			
-			// Draw the AABB of all objects.
-			g.setColor(0.F, 255.F, 255.F, 127.F);
-			g.drawRect((int)object.aabb.p0.x, (int)object.aabb.p0.y, (int)object.aabb.p1.x, (int)object.aabb.p1.y);
 		}
 
 		// Now render our entities on top of the non-interactable objects.

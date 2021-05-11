@@ -47,7 +47,7 @@ public class Camera {
 					GameState.getInstance().getOverridenCameraY());
 
 			// Give NanoVG the matrix we would like to use for transformations.
-			NanoVG.nvgTransform(Graphics.nvgHandle(), viewMatrix.m00(), viewMatrix.m01(), viewMatrix.m10(), viewMatrix.m11(),
+			NanoVG.nvgTransform(g.vg(), viewMatrix.m00(), viewMatrix.m01(), viewMatrix.m10(), viewMatrix.m11(),
 					viewMatrix.m30(), viewMatrix.m31());
 
 		} else {
@@ -66,7 +66,7 @@ public class Camera {
 			Matrix4f viewMatrix = setupViewMatrix(flCameraX, flCameraY);
 
 			// Give NanoVG the matrix we would like to use for transformations.
-			NanoVG.nvgTransform(Graphics.nvgHandle(), viewMatrix.m00(), viewMatrix.m01(), viewMatrix.m10(), viewMatrix.m11(),
+			NanoVG.nvgTransform(g.vg(), viewMatrix.m00(), viewMatrix.m01(), viewMatrix.m10(), viewMatrix.m11(),
 					viewMatrix.m30(), viewMatrix.m31());
 		}
 	}

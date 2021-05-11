@@ -1,35 +1,54 @@
 package turd.game.graphics;
-
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL2.*;
+import static org.lwjgl.stb.STBImage.stbi_failure_reason;
+import static org.lwjgl.stb.STBImage.stbi_info_from_memory;
+import static org.lwjgl.stb.STBImage.stbi_is_hdr_from_memory;
+import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
+import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
 import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NanoVG;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.NativeType;
 
 //import sun.nio.ch.IOUtil;
 import turd.game.Window;
 
+// TODO: Singleton.
 public class Graphics {
 
+//	//byte buffer for the image rendering
+//    private final ByteBuffer image;
+//	
+//	//image height and width
+//    private final int iIWidth;
+//    private final int iIHeight;
+//    private final int iIComp;
+//    //private final String imageName;
+	
+	
 	// NanoVG handle.
 	// This must be passed to all NanoVG function calls.
-	// Since this needs to be used in all NanoVG function calls and the Graphics class
-	// is not static or doesn't have a singleton function, this variable is now static so it can
-	// be accessed from anywhere as it is needed.
-	private static long nvgHandle;
+	private long vg;
 	
 	private NVGColor color;
 	
 	private Window window;
 	private FontRenderer fontRenderer;
 	
+	//original constructor
 	public Graphics(Window window, int flags) {
-		nvgHandle = nvgCreate(flags);
-		
+		this.vg = nvgCreate(flags);
 		this.window = window;
 		this.fontRenderer = new FontRenderer(window);
 		
-		if (nvgHandle == NULL) {
+		if (this.vg == NULL) {
 			throw new RuntimeException("Could not create nanovg.");
         }
 	
@@ -37,17 +56,17 @@ public class Graphics {
 	}
 	
 	public void terminate() {
-		nvgDelete(nvgHandle);
+		nvgDelete(vg);
 	}
 
 	public void beginFrame() {
 		this.fontRenderer.setGLStates();
 		
-		nvgBeginFrame(nvgHandle, window.getScaledWidth(), window.getScaledHeight(), window.getPixelRatio());
+		nvgBeginFrame(vg, window.getScaledWidth(), window.getScaledHeight(), window.getPixelRatio());
 	}
 	
 	public void endFrame() {
-		nvgEndFrame(nvgHandle);
+		nvgEndFrame(vg);
 	}
 	
 	public void drawString(String text, int x, int y) {
@@ -65,53 +84,63 @@ public class Graphics {
 		this.color.a(a / 255.f);
 		
 		this.fontRenderer.setColor(this.color.r(), this.color.g(), this.color.b(), this.color.a());
-		
-		// Set colour for lines
-		nvgStrokeColor(nvgHandle, this.color);
+		//Set colour for lines
+		nvgStrokeColor(vg, color);
+	}
+	
+	//leo attempting stbi load
+	//createImage makes a new object of Image
+	public void createImage(java.nio.ByteBuffer imageName, int[] x, int[] y, int[] channels_in_file,
+            int desired_channels) {
+		//new Image("dfa.jpg").run();		
+	}		
+	
+	public Image playerImage;
+	
+	public void createPlayerTexture() {
+		String imagePath = "player.png";
+		playerImage = new Image( imagePath );
+	}
+	
+	public void drawPlayerTexture() {
+		playerImage.render(20, 20, 64, 64);
 	}
 	
 	public void translate(int x, int y) {
-		nvgTranslate(nvgHandle, x, y);
+		nvgTranslate(vg, x, y);
 		
 		// Update text translations.
 		fontRenderer.translate(x, y);
 	}
 	
 	public void rotate(float angle) {
-		nvgRotate(nvgHandle, angle);
+		nvgRotate(vg, angle);
 	}
 	
 	public void drawFilledRect(int x, int y, int width, int height) {
-		nvgBeginPath(nvgHandle);
-		nvgRect(nvgHandle, x, y, width, height);
-		nvgFillColor(nvgHandle, color);
-		nvgFill(nvgHandle);
-	}
-	
-	public void drawRect(int x, int y, int width, int height) {
-		nvgBeginPath(nvgHandle);
-		nvgRect(nvgHandle, x, y, width, height);
-		nvgStrokeColor(nvgHandle, color);
-		nvgStroke(nvgHandle);
+		nvgBeginPath(vg);
+		nvgRect(vg, x, y, width, height);
+		nvgFillColor(vg, color);
+		nvgFill(vg);
 	}
 	
 	public void drawFilledCircle(float cx, float cy, float r) {
-		nvgBeginPath(nvgHandle);
-		nvgCircle(nvgHandle, cx, cy, r);
-		nvgFillColor(nvgHandle, color);
-		nvgFill(nvgHandle);
+		nvgBeginPath(vg);
+		nvgCircle(vg, cx, cy, r);
+		nvgFillColor(vg, color);
+		nvgFill(vg);
 	}
 	
 	public void drawLine(int iX1, int iY1, int iX2, int iY2) {
-		nvgBeginPath(nvgHandle);
-		nvgMoveTo(nvgHandle, iX1, iY1);
-		nvgLineTo(nvgHandle, iX2, iY2);
-		nvgStroke(nvgHandle);
-		nvgFill(nvgHandle);
+		nvgBeginPath(vg);
+		nvgMoveTo(vg, iX1, iY1);
+		nvgLineTo(vg, iX2, iY2);
+		nvgStroke(vg);
+		nvgFill(vg);
 	}
 	
 	
-	public static long nvgHandle() {
-		return nvgHandle;
+	public long vg() {
+		return this.vg;
 	}
 }
