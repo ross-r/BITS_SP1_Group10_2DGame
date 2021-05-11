@@ -1,5 +1,8 @@
 package turd.game.platform;
 
+import turd.game.Window;
+import turd.game.graphics.Graphics;
+import turd.game.graphics.Texture;
 import turd.game.objects.ObjectList;
 
 public class SmallSquare extends Platform {
@@ -7,25 +10,33 @@ public class SmallSquare extends Platform {
 	private static final int PLATFORM_WIDTH = 100;
 	private static final int PLATFORM_HEIGHT = 100;
 	
-	public SmallSquare(int x, int y) { // pass in paramiters 
+	private Texture texture;
+	
+	public SmallSquare(int x, int y) {
 		super();
 		
 		this.aabb.init(x, y, PLATFORM_WIDTH, PLATFORM_HEIGHT);
 		
 		this.type = PLATFORM_TYPE.SMALLSQ;
 		
-		this.sImage = "res/long_platform.png";
+		this.texture = new Texture(Graphics.nvgHandle(), "Ground_Mid_Mid.png");
 		
-		// red
 		this.r = 255.f;
 		this.g = 0.f;
 		this.b = 0.f;
 		this.a = 255.f;
 		
-		// The game object class has x/y/w/h defined locally.
-		// We can set that instead of making variables.
-		
 		// Register this platform.
 		ObjectList.getInstance().registerStaticObject(this);
+	}
+	
+	@Override
+	public void render(Window window, Graphics g) {
+		final int x = (int)aabb.p0.x;
+		final int y = (int)aabb.p0.y;
+		final int w = (int)aabb.p1.x;
+		final int h = (int)aabb.p1.y;
+		
+		this.texture.render(x, y, w, h, 255.f);
 	}
 }

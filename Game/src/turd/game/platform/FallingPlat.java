@@ -14,8 +14,6 @@ public class FallingPlat extends Platform {
 		
 		this.type = PLATFORM_TYPE.FALLING_PLATFORMS;
 		
-		this.sImage = "res/long_platform.png";
-		
 		// red
 		this.r = 140.f;
 		this.g = 140.f;

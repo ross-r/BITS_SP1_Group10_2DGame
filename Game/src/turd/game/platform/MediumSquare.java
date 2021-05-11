@@ -14,8 +14,6 @@ public class MediumSquare extends Platform {
 		
 		this.type = PLATFORM_TYPE.MEDIUMSQ;
 		
-		this.sImage = "res/long_platform.png";
-		
 		// red
 		this.r = 255.f;
 		this.g = 0.f;

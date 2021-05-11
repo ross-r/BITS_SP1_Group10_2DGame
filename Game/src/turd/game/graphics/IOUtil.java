@@ -63,6 +63,7 @@ public final class IOUtil {
                     if (bytes == -1) {
                         break;
                     }
+                    
                     if (buffer.remaining() == 0) {
                         buffer = resizeBuffer(buffer, buffer.capacity() * 3 / 2); // 50%
                     }

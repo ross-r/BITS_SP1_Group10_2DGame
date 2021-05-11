@@ -14,8 +14,6 @@ public class Spikes extends Platform {
 		
 		this.type = PLATFORM_TYPE.SPIKES;
 		
-		this.sImage = "res/long_platform.png";
-		
 		// blue
 		this.r = 0.f;
 		this.g = 0.f;

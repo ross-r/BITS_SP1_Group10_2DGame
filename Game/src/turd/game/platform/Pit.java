@@ -14,8 +14,6 @@ public class Pit extends Platform {
 		
 		this.type = PLATFORM_TYPE.PIT;
 		
-		this.sImage = "res/long_platform.png";
-		
 		// blue
 		this.r = 0.f;
 		this.g = 255.f;

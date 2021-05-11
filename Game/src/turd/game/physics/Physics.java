@@ -3,7 +3,6 @@ package turd.game.physics;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.objects.StaticObject;
-import turd.game.platform.SmallSquare;
 
 public class Physics {
 
@@ -63,5 +62,22 @@ public class Physics {
 				this.gameObject.aabb.p0.y = y;
 			}
 		}
+	}
+
+	public boolean applyForce(Vec2 direction, Vec2 velocity) {
+		float x = this.gameObject.aabb.p0.x;
+		float y = this.gameObject.aabb.p0.y;
+		
+		x += direction.x * velocity.x;
+		y += direction.y * velocity.y;
+		
+		this.move(x, y);
+		
+		// Check if there was any movement.
+		final float EPSILON = 0.01f;
+		boolean moved = Math.abs(this.gameObject.aabb.p0.x - x) > EPSILON || 
+				Math.abs(this.gameObject.aabb.p0.y - y) > EPSILON;
+				
+		return !moved;
 	}
 }

@@ -18,8 +18,6 @@ public class MediumVertical extends Platform {
 		
 		this.type = PLATFORM_TYPE.LONG_VERT;
 		
-		this.sImage = "res/long_platform.png";
-		
 		// red
 		this.r = 255.f;
 		this.g = 0.f;

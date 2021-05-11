@@ -5,63 +5,83 @@ import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
 import turd.game.objects.ObjectList;
 
-import static org.lwjgl.nanovg.NanoVG.*;
-
 public class LongPlatform extends Platform {
 
-	// final = const
-	// const means it cannot change after initialization (e.g, inline/constrcutor)
-	// pixels sizing
-	
 	private static final int PLATFORM_WIDTH = 800;
 	private static final int PLATFORM_HEIGHT = 100;
 	
-	private Texture texture;
+	private Texture texLeft;
+	private Texture texRight;
+	private Texture texMid;
 	
-	public LongPlatform(int x, int y) { // pass in paramiters 
+	public LongPlatform(int x, int y) {
 		super();
 		
 		this.aabb.init(x, y, PLATFORM_WIDTH, PLATFORM_HEIGHT);
 		
 		this.type = PLATFORM_TYPE.LONG;
 		
-		this.sImage = "platform_long.png";
-		this.texture = new Texture(Graphics.nvgHandle(), this.sImage);
-				
+		this.texLeft = new Texture(Graphics.nvgHandle(), "Ground_Platform_Left.png");
+		this.texRight = new Texture(Graphics.nvgHandle(), "Ground_Platform_Right.png");
+		this.texMid = new Texture(Graphics.nvgHandle(), "Ground_Platform_Mid.png");
+		
 		// red
 		this.r = 255.f;
 		this.g = 0.f;
 		this.b = 0.f;
 		this.a = 255.f;
 		
-		// The game object class has x/y/w/h defined locally.
-		// We can set that instead of making variables.
-		
 		// Register this platform.
 		ObjectList.getInstance().registerStaticObject(this);
 	}
 	
-	@Override
-	public void render(Window window, Graphics g) {
-		//g.setColor(this.r, this.g, this.b, this.a);
-		//g.drawFilledRect((int)aabb.p0.x, (int)aabb.p0.y, (int)aabb.p1.x, (int)aabb.p1.y);
-	
+	private void drawRepeatedTexture(Texture texture, int x, int y, int width, int height) {
+		
+		// Check if the texture can be repeated evenly within the supplied width.
+		if(width % texture.getWidth() != 0) {
+			
+			// For debug purposes.
+			System.out.printf("texture cannot be repeated evenly, width is %d and texture width is %d - remainder: %d\n",
+					width, texture.getWidth(), width % texture.getWidth());
+			
+			return;
+		}
+		
 		// Calculate how many iterations it will take to project the texture over the entire object.
-		final int width = (int)aabb.p1.x;
-		int iterations = (int)Math.ceil((float)width / this.texture.getWidth());
+		final int iterations = width / texture.getWidth();
 		
 		// Apply a scissor rect (clip rect) so that we don't need to manually fix when the texture repeats
 		// too far due to width/width not being equally divisible or w/e.
-		nvgScissor(Graphics.nvgHandle(), aabb.p0.x, aabb.p0.y, aabb.p1.x, aabb.p1.y);
+		// NOTE - Ross (11/5): This should no longer be needed since we make sure the texture can be repeated evenly.
+		//nvgScissor(Graphics.nvgHandle(), aabb.p0.x, aabb.p0.y, aabb.p1.x, aabb.p1.y);
 		
-		int iTexX = (int)aabb.p0.x;
 		for( int i = 0; i < iterations; i++ ) {
-			int iTexWidth = this.texture.getWidth();
-			this.texture.render(iTexX, (int)aabb.p0.y, iTexWidth, (int)aabb.p1.y, 255.f);
-			iTexX += this.texture.getWidth();
+			texture.render(x, y, texture.getWidth(), height, 255.f);
+			x += texture.getWidth();
 		}
 		
-		nvgResetScissor(Graphics.nvgHandle());
+		// NOTE - Ross (11/5): This should no longer be needed since we make sure the texture can be repeated evenly.
+		//nvgResetScissor(Graphics.nvgHandle());
+	}
+	
+	@Override
+	public void render(Window window, Graphics g) {
+		final int x = (int)aabb.p0.x;
+		final int y = (int)aabb.p0.y;
+		final int w = (int)aabb.p1.x;
+		final int h = (int)aabb.p1.y;
+		
+		// Draw the left platform first.
+		this.texLeft.render(x, y, 255.f);
+		
+		// Now draw the right platform.
+		this.texRight.render(x + (w - this.texRight.getWidth()), y, 255.f);
+		
+		// Work out how many times we need to repeat the center platform to fill in the gap.
+		final int iRepeatWidth = w - ( this.texLeft.getWidth() + this.texRight.getWidth() );
+		
+		// Draw the mid platform texture and repeat it to fill out the remaining gap.
+		drawRepeatedTexture(this.texMid, x + this.texLeft.getWidth(), y, iRepeatWidth, h);
 	}
 	
 }

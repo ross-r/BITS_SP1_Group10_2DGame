@@ -7,9 +7,9 @@ import static org.lwjgl.nanovg.NanoVGGL2.*;
 import org.lwjgl.*;
 import org.lwjgl.glfw.GLFW;
 
-import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.HUD;
+import turd.game.graphics.Texture;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
 import turd.game.platform.FallingPlat;
@@ -29,7 +29,7 @@ public class Main {
 
 	private HUD hud;
 	
-//	private Audio audio;
+	private Texture texBackground;
 	
 	private Runnable _render = new Runnable() {
 
@@ -75,6 +75,12 @@ public class Main {
 	}
 	
 	public void render() {
+		// Render the world background.
+		// The world background will not move with the camera, it will remain static.
+		graphics.beginFrame();
+		texBackground.render(0, 0, window.getWidth(), window.getHeight(), 255.f);
+		graphics.endFrame();
+		
 		GameState.getInstance().update(window);
 		
 		// We need to separate things into multiple frames so that translations don't mess stuff up.
@@ -93,6 +99,10 @@ public class Main {
 			return;
 		}
 		
+		// Animate the background texture and move it right every rendered frame to simulate it moving.
+		// Failed attempt to animate the background image :(
+		//texBackground.animate(window.getWidth(), window.getHeight());
+
 		// Zoom the camera in/out.
 		float flCameraFOV = GameState.getInstance().getCameraFOV();
 		
@@ -157,6 +167,10 @@ public class Main {
 		new FallingPlat(2660,144);
 		new FallingPlat(2730,144);
 		new MediumPlatform(2800, 144);
+		
+		//audio.play("laser");
+		
+		texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
 		
 		window.loop(_render, _tick);
 

@@ -10,7 +10,6 @@ import turd.game.input.KeyboardInput;
 import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
 import turd.game.physics.Physics;
-import turd.game.entities.Projectile;
 
 public class Player extends GameObject {
 	private final int PLAYER_BOUNDS = 64;
@@ -43,6 +42,7 @@ public class Player extends GameObject {
 
 	private int iFallTicks;
 	private int iAnimateTicks; //leo - used for temporarily animating wheels
+	private int iAnimateTickTimer;
 	
 	private static int iScrapValue; //leo - used for temporarily counting projectiles
 
@@ -117,20 +117,19 @@ public class Player extends GameObject {
 		}
 	}
 
-	@Override
-	public void render(Window window, Graphics g) {
+	private void drawTrail(Texture texture) {
 		final int x = (int)aabb.p0.x;
 		final int y = (int)aabb.p0.y;
 		final int w = (int)aabb.p1.x;
 		final int h = (int)aabb.p1.y;
-
+		
 		if( this.bInMoveSpeed || this.flMoveSpeedBonusMultiplier != 1.F ) {
 			final int trail = 5;
 
 			// trail - 1 because the last trail is 0 opacity.
 			for( int i = 0; i < trail - 1; i++ ) {
-				int newX = (int)aabb.p0.x;
-				int newY = (int)aabb.p0.y;
+				int newX = x;
+				int newY = y;
 
 				float flUpMove = Math.max(this.flUpMove, -1.F);
 				if( !this.bOnGround && this.flUpMove == 0.f ) {
@@ -139,26 +138,28 @@ public class Player extends GameObject {
 					flUpMove = 1.f;
 				}
 
-				int offsetX = ( ( i + 1 ) * ( PLAYER_BOUNDS / 4 ) ) * ( int )this.flSideMove;
-				int offsetY = ( ( i + 1 ) * ( PLAYER_BOUNDS / 4 ) ) * ( int )flUpMove;
+				int offsetX = ( ( i + 1 ) * ( w / 4 ) ) * ( int )this.flSideMove;
+				int offsetY = ( ( i + 1 ) * ( h / 4 ) ) * ( int )flUpMove;
 
 				newX += offsetX * -1;
 				newY += offsetY * -1;
 
 				float alpha = 255.f - (( i + 1 ) * (255.f/trail));
 
-				texPlayerIdle.render(newX, newY, w, h, alpha);
+				texture.render(newX, newY, w, h, alpha);
 			}
 		}
+	}
+	
+	@Override
+	public void render(Window window, Graphics g) {
+		final int x = (int)aabb.p0.x;
+		final int y = (int)aabb.p0.y;
+		final int w = (int)aabb.p1.x;
+		final int h = (int)aabb.p1.y;
 		
-		//need to update per FPS not Ticks
-		//window.getFps();
-		iAnimateTicks ++;
-		if (iAnimateTicks == 2) {
-			iAnimateTicks = 0;
-			}
 		if (bInMoveLeft) {
-			if (bInJump) {
+			if (this.flJumpTime > 0.f) {
 				texture = texPlayerJumpLeft;
 			} else {
 				if (iAnimateTicks == 1) {
@@ -168,7 +169,7 @@ public class Player extends GameObject {
 				}
 			}
 		} else if (bInMoveRight) {
-			if (bInJump) {
+			if (this.flJumpTime > 0.f) {
 				texture = texPlayerJumpRight;
 			} else {
 				if (iAnimateTicks == 1) {
@@ -179,12 +180,15 @@ public class Player extends GameObject {
 			}
 		} else {
 			//texture = texPlayerIdle;
-		}		
+		}
+		
+		drawTrail(texture);
+		
 		texture.render(x, y, w, h, 255.f);
 
 		// Draws aiming line from centre of player to mouse position
 		g.setColor(255.f, 255.f, 255.f, 255.f);
-		g.drawLine(x + w / 2, y + h / 2, MouseInput.getInstance().getXPosition(window, this), (int)MouseInput.getInstance().getYPosition(window, this));
+		//g.drawLine(x + w / 2, y + h / 2, MouseInput.getInstance().getXPosition(window, this), (int)MouseInput.getInstance().getYPosition(window, this));
 
 		if(projectile != null) {
 			projectile.render(window, g);
@@ -193,10 +197,24 @@ public class Player extends GameObject {
 		if(this.tempScrap != null) {
 			this.tempScrap.render(window, g);
 		}
+
 	}
 
 	@Override
 	public void tick(Window w) {
+		iAnimateTickTimer++;
+		
+		// Decides the frequency at which the wheels animation changes.
+		final int iAnimationMod = this.bInMoveSpeed ? 2 : 4;
+		if( iAnimateTickTimer % iAnimationMod == 0 ) {
+			iAnimateTicks++;
+			if( iAnimateTicks == 2 ) {
+				iAnimateTicks = 0;
+			}
+			
+			iAnimateTickTimer = 0;
+		}
+		
 		input();
 
 		// 'physics.gravity()' returns false when a collision has happened.
@@ -212,8 +230,8 @@ public class Player extends GameObject {
 		// If we are falling for more than 4 seconds (60 ticks per second)
 		// reset our position so we don't stay off-screen.
 		if( iFallTicks >= 60*4 ) {
-			this.aabb.p0.x = 0;
-			this.aabb.p0.y = 0;
+			//this.aabb.p0.x = 0;
+			//this.aabb.p0.y = 0;
 			iFallTicks = 0;
 		}
 
@@ -243,6 +261,27 @@ public class Player extends GameObject {
 		this.physics.move(this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y);
 		this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( this.flUpMove * this.flMoveSpeed ));
 
+		//
+		//
+		//
+		
+		/*
+		int centerX = (int) w.getWidth() / 2;
+		int centerY = (int) w.getHeight() / 2;
+		int targetX = (int) w.getMouseX();
+		int targetY = (int) w.getMouseY();
+		
+		float angle = MathUtils.calcDirection(centerX, centerY, targetX, targetY);
+
+		float flDirectionX = (float) Math.sin(-angle);
+		float flDirectionY = (float) Math.cos(angle);
+		
+		Vec2 direction = new Vec2( flDirectionX, flDirectionY );
+		Vec2 velocity = new Vec2( 8.f, 8.f );
+		
+		this.physics.applyForce(direction, velocity);
+		*/
+		
 		if(MouseInput.getInstance().getMouseClicked() == true) {
 			if(projectile == null) {
 				System.out.println("Projectile");

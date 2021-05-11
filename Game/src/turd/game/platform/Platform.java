@@ -2,7 +2,6 @@ package turd.game.platform;
 
 import turd.game.Window;
 import turd.game.graphics.Graphics;
-import turd.game.objects.GameObject;
 import turd.game.objects.StaticObject;
 
 // Use StaticObject instead of GameObject for when we register the platform
@@ -31,8 +30,6 @@ public class Platform extends StaticObject {
 	// Indicates the type of platform this class should handle.
 	protected PLATFORM_TYPE type;
 	
-	protected String sImage;
- 	
 	protected float r, g, b, a;
 	
 	@Override

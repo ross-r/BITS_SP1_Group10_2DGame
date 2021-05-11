@@ -15,8 +15,6 @@ public class MediumPlatform extends Platform {
 
 		this.type = PLATFORM_TYPE.MEDIUM;
 
-		this.sImage = "res/long_platform.png";
-
 		// red
 		this.r = 255.f;
 		this.g = 0.f;

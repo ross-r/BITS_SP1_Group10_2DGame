@@ -4,7 +4,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.nanovg.NanoVG;
 
-import turd.game.GameState;
 import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
 
