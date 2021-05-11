@@ -158,13 +158,13 @@ public class Main {
 		new FallingPlat(2730,144);
 		new MediumPlatform(2800, 144);
 		
-		//audio.play("laser");
-		
 		window.loop(_render, _tick);
 
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
+		
+		//Terminate all audio devices.
 		//audio.terminate();
 
 //LEO	HUD.terminate();
