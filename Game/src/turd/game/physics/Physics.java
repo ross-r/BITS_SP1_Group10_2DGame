@@ -1,5 +1,6 @@
 package turd.game.physics;
 
+import turd.game.entities.TestProjectile;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.objects.StaticObject;
@@ -45,17 +46,53 @@ public class Physics {
 		return true;
 	}
 	
+	// Check if a projectile intersects with another entity (which is not a projectile)
+	private void handleProjectileCollisions() {
+		if( this.gameObject instanceof TestProjectile ) {
+			
+			for (GameObject entity : ObjectList.getInstance().getEntities()) {
+			
+				// Skip self.
+				if( entity.equals(this.gameObject) ) {
+					continue;
+				}
+				
+				// Skip other projectiles.
+				if( entity instanceof TestProjectile ) {
+					continue;
+				}
+				
+				if (this.gameObject.collides(entity)) {
+					
+					// Notify the entity that they have had a collision.
+					entity.onCollision(this.gameObject);
+					
+					// Destroy the projectile once it has collided with an entity.
+					( ( TestProjectile )this.gameObject ).destroy(true);
+					
+					// Don't de-register the game object from ObjectList here.
+				}
+			}
+			
+		}
+	}
+	
 	public void move(float flNewX, float flNewY) {
 		float x = this.gameObject.aabb.p0.x;
 		float y = this.gameObject.aabb.p0.y;
 		
 		this.gameObject.aabb.p0.x = flNewX;
 		this.gameObject.aabb.p0.y = flNewY;
-				
+		
+		this.handleProjectileCollisions();
+		
 		// Perform collision detection on all other static objects.
 		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
 			
 			if (this.gameObject.collides(staticObject)) {
+				
+				// Notify our object that it has collided with something.
+				this.gameObject.onCollision(staticObject);
 				
 				// Stops movement.
 				this.gameObject.aabb.p0.x = x;

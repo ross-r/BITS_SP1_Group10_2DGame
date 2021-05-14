@@ -18,4 +18,8 @@ public abstract class GameObject {
 	public boolean collides(GameObject object) {
 		return this.aabb.collides(object.aabb);
 	}
+	
+	public void onCollision(GameObject object) {
+		// Override this method in classes which wish to implement functionality upon collisions.
+	}
 }

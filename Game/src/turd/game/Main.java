@@ -146,6 +146,7 @@ public class Main {
 		
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
+		ObjectList.getInstance().createEnemy(420.f, 20.f);
 
 		// (Length , Height)
 		// Window size

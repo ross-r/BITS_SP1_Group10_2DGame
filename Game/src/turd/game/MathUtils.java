@@ -1,5 +1,8 @@
 package turd.game;
 
+import turd.game.objects.GameObject;
+import turd.game.physics.Vec2;
+
 public class MathUtils {
 	public static float calcAngle( int x, int y, int x1, int y1 ) {
 		double theta = Math.atan2( y1 - y, x1 - x );
@@ -26,5 +29,63 @@ public class MathUtils {
 	public static float calcDirection( int x, int y, int x1, int y1 ) {
 		double theta = Math.atan2( -( x1 - x ), y1 - y );
 		return ( float ) theta;
+	}
+	
+	public static float calcDirection( float x, float y, float x1, float y1 ) {
+		double theta = Math.atan2( -( x1 - x ), y1 - y );
+		return ( float ) theta;
+	}
+	
+	// returned values are in radians.
+	public static Vec2 calcDirFromGameObjectToMouse(Window window, GameObject object) {
+		// Compute center coordinates of our aabb.
+		final float flCenterX = object.aabb.p0.x + ( object.aabb.p1.x / 2 );
+		final float flCenterY = object.aabb.p0.y + ( object.aabb.p1.y / 2 );
+		
+		// Work out the mouse coordinates in relation to the center of the screen specifically,
+		// i.e; if the mouse is in the center the coordinates should be [0, 0]
+		// if the mouse is off to the left it should be [-30, 0] where 30 is arbitrarily chosen for this example.
+		final float flMouseX = flCenterX + ( float ) window.getMouseX() - ( window.getWidth() / 2 );
+		final float flMouseY = flCenterY + ( float ) window.getMouseY() - ( window.getHeight() / 2 );
+		
+		float flDirection = MathUtils.calcDirection(flCenterX, flCenterY, flMouseX, flMouseY);
+		
+		float flDirectionX = (float) Math.sin(-flDirection);
+		float flDirectionY = (float) Math.cos(flDirection);
+		
+		return new Vec2(flDirectionX, flDirectionY);
+	}
+	
+	public static Vec2 calcDirBetweenGameObjects(GameObject object0, GameObject object1) {
+		// Compute center coordinates of our aabb.
+		final float flCenterX = object0.aabb.p0.x + ( object0.aabb.p1.x / 2 );
+		final float flCenterY = object0.aabb.p0.y + ( object0.aabb.p1.y / 2 );
+		
+		// Compute center coordinates of target aabb.
+		final float flTargetX = object1.aabb.p0.x + ( object1.aabb.p1.x / 2 );
+		final float flTargetY = object1.aabb.p0.y + ( object1.aabb.p1.y / 2 );
+		
+		float flDirection = MathUtils.calcDirection(flCenterX, flCenterY, flTargetX, flTargetY);
+		
+		float flDirectionX = (float) Math.sin(-flDirection);
+		float flDirectionY = (float) Math.cos(flDirection);
+		
+		return new Vec2(flDirectionX, flDirectionY);
+	}
+	
+	// Expected input is milliseconds.
+	// i.e; 2800 = 2.8 seconds
+	public static int convertMillisecondsToGameTicks(double milliseconds) {
+		
+		// The ratio to convert 1 millisecond into a second ( 1ms = 0.001s )
+		final double MS_TO_SECOND = 0.001;
+		
+		// How many milliseconds are in a second.
+		final double MS_IN_SECOND = 1000;
+		
+		// How many game ticks happen in a second.
+		final int GAME_TICKS = 60;
+		
+		return ( int )( ( milliseconds / MS_IN_SECOND ) / MS_TO_SECOND ) / GAME_TICKS;
 	}
 }

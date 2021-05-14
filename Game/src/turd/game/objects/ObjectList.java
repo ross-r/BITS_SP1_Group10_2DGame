@@ -6,9 +6,10 @@ import java.util.stream.Collectors;
 
 import turd.game.Camera;
 import turd.game.Window;
-import turd.game.entities.AI;
+import turd.game.entities.Enemy;
 import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
+import turd.game.physics.Vec2;
 import turd.game.entities.Scrap;
 
 public class ObjectList {
@@ -23,9 +24,11 @@ public class ObjectList {
 	// world objects, etc...
 	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
+	private Player player;
 	private Camera camera;
 	
 	private ObjectList() {
+		this.player = null;
 		this.camera = null;
 	}
 	
@@ -47,21 +50,34 @@ public class ObjectList {
 	}
 	
 	public Player createPlayer() {
+		if( this.player != null ) {
+			throw new RuntimeException("A player entity has already been created. Only 1 player is allowed.");
+		}
+		
 		this.entities.add(new Player());
+		
+		this.player = ( Player )this.entities.getLast();
 		
 		// Initialize the camrea object once a player is created.
 		// Assume that only one player will ever be created.
 		if ( this.camera == null ) {
-			this.camera = new Camera( (Player) this.entities.getLast() );
+			this.camera = new Camera( this.player );
 		}
 		
-		return (Player) this.entities.getLast();
-	
+		this.player.initialize();
+		return this.player;
 	}
 	
-	public AI createAI() {
-		this.entities.add(new AI());
-		return (AI) this.entities.getLast();
+	public GameObject createEntityObject(GameObject object) {
+		this.entities.add(object);
+		return this.entities.getLast();
+	}
+	
+	public Enemy createEnemy(float x, float y) {
+		this.entities.add(new Enemy(new Vec2(x, y)));
+		Enemy enemy = (Enemy) this.entities.getLast();
+		enemy.initialize();
+		return enemy;
 	}
 	
 	public Scrap createScrap(int iX, int iY){
@@ -108,8 +124,21 @@ public class ObjectList {
 		}
 	}
 
+	public List<GameObject> getEntities() {
+		// https://stackoverflow.com/a/33570034
+		return entities.stream().map(n -> (GameObject)n).collect(Collectors.toList());
+	}
+	
 	public List<StaticObject> getStaticObjects() {
 		// https://stackoverflow.com/a/33570034
 		return objects.stream().map(n -> (StaticObject)n).collect(Collectors.toList());
+	}
+	
+	public Player getPlayer() {
+		if( this.player == null ) {
+			throw new RuntimeException("ObjectList method 'getPlayer' called before a player has been created.");
+		}
+		
+		return this.player;
 	}
 }

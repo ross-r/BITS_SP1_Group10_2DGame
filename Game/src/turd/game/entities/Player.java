@@ -2,6 +2,7 @@ package turd.game.entities;
 
 import org.lwjgl.glfw.GLFW;
 
+import turd.game.MathUtils;
 import turd.game.Window;
 import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
@@ -9,7 +10,9 @@ import turd.game.graphics.Texture;
 import turd.game.input.KeyboardInput;
 import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
+import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
+import turd.game.physics.Vec2;
 
 public class Player extends GameObject {
 	private final int PLAYER_BOUNDS = 64;
@@ -58,6 +61,10 @@ public class Player extends GameObject {
 	Texture texture;
 	
 	Audio playerAudio;
+	
+	private final int MAX_PROJECTILES = 40;
+	private int iCurrentProjectileIndex;
+	private TestProjectile testProjectiles[];
 
 	public Player() {
 		super();
@@ -75,7 +82,11 @@ public class Player extends GameObject {
 		this.flMoveSpeedBonusMultiplier = 1.f;
 		this.flJumpTime = 0.f;
 
-		this.aabb.init(0.f, 0.f, PLAYER_BOUNDS, PLAYER_BOUNDS);
+		// Align the players bounding box so that x + w / 2 will be the center position of the aabb.
+		// (applies to y + h / 2 too)
+		//
+		// this is used so that the mouse position can be centered relative to the players centered aabb.
+		this.aabb.init(-( PLAYER_BOUNDS / 2 ), -( PLAYER_BOUNDS / 2 ), PLAYER_BOUNDS, PLAYER_BOUNDS);
 
 		// Create textures.
 		texPlayerIdle = new Texture( Graphics.nvgHandle(), "player_idle.png" );
@@ -91,6 +102,16 @@ public class Player extends GameObject {
 		
 		//temporary health/ammo value
 		iScrapValue = 7;
+	}
+	
+	// Called from ObjectList method 'createPlayer'
+	// use this to register additional game objects, prevents exceptions being thrown.
+	public void initialize() {
+		this.testProjectiles = new TestProjectile[ this.MAX_PROJECTILES ];
+		
+		for( int i = 0; i < this.MAX_PROJECTILES; i++ ) {
+			this.testProjectiles[ i ] = (TestProjectile) ObjectList.getInstance().createEntityObject(new TestProjectile());
+		}
 	}
 
 	private void input() {
@@ -201,7 +222,7 @@ public class Player extends GameObject {
 	}
 
 	@Override
-	public void tick(Window w) {
+	public void tick(Window window) {
 		iAnimateTickTimer++;
 		
 		// Decides the frequency at which the wheels animation changes.
@@ -264,24 +285,49 @@ public class Player extends GameObject {
 		//
 		//
 		//
+
+		// Figure out which projectile we should fire.
+		int iProjectileIndex = -1;
+		for( int i = 0; i < this.MAX_PROJECTILES; i++ ) {
+			if( this.testProjectiles[ i ].isInitialized() ) {
+				continue;
+			}
+			
+			iProjectileIndex = i;
+			break;
+		}
+		
+		// If we have a projectile we can shoot.
+		if( iProjectileIndex >= 0 && iProjectileIndex < this.MAX_PROJECTILES ) {
+		
+			TestProjectile testProjectile = this.testProjectiles[ iProjectileIndex ];
+			
+			if( MouseInput.getInstance().getMouseClicked() ) {
+				
+				Vec2 direction = MathUtils.calcDirFromGameObjectToMouse(window, this);
+				
+				// Compute center coordinates of our aabb.
+				final float flCenterX = this.aabb.p0.x + ( this.aabb.p1.x / 2 );
+				final float flCenterY = this.aabb.p0.y + ( this.aabb.p1.y / 2 );
+				
+				// Compute the position and move it out of the players bounding box slightly.
+				// This prevents the projectile getting stuck on the entity shooting it.
+				Vec2 position = new Vec2( 
+					flCenterX + ( direction.x * PLAYER_BOUNDS ), 
+					flCenterY + ( direction.y * PLAYER_BOUNDS ) 
+				);
+				
+				Vec2 velocity = new Vec2( 10.f, 10.f );
+				
+				testProjectile.initialize(position, direction, velocity);
+				
+				// TODO: It would be a good idea to add a delay between projectile shots
+				// this delay could be affected by some of our EVF's (such as speed alter, etc..)
+			}
+		
+		}
 		
 		/*
-		int centerX = (int) w.getWidth() / 2;
-		int centerY = (int) w.getHeight() / 2;
-		int targetX = (int) w.getMouseX();
-		int targetY = (int) w.getMouseY();
-		
-		float angle = MathUtils.calcDirection(centerX, centerY, targetX, targetY);
-
-		float flDirectionX = (float) Math.sin(-angle);
-		float flDirectionY = (float) Math.cos(angle);
-		
-		Vec2 direction = new Vec2( flDirectionX, flDirectionY );
-		Vec2 velocity = new Vec2( 8.f, 8.f );
-		
-		this.physics.applyForce(direction, velocity);
-		*/
-		
 		if(MouseInput.getInstance().getMouseClicked() == true) {
 			if(projectile == null) {
 				System.out.println("Projectile");
@@ -307,6 +353,7 @@ public class Player extends GameObject {
 				projectile.tick(w);
 			}
 		}
+		*/
 	}
 	
 //	private void moveAudio() {
@@ -325,6 +372,12 @@ public class Player extends GameObject {
 //		playerAudio.play("jump");
 //	}
 	
+	@Override
+	public void onCollision(GameObject object) {
+		if( object instanceof TestProjectile ) {
+			System.out.println("Player has had a projectile collide with their aabb - object: " + object);
+		}
+	}
 	
 	//players health/ammunition value (scrap)
 	public static int getScrapValue() {
