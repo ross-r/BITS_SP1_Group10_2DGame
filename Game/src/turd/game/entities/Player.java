@@ -22,6 +22,8 @@ public class Player extends GameObject {
 	private final float PLAYER_MOVE_SPEED_MULTIPLIER = 3.F; // ( PLAYER_MOVE_SPEED * x )
 	private final float PLAYER_JUMP_SPEED_MULTIPLIER = 0.5F; // ( PLAYER_MOVE_SPEED * x )
 
+	private final int MAX_SCRAP_VALUE = 7;
+	
 	Scrap tempScrap;
 	Physics physics;
 
@@ -47,7 +49,7 @@ public class Player extends GameObject {
 	private int iAnimateTicks; //leo - used for temporarily animating wheels
 	private int iAnimateTickTimer;
 	
-	private static int iScrapValue; //leo - used for temporarily counting projectiles
+	private int iScrapValue; //leo - used for temporarily counting projectiles
 
 	Projectile projectile;
 
@@ -63,8 +65,8 @@ public class Player extends GameObject {
 	Audio playerAudio;
 	
 	private final int MAX_PROJECTILES = 40;
-	private int iCurrentProjectileIndex;
 	private TestProjectile testProjectiles[];
+	private int iProjectileCooldown;
 
 	public Player() {
 		super();
@@ -102,6 +104,8 @@ public class Player extends GameObject {
 		
 		//temporary health/ammo value
 		iScrapValue = 7;
+		
+		this.iProjectileCooldown = 0;
 	}
 	
 	// Called from ObjectList method 'createPlayer'
@@ -285,46 +289,10 @@ public class Player extends GameObject {
 		//
 		//
 		//
-
-		// Figure out which projectile we should fire.
-		int iProjectileIndex = -1;
-		for( int i = 0; i < this.MAX_PROJECTILES; i++ ) {
-			if( this.testProjectiles[ i ].isInitialized() ) {
-				continue;
-			}
-			
-			iProjectileIndex = i;
-			break;
-		}
 		
-		// If we have a projectile we can shoot.
-		if( iProjectileIndex >= 0 && iProjectileIndex < this.MAX_PROJECTILES ) {
-		
-			TestProjectile testProjectile = this.testProjectiles[ iProjectileIndex ];
-			
-			if( MouseInput.getInstance().getMouseClicked() ) {
-				
-				Vec2 direction = MathUtils.calcDirFromGameObjectToMouse(window, this);
-				
-				// Compute center coordinates of our aabb.
-				final float flCenterX = this.aabb.p0.x + ( this.aabb.p1.x / 2 );
-				final float flCenterY = this.aabb.p0.y + ( this.aabb.p1.y / 2 );
-				
-				// Compute the position and move it out of the players bounding box slightly.
-				// This prevents the projectile getting stuck on the entity shooting it.
-				Vec2 position = new Vec2( 
-					flCenterX + ( direction.x * PLAYER_BOUNDS ), 
-					flCenterY + ( direction.y * PLAYER_BOUNDS ) 
-				);
-				
-				Vec2 velocity = new Vec2( 10.f, 10.f );
-				
-				testProjectile.initialize(position, direction, velocity);
-				
-				// TODO: It would be a good idea to add a delay between projectile shots
-				// this delay could be affected by some of our EVF's (such as speed alter, etc..)
-			}
-		
+		this.iProjectileCooldown--;
+		if( MouseInput.getInstance().getMouseClicked() ) {
+			this.shoot(window);
 		}
 		
 		/*
@@ -356,6 +324,61 @@ public class Player extends GameObject {
 		*/
 	}
 	
+	private void shoot(Window window) {
+
+		// Do we have ammo to use?
+		if( this.iScrapValue == 0 ) {
+			return;
+		}
+		
+		if( this.iProjectileCooldown > 0 ) {
+			return;
+		}
+		
+		// Figure out which projectile we should fire.
+		int iProjectileIndex = -1;
+		for( int i = 0; i < this.MAX_PROJECTILES; i++ ) {
+			if( this.testProjectiles[ i ].isInitialized() ) {
+				continue;
+			}
+			
+			iProjectileIndex = i;
+			break;
+		}
+		
+		// No projectiles found to fire.
+		if( iProjectileIndex == -1 ) {
+			return;
+		}
+	
+		TestProjectile testProjectile = this.testProjectiles[ iProjectileIndex ];
+						
+		Vec2 direction = MathUtils.calcDirFromGameObjectToMouse(window, this);
+		
+		// Compute center coordinates of our aabb.
+		final float flCenterX = this.aabb.p0.x + ( this.aabb.p1.x / 2 );
+		final float flCenterY = this.aabb.p0.y + ( this.aabb.p1.y / 2 );
+		
+		// Compute the position and move it out of the players bounding box slightly.
+		// This prevents the projectile getting stuck on the entity shooting it.
+		Vec2 position = new Vec2( 
+			flCenterX + ( direction.x * PLAYER_BOUNDS ), 
+			flCenterY + ( direction.y * PLAYER_BOUNDS ) 
+		);
+		
+		Vec2 velocity = new Vec2( 10.f, 10.f );
+		
+		testProjectile.initialize(position, direction, velocity);
+		
+		// TODO: It would be a good idea to add a delay between projectile shots
+		// this delay could be affected by some of our EVF's (such as speed alter, etc..)
+	
+		// Since we have shot a projectile, consume ammo.
+		this.iScrapValue--;
+		
+		this.iProjectileCooldown = MathUtils.convertMillisecondsToGameTicks( 1000 );
+	}
+	
 //	private void moveAudio() {
 //		playerAudio.play("playerRevUp");
 //		isMoving = false;
@@ -375,12 +398,45 @@ public class Player extends GameObject {
 	@Override
 	public void onCollision(GameObject object) {
 		if( object instanceof TestProjectile ) {
-			System.out.println("Player has had a projectile collide with their aabb - object: " + object);
+			
+			//System.out.println("Player has had a projectile collide with their aabb - object: " + object);
 		}
 	}
 	
 	//players health/ammunition value (scrap)
-	public static int getScrapValue() {
+	public int getScrapValue() {
 		return iScrapValue;
+	}
+	
+	public boolean collectScrap() {
+		if( this.iScrapValue == MAX_SCRAP_VALUE ) {
+			// Can't collect scrap as we have max already.
+			return false;
+		}
+		
+		++this.iScrapValue;
+		
+		return true;
+	}
+	
+	public void setScrapValue(int iScrapValue) {
+		if( iScrapValue > MAX_SCRAP_VALUE ) {
+			this.iScrapValue = MAX_SCRAP_VALUE;
+			return;
+		}
+		
+		this.iScrapValue = iScrapValue;
+	}
+	
+	public void incrementScrapValue() {
+		if( this.iScrapValue == MAX_SCRAP_VALUE ) {
+			return;
+		}
+		
+		++this.iScrapValue;
+	}
+	
+	public boolean hasMaxScrap() {
+		return this.iScrapValue == MAX_SCRAP_VALUE;
 	}
 }

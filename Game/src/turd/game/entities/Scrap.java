@@ -16,6 +16,8 @@ public class Scrap extends GameObject {
 	private int iInAirTimer;
 	private boolean bInAir;
 	
+	private boolean bCollected;
+	
 	private float flScrapSpeed;
 	
 	public Scrap(int iX, int iY) {
@@ -28,15 +30,14 @@ public class Scrap extends GameObject {
 		this.iInAirTimer = 0;
 		this.bInAir = false;
 		
+		this.bCollected = false;
+		
 		flScrapSpeed = 20;
 		initialise(iX,iY);
 	}
 	
 	public void initialise(int iStartX, int iStartY) {
-		
 		this.aabb.init(iStartX, iStartY, SCRAP_BOUNDS, SCRAP_BOUNDS);
-		
-		 System.out.println("Scrap Created");
 	}
 	
 	@Override
@@ -93,4 +94,28 @@ public class Scrap extends GameObject {
 		return this.flScrapSpeed;
 	}
 	
+	@Override
+	public void onCollision(GameObject object) {
+		
+		if( this.bCollected ) {
+			return;
+		}
+		
+		// Only the player can collect scrap.
+		if( !( object instanceof Player ) ) {
+			return;
+		}
+		
+		// The player has 'collected' this piece of scrap.
+		if ( ( ( Player ) object ).collectScrap() ) {
+		
+			// Mark this scrap as collected for deletion later.
+			this.bCollected = true;
+		}
+	}
+	
+	@Override
+	public boolean shouldDelete() {
+		return this.bCollected;
+	}
 }
