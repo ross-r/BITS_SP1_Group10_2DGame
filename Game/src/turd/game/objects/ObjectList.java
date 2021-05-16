@@ -126,6 +126,23 @@ public class ObjectList {
 		// Reference: https://www.vogella.com/tutorials/JavaCollections/article.html
 		// Feel free to read if you're interested in learning how this stuff works.
 		//
+		this.processQueue();
+		
+		for(GameObject object : objects) {
+			object.tick(window);
+		}
+		
+		for(GameObject entity : entities) {
+			entity.tick(window);
+		}
+		
+		//
+		// Delete any objects which request it.
+		//
+		this.removeDeadObjects();
+	}
+	
+	private void processQueue() {
 		if( !this.queue.isEmpty() ) {
 			
 			// Firstly filter the queued game objects into two categories
@@ -162,19 +179,6 @@ public class ObjectList {
 				System.out.println("The queue was not fully emptied into its respective linked lists.");
 			}
 		}
-		
-		for(GameObject object : objects) {
-			object.tick(window);
-		}
-		
-		for(GameObject entity : entities) {
-			entity.tick(window);
-		}
-		
-		//
-		// Delete any objects which request it.
-		//
-		this.removeDeadObjects();
 	}
 	
 	private void removeDeadObjects() {
