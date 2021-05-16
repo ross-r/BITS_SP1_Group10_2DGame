@@ -2,6 +2,8 @@ package turd.game.entities;
 
 import org.lwjgl.glfw.GLFW;
 
+import turd.game.Constants;
+import turd.game.GameState;
 import turd.game.MathUtils;
 import turd.game.Window;
 import turd.game.audio.Audio;
@@ -15,19 +17,15 @@ import turd.game.physics.Physics;
 import turd.game.physics.Vec2;
 
 public class Player extends GameObject {
-	private final int PLAYER_BOUNDS = 64;
-
-	// Movement variables.
-	private final float PLAYER_MOVE_SPEED = 4.F;
-	private final float PLAYER_MOVE_SPEED_MULTIPLIER = 3.F; // ( PLAYER_MOVE_SPEED * x )
-	private final float PLAYER_JUMP_SPEED_MULTIPLIER = 0.5F; // ( PLAYER_MOVE_SPEED * x )
-
-	private final int MAX_SCRAP_VALUE = 7;
 	
+	//
 	Scrap tempScrap;
-	Physics physics;
-
-	// Movement related properties.
+	private Physics physics;
+	//
+	
+	//
+	// Movement related properties
+	//
 	private float flSideMove;
 	private float flUpMove;
 
@@ -35,9 +33,6 @@ public class Player extends GameObject {
 	private boolean bInMoveRight;
 	private boolean bInMoveSpeed;
 	private boolean bInJump;
-	
-	private boolean isMoving;
-
 	private boolean bOnGround;
 
 	private float flMoveSpeed;
@@ -46,31 +41,55 @@ public class Player extends GameObject {
 	private float flJumpTime;
 
 	private int iFallTicks;
+	
+	//
+	// Animations
+	//
 	private int iAnimateTicks; //leo - used for temporarily animating wheels
 	private int iAnimateTickTimer;
+	private int iDamageTakenStart;
+	private int iDamageTakenFadeOutStart;
+	private int iDamageTakenFadeEnd;
+	private float flDamageOverlayAlpha;
 	
+	//
+	// Ammo
+	//
 	private int iScrapValue; //leo - used for temporarily counting projectiles
 
-	Projectile projectile;
+	private Projectile projectile;
 
-	Texture texPlayerIdle;
-	Texture texPlayerLeft1;
-	Texture texPlayerLeft2;
-	Texture texPlayerRight1;
-	Texture texPlayerRight2;
-	Texture texPlayerJumpLeft;
-	Texture texPlayerJumpRight;
-	Texture texture;
+	//
+	// Textures
+	//
+	private Texture texPlayerIdle;
+	private Texture texPlayerLeft1;
+	private Texture texPlayerLeft2;
+	private Texture texPlayerRight1;
+	private Texture texPlayerRight2;
+	private Texture texPlayerJumpLeft;
+	private Texture texPlayerJumpRight;
+	private Texture texture;
 	
 	Audio playerAudio;
 	
-	private final int MAX_PROJECTILES = 40;
+	//
+	// Projectiles
+	//
 	private TestProjectile testProjectiles[];
 	private int iProjectileCooldown;
 
+	//
+	// Health, damage stuff, etc...
+	//
+	private int iHealth;
+	
 	public Player() {
 		super();
 
+		// The player should have max health by default.
+		this.iHealth = Constants.PLAYER_MAX_HEALTH;
+		
 		// Initialize physics for this entity.
 		this.physics = new Physics(this);
 
@@ -88,7 +107,7 @@ public class Player extends GameObject {
 		// (applies to y + h / 2 too)
 		//
 		// this is used so that the mouse position can be centered relative to the players centered aabb.
-		this.aabb.init(-( PLAYER_BOUNDS / 2 ), -( PLAYER_BOUNDS / 2 ), PLAYER_BOUNDS, PLAYER_BOUNDS);
+		this.aabb.init(-( Constants.PLAYER_BOUNDS / 2 ), -( Constants.PLAYER_BOUNDS / 2 ), Constants.PLAYER_BOUNDS, Constants.PLAYER_BOUNDS);
 
 		// Create textures.
 		texPlayerIdle = new Texture( Graphics.nvgHandle(), "player_idle.png" );
@@ -111,9 +130,9 @@ public class Player extends GameObject {
 	// Called from ObjectList method 'createPlayer'
 	// use this to register additional game objects, prevents exceptions being thrown.
 	public void initialize() {
-		this.testProjectiles = new TestProjectile[ this.MAX_PROJECTILES ];
+		this.testProjectiles = new TestProjectile[ Constants.MAX_PROJECTILES ];
 		
-		for( int i = 0; i < this.MAX_PROJECTILES; i++ ) {
+		for( int i = 0; i < Constants.MAX_PROJECTILES; i++ ) {
 			this.testProjectiles[ i ] = (TestProjectile) ObjectList.getInstance().createEntityObject(new TestProjectile());
 		}
 	}
@@ -223,6 +242,40 @@ public class Player extends GameObject {
 			this.tempScrap.render(window, g);
 		}
 
+		// Draw a full-screen overlay when we take damage.
+		final int iCurrentTick = GameState.getInstance().getCurrentTick();
+		if( iCurrentTick >= this.iDamageTakenStart && iCurrentTick <= this.iDamageTakenFadeEnd ) {
+			
+			// Save the current render state.
+			g.save();
+			
+			// Prevent the camera's projection matrix from messing this up.
+			g.resetTransform();
+						
+			// Fade the opacity in until the fade out tick is met.
+			if( iCurrentTick < this.iDamageTakenFadeOutStart ) {
+				
+				final int iDeltaTicks = this.iDamageTakenFadeOutStart - this.iDamageTakenStart;
+				
+				flDamageOverlayAlpha += ( ( ( float )iDeltaTicks / 60.f ) * ( 255.f / 8.f ) );
+				
+			}
+
+			// Assume fade-out has started.
+			else {
+				
+				final int iDeltaTicks = this.iDamageTakenFadeEnd - this.iDamageTakenFadeOutStart;
+				flDamageOverlayAlpha -= ( ( ( float )iDeltaTicks / 60.f ) * ( 255.f / 8.f ) );
+			}
+
+
+			g.setColor(255.f, 0.f, 0.f, flDamageOverlayAlpha);
+			g.drawFilledRect(0, 0, window.getWidth(), window.getHeight());
+			
+			// Restore the render state that was saved so that we don't purge the transformation matrix for render calls
+			// that may happen after our player is drawn.
+			g.restore();
+		}
 	}
 
 	@Override
@@ -260,14 +313,14 @@ public class Player extends GameObject {
 			iFallTicks = 0;
 		}
 
-		this.flMoveSpeed = this.bInMoveSpeed ? ( PLAYER_MOVE_SPEED * PLAYER_MOVE_SPEED_MULTIPLIER ) : PLAYER_MOVE_SPEED;
+		this.flMoveSpeed = this.bInMoveSpeed ? ( Constants.PLAYER_MOVE_SPEED * Constants.PLAYER_MOVE_SPEED_MULTIPLIER ) : Constants.PLAYER_MOVE_SPEED;
 
 		// 'flMoveSpeedBonusMultiplier' is the variable we would write to when we want to gain a bonus to movement speed outside of the
 		// default movement speed limitations (i.e; move speed, jump speed, jump height) - this value is a multiplier so it scales,
 		// a value of 1 will have no change, < 1 will slow us, > 1 will make us faster.
 		this.flMoveSpeed *= this.flMoveSpeedBonusMultiplier;
 
-		this.flJumpSpeed = this.bInMoveSpeed ? PLAYER_JUMP_SPEED_MULTIPLIER : 1.f;
+		this.flJumpSpeed = this.bInMoveSpeed ? Constants.PLAYER_JUMP_SPEED_MULTIPLIER : 1.f;
 
 		if ( this.flJumpTime > 0.f ) {
 			this.flJumpTime -= ( 1.f / 60.f );
@@ -337,7 +390,7 @@ public class Player extends GameObject {
 		
 		// Figure out which projectile we should fire.
 		int iProjectileIndex = -1;
-		for( int i = 0; i < this.MAX_PROJECTILES; i++ ) {
+		for( int i = 0; i < Constants.MAX_PROJECTILES; i++ ) {
 			if( this.testProjectiles[ i ].isInitialized() ) {
 				continue;
 			}
@@ -362,8 +415,8 @@ public class Player extends GameObject {
 		// Compute the position and move it out of the players bounding box slightly.
 		// This prevents the projectile getting stuck on the entity shooting it.
 		Vec2 position = new Vec2( 
-			flCenterX + ( direction.x * PLAYER_BOUNDS ), 
-			flCenterY + ( direction.y * PLAYER_BOUNDS ) 
+			flCenterX + ( direction.x * Constants.PLAYER_BOUNDS ), 
+			flCenterY + ( direction.y * Constants.PLAYER_BOUNDS ) 
 		);
 		
 		Vec2 velocity = new Vec2( 10.f, 10.f );
@@ -395,11 +448,38 @@ public class Player extends GameObject {
 //		playerAudio.play("jump");
 //	}
 	
+	private void onTakeDamage() {
+		if( this.iHealth <= 0 ) {
+			
+			// We can allow for a 'lives' system so we can let the player restart the level and try again.
+			GameState.getInstance().setPlayerDead();
+			
+			return;
+		}
+		
+		// We can apply a multiplier for things like damage resistance and so on.
+		this.iHealth -= Constants.PROJECTILE_BASE_DAMAGE;
+		
+		// Reset damage overlay alpha.
+		this.flDamageOverlayAlpha = 0.f;
+		
+		// Since we have taken some damage, I want to have an overlay to indicate it
+		// this will be rather crappy, but it'll be a red full-screen overlay that fades out.
+		this.iDamageTakenStart = GameState.getInstance().getCurrentTick();
+		
+		// Begin to fade out the overlay 500ms after initial damage taken.
+		this.iDamageTakenFadeOutStart = this.iDamageTakenStart + MathUtils.convertMillisecondsToGameTicks(500);
+		
+		// And finally, end the overlay 250ms after the fade begins.
+		this.iDamageTakenFadeEnd = this.iDamageTakenFadeOutStart + MathUtils.convertMillisecondsToGameTicks(500);
+		
+		//System.out.printf("%d %d\n", this.iDamageTakenStart, this.iDamageTakenFadeOutStart);
+	}
+	
 	@Override
 	public void onCollision(GameObject object) {
 		if( object instanceof TestProjectile ) {
-			
-			//System.out.println("Player has had a projectile collide with their aabb - object: " + object);
+			onTakeDamage();
 		}
 	}
 	
@@ -409,7 +489,7 @@ public class Player extends GameObject {
 	}
 	
 	public boolean collectScrap() {
-		if( this.iScrapValue == MAX_SCRAP_VALUE ) {
+		if( this.iScrapValue == Constants.PLAYER_MAX_SCRAP_VALUE ) {
 			// Can't collect scrap as we have max already.
 			return false;
 		}
@@ -420,8 +500,8 @@ public class Player extends GameObject {
 	}
 	
 	public void setScrapValue(int iScrapValue) {
-		if( iScrapValue > MAX_SCRAP_VALUE ) {
-			this.iScrapValue = MAX_SCRAP_VALUE;
+		if( iScrapValue > Constants.PLAYER_MAX_SCRAP_VALUE ) {
+			this.iScrapValue = Constants.PLAYER_MAX_SCRAP_VALUE;
 			return;
 		}
 		
@@ -429,7 +509,7 @@ public class Player extends GameObject {
 	}
 	
 	public void incrementScrapValue() {
-		if( this.iScrapValue == MAX_SCRAP_VALUE ) {
+		if( this.iScrapValue == Constants.PLAYER_MAX_SCRAP_VALUE ) {
 			return;
 		}
 		
@@ -437,6 +517,6 @@ public class Player extends GameObject {
 	}
 	
 	public boolean hasMaxScrap() {
-		return this.iScrapValue == MAX_SCRAP_VALUE;
+		return this.iScrapValue == Constants.PLAYER_MAX_SCRAP_VALUE;
 	}
 }

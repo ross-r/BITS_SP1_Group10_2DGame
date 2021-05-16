@@ -117,11 +117,7 @@ public class TestProjectile extends GameObject {
 
 	@Override
 	public void onCollision(GameObject object) {
-		
-		// TODO: Spawn some scrap that the player can collect.
-		
 		ObjectList.getInstance().registerQueuedObject( new Scrap( ( int ) this.aabb.p0.x, ( int ) this.aabb.p0.y ) );
-
 		this.destroy(false);
 	}
 }

@@ -67,7 +67,7 @@ public class Scrap extends GameObject {
 			this.iInAirTimer = 0;
 		}
 		
-		this.physics.gravity();
+		//this.physics.gravity();
 		
 		if(this.iInAirTimer == 200) {
 			this.flScrapSpeed = 0;
