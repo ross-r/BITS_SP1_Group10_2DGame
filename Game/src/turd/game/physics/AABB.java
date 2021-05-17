@@ -47,4 +47,11 @@ public final class AABB {
 		return out;
 	}
 	
+	public float getCenterX() {
+		return p0.x + ( p1.x / 2.f );
+	}
+	
+	public float getCenterY() {
+		return p0.y + ( p1.y / 2.f );
+	}
 }

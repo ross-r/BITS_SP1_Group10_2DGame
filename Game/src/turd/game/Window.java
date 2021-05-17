@@ -262,6 +262,8 @@ public class Window {
 			while (flTickTime > NS_PER_TICK) {
 				iTicks++;
 
+				GameState.getInstance().incrementTicks();
+				
 				if(tick != null) {
 					tick.run();
 				}
