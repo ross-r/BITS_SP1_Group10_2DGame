@@ -71,6 +71,18 @@ public class Main {
 		}
 		// ----------------------- PAUSE MENU HUD
 
+		//
+		if (!GameState.getInstance().isIsPlayerAlive()) {
+			// Draw a darker background that is on top of everything else.
+			graphics.setColor(0.f, 0.f, 0.f, 127.f);
+			graphics.drawFilledRect(0, 0, window.getWidth(), window.getHeight());
+
+			// Draw text indicating the game is paused.
+			graphics.setColor(255.f, 255.f, 255.f, 255.f);
+			graphics.drawString("GAME OVER", 2, 2, 8.f);
+		} 
+		//
+		
 		hud.render(window, graphics);
 		graphics.endFrame();
 	}
@@ -95,8 +107,8 @@ public class Main {
 	}
 	
 	public void tick() {
-		// If the game is paused then don't process any ticks.
-		if (GameState.getInstance().isPaused()) {
+		// If the game isn't running don't run any ticks.
+		if (!GameState.getInstance().isGameRunning()) {
 			return;
 		}
 		
@@ -145,6 +157,7 @@ public class Main {
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
 		ObjectList.getInstance().createEnemy(420.f, 20.f);
+		ObjectList.getInstance().createEnemy(1640.f, 20.f);
 
 		// (Length , Height)
 		// Window size
