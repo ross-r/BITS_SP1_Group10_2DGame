@@ -48,24 +48,39 @@ public class Player extends GameObject {
 	private int iDamageTakenFadeOutStart;
 	private int iDamageTakenFadeEnd;
 	private float flDamageOverlayAlpha;
+	private boolean jumping = false;
+	private final int iEmptyScrapValue = 2;
+	private final int iHalfScrapValue = 5;
+	private int iLastInput;
 	
 	//
 	// Ammo
 	//
-	private int iScrapValue; //leo - used for temporarily counting projectiles
+	private int iScrapValue; // used for counting projectiles
 
 	//
 	// Textures
 	//
-	private Texture texPlayerIdle;
-	private Texture texPlayerLeft1;
-	private Texture texPlayerLeft2;
-	private Texture texPlayerRight1;
-	private Texture texPlayerRight2;
-	private Texture texPlayerJumpLeft;
-	private Texture texPlayerJumpRight;
-	private Texture texture;
-	
+	Texture texture;
+	// player moving left/right
+	Texture texLeftE1, texLeftE2, texRightE1, texRightE2, texLeftH1, texLeftH2, texRightH1, texRightH2, texLeftF1,
+			texLeftF2, texRightF1, texRightF2;
+	// player jumping left/right pre-jump
+	Texture texLeftE1J1, texLeftE2J1, texRightE1J1, texRightE2J1, texLeftH1J1, texLeftH2J1, texRightH1J1, texRightH2J1,
+			texLeftF1J1, texLeftF2J1, texRightF1J1, texRightF2J1;
+	// player jumping left/right mid-jump
+	Texture texLeftE1J2, texLeftE2J2, texRightE1J2, texRightE2J2, texLeftH1J2, texLeftH2J2, texRightH1J2, texRightH2J2,
+			texLeftF1J2, texLeftF2J2, texRightF1J2, texRightF2J2;
+	// player jumping left/right post-jump
+	Texture texLeftE1J3, texLeftE2J3, texRightE1J3, texRightE2J3, texLeftH1J3, texLeftH2J3, texRightH1J3, texRightH2J3,
+			texLeftF1J3, texLeftF2J3, texRightF1J3, texRightF2J3;
+	// player attack left/right mid-attack
+	Texture texLeftE1A1, texLeftE2A1, texRightE1A1, texRightE2A1, texLeftH1A1, texLeftH2A1, texRightH1A1, texRightH2A1,
+			texLeftF1A1, texLeftF2A1, texRightF1A1, texRightF2A1;
+	// player attack left/right fin-attack
+	Texture texLeftE1A2, texLeftE2A2, texRightE1A2, texRightE2A2, texLeftH1A2, texLeftH2A2, texRightH1A2, texRightH2A2,
+			texLeftF1A2, texLeftF2A2, texRightF1A2, texRightF2A2;
+
 	//
 	// Projectiles
 	//
@@ -103,14 +118,92 @@ public class Player extends GameObject {
 		this.aabb.init(-( Constants.PLAYER_BOUNDS / 2 ), -( Constants.PLAYER_BOUNDS / 2 ), Constants.PLAYER_BOUNDS, Constants.PLAYER_BOUNDS);
 
 		// Create textures.
-		texPlayerIdle = new Texture( Graphics.nvgHandle(), "player_idle.png" );
-		texPlayerLeft1 = new Texture( Graphics.nvgHandle(), "player_left1.png");
-		texPlayerLeft2 = new Texture( Graphics.nvgHandle(), "player_left2.png");
-		texPlayerRight1 = new Texture( Graphics.nvgHandle(), "player_right1.png");
-		texPlayerRight2 = new Texture( Graphics.nvgHandle(), "player_right2.png");
-		texPlayerJumpLeft = new Texture( Graphics.nvgHandle(), "player_jump_left.png");
-		texPlayerJumpRight = new Texture( Graphics.nvgHandle(), "player_jump_right.png");
-		texture = this.texPlayerIdle;
+		// Create textures.
+		// player walking left/right
+		texLeftE1 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftEmpty.png");
+		texLeftE2 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftEmpty-ALT.png");
+		texRightE1 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightEmpty.png");
+		texRightE2 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightEmpty-ALT.png");
+		texLeftH1 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftHalf.png");
+		texLeftH2 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftHalf-ALT.png");
+		texRightH1 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightHalf.png");
+		texRightH2 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightHalf-ALT.png");
+		texLeftF1 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftFull.png");
+		texLeftF2 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftFull-ALT.png");
+		texRightF1 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightFull.png");
+		texRightF2 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightFull-ALT.png");
+		// player jumping left/right pre-jump
+		texLeftE1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftEmpty.png");
+		texLeftE2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftEmpty-ALT.png");
+		texRightE1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightEmpty.png");
+		texRightE2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightEmpty-ALT.png");
+		texLeftH1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftHalf.png");
+		texLeftH2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftHalf-ALT.png");
+		texRightH1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightHalf.png");
+		texRightH2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightHalf-ALT.png");
+		texLeftF1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftFull.png");
+		texLeftF2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftFull-ALT.png");
+		texRightF1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightFull.png");
+		texRightF2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightFull-ALT.png");
+		// player jumping left/right mid-jump
+		texLeftE1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftEmpty.png");
+		texLeftE2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftEmpty-ALT.png");
+		texRightE1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightEmpty.png");
+		texRightE2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightEmpty-ALT.png");
+		texLeftH1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftHalf.png");
+		texLeftH2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftHalf-ALT.png");
+		texRightH1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightHalf.png");
+		texRightH2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightHalf-ALT.png");
+		texLeftF1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftFull.png");
+		texLeftF2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftFull-ALT.png");
+		texRightF1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightFull.png");
+		texRightF2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightFull-ALT.png");
+		// player jumping left/right post-jump
+		texLeftE1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftEmpty.png");
+		texLeftE2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftEmpty-ALT.png");
+		texRightE1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightEmpty.png");
+		texRightE2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightEmpty-ALT.png");
+		texLeftH1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftHalf.png");
+		texLeftH2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftHalf-ALT.png");
+		texRightH1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightHalf.png");
+		texRightH2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightHalf-ALT.png");
+		texLeftF1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftFull.png");
+		texLeftF2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftFull-ALT.png");
+		texRightF1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightFull.png");
+		texRightF2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightFull-ALT.png");
+		// player attack left/right mid-attack
+		texLeftE1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftEmpty.png");
+		texLeftE2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftEmpty-ALT.png");
+		texRightE1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightEmpty.png");
+		texRightE2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightEmpty-ALT.png");
+		texLeftH1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftHalf.png");
+		texLeftH2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftHalf-ALT.png");
+		texRightH1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightHalf.png");
+		texRightH2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightHalf-ALT.png");
+		texLeftF1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftFull.png");
+		texLeftF2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftFull-ALT.png");
+		texRightF1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightFull.png");
+		texRightF2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightFull-ALT.png");
+		// player attack left/right fin-attack
+		texLeftE1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftEmpty.png");
+		texLeftE2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftEmpty-ALT.png");
+		texRightE1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightEmpty.png");
+		texRightE2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightEmpty-ALT.png");
+		texLeftH1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftHalf.png");
+		texLeftH2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftHalf-ALT.png");
+		texRightH1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightHalf.png");
+		texRightH2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightHalf-ALT.png");
+		texLeftF1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftFull.png");
+		texLeftF2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftFull-ALT.png");
+		texRightF1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightFull.png");
+		texRightF2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightFull-ALT.png");
+		//texture used for player graphic at all times
+		//this texture references the above textures when it needs to
+		texture = this.texRightF1;
+		// health/ammo value (graphics)
+		iScrapValue = 7;
+		// saves last left/right keyboard input (graphics)
+		iLastInput = 1;
 	
 		//temporary health/ammo value
 		iScrapValue = 7;
@@ -193,32 +286,306 @@ public class Player extends GameObject {
 		final int w = (int)aabb.p1.x;
 		final int h = (int)aabb.p1.y;
 		
+
+		// sets the last input so when the player stops their left/right
+		// keyboard input, the animations still update correctly
 		if (bInMoveLeft) {
-			Audio.getInstance().playerMovePlay();
-			if (this.flJumpTime > 0.f) {
-				texture = texPlayerJumpLeft;
-			} else {
-				if (iAnimateTicks == 1) {
-					texture = texPlayerLeft1;
-				} else if (iAnimateTicks == 0) {
-					texture = texPlayerLeft2;
-				}
-			}
+			iLastInput = 0;
 		} else if (bInMoveRight) {
-			Audio.getInstance().playerMovePlay();
-			if (this.flJumpTime > 0.f) {
-				texture = texPlayerJumpRight;
-			} else {
-				if (iAnimateTicks == 1) {
-					texture = texPlayerRight1;
-				} else if (iAnimateTicks == 0) {
-					texture = texPlayerRight2;
-				}
-			}
-		} else {
-			Audio.getInstance().stop("playerMove");
-			//texture = texPlayerIdle;
+			iLastInput = 1;
 		}
+		
+		//render the player graphic
+				if (iLastInput == 0) {								// LEFT
+					if (iEmptyScrapValue >= iScrapValue) { 			// EMPTY
+						// on ground
+						if (bOnGround && !bInJump) {
+							if (jumping == true) {
+								this.texture = this.texLeftE1J3;	// landing (jump)
+								jumping = false;
+							}
+							// walk animation
+							if (bInMoveLeft) {
+								if (iAnimateTicks == 0) {
+									this.texture = this.texLeftE1;	// walk 1
+								} else if (iAnimateTicks == 1) {
+									this.texture = this.texLeftE2;	// walk 2
+								}
+							}
+						}
+						// start-jump
+						if (bOnGround && bInJump) {
+							this.texture = this.texLeftE1J1; 		// pre-jump (jump)
+						}
+						// mid-jump
+						if (flJumpTime > 0.f) {
+							this.texture = this.texLeftE1J2;		// mid-jump (jump)
+							// jump texture
+							jumping = true;
+						}
+						// falling
+						if ((flJumpTime <= 0.f) && !bOnGround) {
+							this.texture = this.texLeftE1;			// falling (walk)
+							// un-iterated walk texture
+							jumping = true;
+						}
+						// attack
+						if (MouseInput.getInstance().getMouseClicked()) {
+							// mid attack texture
+							this.texture = this.texLeftE1A1;		// mid-atk (attack)
+							// final attack
+							this.texture = this.texLeftE1A2;		// fin-atk (attack)
+						}
+					}
+				}
+
+				if (iLastInput == 1) {								// RIGHT
+					if (iEmptyScrapValue >= iScrapValue) {			// EMPTY
+						// on ground
+						if (bOnGround && !bInJump) {
+							if (jumping == true) {
+								this.texture = this.texRightE1J3; 	// landing (jump)
+								jumping = false;
+							}
+							// walk animation
+							if (bInMoveRight) {
+								if (iAnimateTicks == 0) {
+									this.texture = this.texRightE1; // walk 1
+								} else if (iAnimateTicks == 1) {
+									this.texture = this.texRightE2; // walk 2
+								}
+							}
+						}
+						// start-jump
+						if (bOnGround && bInJump) {
+							this.texture = this.texRightE1J1; 		// pre-jump (jump)
+						}
+						// mid-jump
+						if (flJumpTime > 0.f) {
+							this.texture = this.texRightE1J2;		// mid-jump (jump)
+							// jump texture
+							jumping = true;
+						}
+						// falling
+						if ((flJumpTime <= 0.f) && !bOnGround) {
+							this.texture = this.texRightE1;			// falling (walk)
+							// un-iterating walk texture
+							jumping = true;
+						}
+						// attack
+						if (MouseInput.getInstance().getMouseClicked()) {
+							// mid attack texture
+							this.texture = this.texRightE1A1;		// mid-atk (attack)
+							// final attack
+							this.texture = this.texRightE1A2;		// fin-atk (attack)
+						}
+					}
+				}
+				if (iLastInput == 0) { 														// LEFT
+					if (iHalfScrapValue >= iScrapValue && iEmptyScrapValue < iScrapValue) { // HALF
+						// on ground
+						if (bOnGround && !bInJump) {
+							if (jumping == true) {
+								this.texture = this.texLeftH1J3; 	// landing (jump)
+								jumping = false;
+							}
+							// walk animation
+							if (bInMoveLeft) {
+								if (iAnimateTicks == 0) {
+									this.texture = this.texLeftH1;	// walk 1
+								} else if (iAnimateTicks == 1) {
+									this.texture = this.texLeftH2;	// walk 2
+								}
+							}
+						}
+						// start-jump
+						if (bOnGround && bInJump) {
+							this.texture = this.texLeftH1J1; 		// pre-jump (jump)
+						}
+						// mid-jump
+						if (flJumpTime > 0.f) {
+							this.texture = this.texLeftH1J2;		// mid-jump (jump)
+							// jump texture
+							jumping = true;
+						}
+						// falling
+						if ((flJumpTime <= 0.f) && !bOnGround) {
+							this.texture = this.texLeftH1;			// falling (walk)
+							// un-iterating walk texture
+							jumping = true;
+						}
+						// attack
+						if (MouseInput.getInstance().getMouseClicked()) {
+							// mid attack texture
+							this.texture = this.texLeftH1A1;		// mid-atk (attack)
+							// final attack
+							this.texture = this.texLeftH1A2;		// fin-atk (attack)
+						}
+					}
+				}
+
+				if (iLastInput == 1) { 														// RIGHT
+					if (iHalfScrapValue >= iScrapValue && iEmptyScrapValue < iScrapValue) {	// HALF
+						// on ground
+						if (bOnGround && !bInJump) {
+							if (jumping == true) {
+								this.texture = this.texRightH1J3; 	// landing (jump)
+								jumping = false;
+							}
+							// walk animation
+							if (bInMoveRight) {
+								if (iAnimateTicks == 0) {
+									this.texture = this.texRightH1;	// walk 1
+								} else if (iAnimateTicks == 1) {
+									this.texture = this.texRightH2;	// walk 2
+								}
+							}
+						}
+						// start-jump
+						if (bOnGround && bInJump) {
+							this.texture = this.texRightH1J1; 		// pre-jump (jump)
+						}
+						// mid-jump
+						if (flJumpTime > 0.f) {
+							this.texture = this.texRightH1J2;		// mid-jump (jump)
+							// jump texture
+							jumping = true;
+						}
+						// falling
+						if ((flJumpTime <= 0.f) && !bOnGround) {
+							this.texture = this.texRightH1;			// falling (walk)
+							// un-iterating walk texture
+							jumping = true;
+						}
+						// attack
+						if (MouseInput.getInstance().getMouseClicked()) {
+							// mid attack texture
+							this.texture = this.texRightH1A1;		// mid-atk (attack)
+							// final attack
+							this.texture = this.texRightH1A2;		// fin-atk (attack)
+						}
+					}
+				}
+				if (iLastInput == 0) { 								// LEFT
+					if (iScrapValue >= (Constants.PLAYER_MAX_SCRAP_VALUE - 1)) {		// FULL
+						// on ground
+						if (bOnGround && !bInJump) {
+							if (jumping == true) {
+								this.texture = this.texLeftF1J3; 	// landing (jump)
+								jumping = false;
+							}
+							// walk animation
+							if (bInMoveLeft) {
+								if (iAnimateTicks == 0) {
+									this.texture = this.texLeftF1;	// walk 1
+								} else if (iAnimateTicks == 1) {
+									this.texture = this.texLeftF2;	// walk 2
+								}
+							}
+						}
+						// start-jump
+						if (bOnGround && bInJump) {
+							this.texture = this.texLeftF1J1;		// pre-jump (jump)
+						}
+						// mid-jump
+						if (flJumpTime > 0.f) {
+							this.texture = this.texLeftF1J2;		// mid-jump (jump)
+							// jump texture
+							jumping = true;
+						}
+						// falling
+						if ((flJumpTime <= 0.f) && !bOnGround) {
+							this.texture = this.texLeftF1;			// falling (walk)
+							// un-iterating walk texture
+							jumping = true;
+						}
+						// attack
+						if (MouseInput.getInstance().getMouseClicked()) {
+							// mid attack texture
+							this.texture = this.texLeftF1A1;		// mid-atk (attack)
+							// final attack
+							this.texture = this.texLeftF1A2;		// fin-atk (attack)
+						}
+					}
+				}
+
+				if (iLastInput == 1) { 								// RIGHT
+					if (iScrapValue >= (Constants.PLAYER_MAX_SCRAP_VALUE - 1)) {		// FULL
+						// on ground
+						if (bOnGround && !bInJump) {
+							if (jumping == true) {
+								this.texture = this.texRightF1J3;	// landing (jump)
+								jumping = false;
+							}
+							// walk animation
+							if (bInMoveRight) {
+								if (iAnimateTicks == 0) {
+									this.texture = this.texRightF1;	// walk 1
+								} else if (iAnimateTicks == 1) {
+									this.texture = this.texRightF2;	// walk 2
+								}
+							}
+						}
+						// start-jump
+						if (bOnGround && bInJump) {
+							this.texture = this.texRightF1J1;		// pre-jump (jump)
+						}
+						// mid-jump
+						if (flJumpTime > 0.f) {
+							this.texture = this.texRightF1J2;		// mid-jump (jump)
+							// jump texture
+							jumping = true;
+						}
+						// falling
+						if ((flJumpTime <= 0.f) && !bOnGround) {
+							this.texture = this.texRightF1;			// falling (walk)
+							// un-iterating walk texture
+							jumping = true;
+						}
+						// attack
+						if (MouseInput.getInstance().getMouseClicked()) {
+							// mid attack texture
+							this.texture = this.texRightF1A1;		// mid-atk (attack)
+							// final attack
+							this.texture = this.texRightF1A2;		// fin-atk (attack)
+						}
+					}
+				}
+		
+		
+				if (bInMoveLeft || bInMoveRight)
+					Audio.getInstance().playerMovePlay();
+				else
+					Audio.getInstance().stop("playerMove");
+		
+		
+		//OLD TEXTURES, LEFT HERE TEMPORARILY
+//		if (bInMoveLeft) {
+//			Audio.getInstance().playerMovePlay();
+//			if (this.flJumpTime > 0.f) {
+//				texture = texPlayerJumpLeft;
+//			} else {
+//				if (iAnimateTicks == 1) {
+//					texture = texPlayerLeft1;
+//				} else if (iAnimateTicks == 0) {
+//					texture = texPlayerLeft2;
+//				}
+//			}
+//		} else if (bInMoveRight) {
+//			Audio.getInstance().playerMovePlay();
+//			if (this.flJumpTime > 0.f) {
+//				texture = texPlayerJumpRight;
+//			} else {
+//				if (iAnimateTicks == 1) {
+//					texture = texPlayerRight1;
+//				} else if (iAnimateTicks == 0) {
+//					texture = texPlayerRight2;
+//				}
+//			}
+//		} else {
+//			Audio.getInstance().stop("playerMove");
+//			//texture = texPlayerIdle;
+//		}
 		
 		drawTrail(texture);
 		
