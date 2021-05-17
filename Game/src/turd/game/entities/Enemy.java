@@ -3,6 +3,7 @@ package turd.game.entities;
 import turd.game.Constants;
 import turd.game.MathUtils;
 import turd.game.Window;
+import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
@@ -156,6 +157,7 @@ public class Enemy extends GameObject {
 	public void onCollision(GameObject object) {
 		if( object instanceof TestProjectile ) {
 			onTakeDamage();
+			Audio.getInstance().play("enemyDamage");
 		}
 	}
 	

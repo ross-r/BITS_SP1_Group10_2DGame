@@ -5,7 +5,6 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
@@ -69,7 +68,7 @@ public class Audio {
 		//Create Player Sounds
 		AudioSource playerJump = new AudioSource("playerJump.ogg", false, false, -50);
 		AudioSource playerRevUp = new AudioSource("playerRevUp.ogg", false, false, 20);
-		AudioSource playerMove = new AudioSource("playerMove.ogg", false, false, 20);
+		AudioSource playerMove = new AudioSource("playerMove.ogg", true, false, 20);
 		AudioSource playerShoot = new AudioSource("playerShoot.ogg", false, false, 1);
 		AudioSource playerPickUp = new AudioSource("playerPickUp.ogg", false, false, 1);
 		AudioSource playerDamage = new AudioSource("playerDamage.ogg", false, false, 1);
@@ -125,6 +124,19 @@ public class Audio {
 			instance = new Audio();
 		}
 		return instance;
+	}
+	
+	public void playerMovePlay() {
+		if (!soundMap.get("playerMove").isPlaying()) {
+			play("playerMove");
+		}
+	}
+	
+	public boolean getPlaying(String key) {
+		if (soundMap.get(key).isPlaying()) {
+			return true;
+		}
+		return false;
 	}
 
 	//Initializes the audio devices. Opens a device that manages memory and sets the context for audio management.

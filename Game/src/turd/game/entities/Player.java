@@ -35,8 +35,6 @@ public class Player extends GameObject {
 	private boolean bInMoveRight;
 	private boolean bInMoveSpeed;
 	private boolean bInJump;
-	
-	private boolean isMoving;
 
 	private boolean bOnGround;
 
@@ -61,9 +59,6 @@ public class Player extends GameObject {
 	Texture texPlayerJumpLeft;
 	Texture texPlayerJumpRight;
 	Texture texture;
-	
-	Audio playerAudio;
-	
 	private final int MAX_PROJECTILES = 40;
 	private TestProjectile testProjectiles[];
 	private int iProjectileCooldown;
@@ -99,9 +94,7 @@ public class Player extends GameObject {
 		texPlayerJumpLeft = new Texture( Graphics.nvgHandle(), "player_jump_left.png");
 		texPlayerJumpRight = new Texture( Graphics.nvgHandle(), "player_jump_right.png");
 		texture = this.texPlayerIdle;
-		
-		playerAudio = new Audio();
-		
+	
 		//temporary health/ammo value
 		iScrapValue = 7;
 		
@@ -184,6 +177,7 @@ public class Player extends GameObject {
 		final int h = (int)aabb.p1.y;
 		
 		if (bInMoveLeft) {
+			Audio.getInstance().playerMovePlay();
 			if (this.flJumpTime > 0.f) {
 				texture = texPlayerJumpLeft;
 			} else {
@@ -194,6 +188,7 @@ public class Player extends GameObject {
 				}
 			}
 		} else if (bInMoveRight) {
+			Audio.getInstance().playerMovePlay();
 			if (this.flJumpTime > 0.f) {
 				texture = texPlayerJumpRight;
 			} else {
@@ -204,6 +199,7 @@ public class Player extends GameObject {
 				}
 			}
 		} else {
+			Audio.getInstance().stop("playerMove");
 			//texture = texPlayerIdle;
 		}
 		
@@ -270,6 +266,11 @@ public class Player extends GameObject {
 		this.flJumpSpeed = this.bInMoveSpeed ? PLAYER_JUMP_SPEED_MULTIPLIER : 1.f;
 
 		if ( this.flJumpTime > 0.f ) {
+			
+			if (!Audio.getInstance().getPlaying("playerJump")) {
+				Audio.getInstance().play("playerJump");
+			}
+		
 			this.flJumpTime -= ( 1.f / 60.f );
 
 			// Negative value here since we want to go upwards.
@@ -292,6 +293,8 @@ public class Player extends GameObject {
 		
 		this.iProjectileCooldown--;
 		if( MouseInput.getInstance().getMouseClicked() ) {
+			if (!Audio.getInstance().getPlaying("playerShoot"))
+			Audio.getInstance().play("playerShoot");
 			this.shoot(window);
 		}
 		
@@ -379,31 +382,6 @@ public class Player extends GameObject {
 		this.iProjectileCooldown = MathUtils.convertMillisecondsToGameTicks( 1000 );
 	}
 	
-	public boolean getMoving() {
-		isMoving = false;
-		if (bInMoveLeft || bInMoveRight) {
-			isMoving = true;
-			return isMoving;
-		}
-		return isMoving;
-	}
-	
-//	private void moveAudio() {
-//		playerAudio.play("playerRevUp");
-//		isMoving = false;
-//		while (this.bInMoveLeft || this.bInMoveRight) {
-//			playerAudio.play("playerMove");
-//			
-//			if (!this.bInMoveLeft || this.bInMoveRight) {
-//				playerAudio.stop("playerMove");
-//			}
-//		}
-//	}
-//	
-//	private void jumpAudio() {
-//		playerAudio.play("jump");
-//	}
-	
 	@Override
 	public void onCollision(GameObject object) {
 		if( object instanceof TestProjectile ) {
@@ -425,7 +403,10 @@ public class Player extends GameObject {
 		
 		++this.iScrapValue;
 		
+		Audio.getInstance().play("playerPickUp");
+		
 		return true;
+		
 	}
 	
 	public void setScrapValue(int iScrapValue) {

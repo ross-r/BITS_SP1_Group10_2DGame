@@ -145,8 +145,6 @@ public class Main {
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
 		ObjectList.getInstance().createEnemy(420.f, 20.f);
-		
-		Audio.getInstance().play("playerJump");
 
 		// (Length , Height)
 		// Window size
