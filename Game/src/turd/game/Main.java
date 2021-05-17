@@ -7,6 +7,7 @@ import static org.lwjgl.nanovg.NanoVGGL2.*;
 import org.lwjgl.*;
 import org.lwjgl.glfw.GLFW;
 
+import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.HUD;
 import turd.game.graphics.Texture;
@@ -131,9 +132,6 @@ public class Main {
 		//create hud.
 		hud = new HUD(window, graphics);
 
-		// Create audio.
-		//audio = new Audio();
-
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
 		//GameState.getInstance().setUseCamera(false);
@@ -147,6 +145,8 @@ public class Main {
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
 		ObjectList.getInstance().createEnemy(420.f, 20.f);
+		
+		Audio.getInstance().play("playerJump");
 
 		// (Length , Height)
 		// Window size
@@ -169,7 +169,7 @@ public class Main {
 		new FallingPlat(2730,144);
 		new MediumPlatform(2800, 144);
 		
-		//audio.play("laser");
+		Audio.getInstance().play("playerJump");
 		
 		texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
 		
@@ -179,8 +179,8 @@ public class Main {
 		window.terminate();
 		graphics.terminate();
 		
-		//Terminate all audio devices.
-		//audio.terminate();
+//		//Terminate all audio devices.
+//		Audio.getInstance().terminate();
 
 //LEO	HUD.terminate();
 	}

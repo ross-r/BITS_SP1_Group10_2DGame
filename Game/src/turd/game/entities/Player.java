@@ -62,8 +62,6 @@ public class Player extends GameObject {
 	Texture texPlayerJumpRight;
 	Texture texture;
 	
-	Audio playerAudio;
-	
 	private final int MAX_PROJECTILES = 40;
 	private TestProjectile testProjectiles[];
 	private int iProjectileCooldown;
@@ -99,8 +97,6 @@ public class Player extends GameObject {
 		texPlayerJumpLeft = new Texture( Graphics.nvgHandle(), "player_jump_left.png");
 		texPlayerJumpRight = new Texture( Graphics.nvgHandle(), "player_jump_right.png");
 		texture = this.texPlayerIdle;
-		
-		playerAudio = new Audio();
 		
 		//temporary health/ammo value
 		iScrapValue = 7;
@@ -378,22 +374,6 @@ public class Player extends GameObject {
 		
 		this.iProjectileCooldown = MathUtils.convertMillisecondsToGameTicks( 1000 );
 	}
-	
-//	private void moveAudio() {
-//		playerAudio.play("playerRevUp");
-//		isMoving = false;
-//		while (this.bInMoveLeft || this.bInMoveRight) {
-//			playerAudio.play("playerMove");
-//			
-//			if (!this.bInMoveLeft || this.bInMoveRight) {
-//				playerAudio.stop("playerMove");
-//			}
-//		}
-//	}
-//	
-//	private void jumpAudio() {
-//		playerAudio.play("jump");
-//	}
 	
 	@Override
 	public void onCollision(GameObject object) {
