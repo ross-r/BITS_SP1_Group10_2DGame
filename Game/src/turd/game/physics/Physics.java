@@ -47,33 +47,31 @@ public class Physics {
 	}
 	
 	// Check if a projectile intersects with another entity (which is not a projectile)
-	private void handleProjectileCollisions() {
-		if( this.gameObject instanceof TestProjectile ) {
-			
-			for (GameObject entity : ObjectList.getInstance().getEntities()) {
-			
-				// Skip self.
-				if( entity.equals(this.gameObject) ) {
-					continue;
-				}
-				
-				// Skip other projectiles.
-				if( entity instanceof TestProjectile ) {
-					continue;
-				}
-				
-				if (this.gameObject.collides(entity)) {
-					
-					// Notify the entity that they have had a collision.
-					entity.onCollision(this.gameObject);
-					
-					// Destroy the projectile once it has collided with an entity.
-					( ( TestProjectile )this.gameObject ).destroy(true);
-					
-					// Don't de-register the game object from ObjectList here.
-				}
+	private void handleEntityCollisions() {
+		for( GameObject entity : ObjectList.getInstance().getEntities() ) {
+		
+			// Skip self.
+			if( entity.equals( this.gameObject ) ) {
+				continue;
 			}
 			
+			// Skip other projectiles.
+			if( entity instanceof TestProjectile ) {
+				continue;
+			}
+			
+			if( this.gameObject.collides( entity ) ) {
+				
+				// Notify the entity that they have had a collision.
+				entity.onCollision( this.gameObject );
+				
+				// Destroy the projectile once it has collided with an entity.
+				if( this.gameObject instanceof TestProjectile ) {
+					( ( TestProjectile )this.gameObject ).destroy(true);
+				}
+				
+				// Don't de-register the game object from ObjectList here.
+			}
 		}
 	}
 	
@@ -84,7 +82,7 @@ public class Physics {
 		this.gameObject.aabb.p0.x = flNewX;
 		this.gameObject.aabb.p0.y = flNewY;
 		
-		this.handleProjectileCollisions();
+		this.handleEntityCollisions();
 		
 		// Perform collision detection on all other static objects.
 		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {

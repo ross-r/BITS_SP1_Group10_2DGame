@@ -88,4 +88,8 @@ public class MathUtils {
 		
 		return ( int )( ( milliseconds / MS_IN_SECOND ) / MS_TO_SECOND ) / GAME_TICKS;
 	}
+	
+	public static float randomInRange( float flMin, float flMax ) {
+		return ( float ) ( Math.random() * ( flMax - flMin ) ) + flMin;
+	}
 }

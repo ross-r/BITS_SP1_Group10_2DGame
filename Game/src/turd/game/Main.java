@@ -7,6 +7,7 @@ import static org.lwjgl.nanovg.NanoVGGL2.*;
 import org.lwjgl.*;
 import org.lwjgl.glfw.GLFW;
 
+import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.HUD;
 import turd.game.graphics.Texture;
@@ -68,6 +69,18 @@ public class Main {
 		}
 		// ----------------------- PAUSE MENU HUD
 
+		//
+		if (!GameState.getInstance().isIsPlayerAlive()) {
+			// Draw a darker background that is on top of everything else.
+			graphics.setColor(0.f, 0.f, 0.f, 127.f);
+			graphics.drawFilledRect(0, 0, window.getWidth(), window.getHeight());
+
+			// Draw text indicating the game is paused.
+			graphics.setColor(255.f, 255.f, 255.f, 255.f);
+			graphics.drawString("GAME OVER", 2, 2, 8.f);
+		} 
+		//
+		
 		hud.render(window, graphics);
 		graphics.endFrame();
 	}
@@ -93,8 +106,8 @@ public class Main {
 	}
 
 	public void tick() {
-		// If the game is paused then don't process any ticks.
-		if (GameState.getInstance().isPaused()) {
+		// If the game isn't running don't run any ticks.
+		if (!GameState.getInstance().isGameRunning()) {
 			return;
 		}
 
@@ -131,9 +144,12 @@ public class Main {
 		// create hud.
 		hud = new HUD(window, graphics);
 
+<<<<<<< HEAD
 		// Create audio.
 		// audio = new Audio();
 
+=======
+>>>>>>> f6a8734c1291783b553bdd4c796e320543575a6f
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
 		// GameState.getInstance().setUseCamera(false);
@@ -147,12 +163,37 @@ public class Main {
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
 		ObjectList.getInstance().createEnemy(420.f, 20.f);
+		ObjectList.getInstance().createEnemy(1640.f, 20.f);
 
+<<<<<<< HEAD
 		tbb = new TheBigBang();
 		tbb.Bang();
 		
 		// audio.play("laser");
 
+=======
+		// (Length , Height)
+		// Window size
+		// 720
+		// 1280
+
+		new LongPlatform(-80, 144);
+		new SmallSquare(-80, 80);
+		new SmallSquare(656, 80);
+		new Spikes(720, 100);
+		new LongPlatform(850, 144);
+		new SmallSquare(850, 80);
+		new SmallSquare(1820, 144);
+		new MediumPlatform(2046, 144);
+		new Pit(1650, 240);
+		new FallingPlat(2450,144);
+		new FallingPlat(2520,144);
+		new FallingPlat(2590,144);
+		new FallingPlat(2660,144);
+		new FallingPlat(2730,144);
+		new MediumPlatform(2800, 144);
+		
+>>>>>>> f6a8734c1291783b553bdd4c796e320543575a6f
 		texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
 
 		window.loop(_render, _tick);
@@ -160,9 +201,15 @@ public class Main {
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
+<<<<<<< HEAD
 
 		// Terminate all audio devices.
 		// audio.terminate();
+=======
+		
+		//Terminate all audio devices.
+		Audio.getInstance().terminate();
+>>>>>>> f6a8734c1291783b553bdd4c796e320543575a6f
 
 //LEO	HUD.terminate();
 	}

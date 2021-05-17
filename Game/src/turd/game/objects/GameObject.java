@@ -22,4 +22,9 @@ public abstract class GameObject {
 	public void onCollision(GameObject object) {
 		// Override this method in classes which wish to implement functionality upon collisions.
 	}
+	
+	public boolean shouldDelete() {
+		// Override this method in classes which wish to have deleted.
+		return false;
+	}
 }

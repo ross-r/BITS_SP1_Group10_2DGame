@@ -2,7 +2,9 @@ package turd.game.entities;
 
 import turd.game.Window;
 import turd.game.graphics.Graphics;
+import turd.game.graphics.Texture;
 import turd.game.objects.GameObject;
+import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
 import turd.game.physics.Vec2;
 
@@ -18,6 +20,8 @@ public class TestProjectile extends GameObject {
 	
 	private int iTicksAirBorne;
 	private int iMaxTicksAirborne;
+	
+	private Texture texture;
 	
 	// An empty constructor so that the object can be registered into the object list at creation of Player class.
 	// This is done as at creation we don't know the position, direction or velocity that this object should have.
@@ -37,6 +41,10 @@ public class TestProjectile extends GameObject {
 		this.iMaxTicksAirborne = 2 * 60;
 		
 		this.bInitialized = false;
+		
+		// Select one of the hud_scrap textures randomly.
+		final int rand = ( int ) ( ( Math.random() * ( 7 - 1 ) ) + 1 );
+		this.texture = new Texture( Graphics.nvgHandle(), String.format( "hud_scrap%d.png", rand ) );
 	}
 	
 	public void initialize(Vec2 position, Vec2 direction, Vec2 velocity) {
@@ -56,6 +64,14 @@ public class TestProjectile extends GameObject {
 	public void destroy(boolean bCalledByPhysics) {
 		this.bInitialized = false;
 		this.iTicksAirBorne = 0;
+		
+		// If this is the case then the projectile has hit another entity.
+		// - Commented out as I don't know if we want this behaviour, I would assume if the projectile damages something,
+		// we would want the projectile to be 'consumed', maybe it could drop a scrap object that gives a smaller portion of 'ammo'?
+		//if( bCalledByPhysics ) {
+		//	ObjectList.getInstance().registerQueuedObject( new Scrap( ( int ) this.aabb.p0.x, ( int ) this.aabb.p0.y ) );
+		//}
+
 		this.aabb.init(0.f, 0.f, 0.f, 0.f);
 	}
 	
@@ -70,8 +86,10 @@ public class TestProjectile extends GameObject {
 			return;
 		}
 		
-		g.setColor(255.f, 0.f, 0.f, 255.f);
-		g.drawFilledRect(x - w / 2, y - h / 2, w, h);
+		this.texture.render(x - w / 2, y - h / 2, 255.f);
+		
+		//g.setColor(255.f, 0.f, 0.f, 255.f);
+		//g.drawFilledRect(x - w / 2, y - h / 2, w, h);
 	}
 
 	@Override
@@ -82,7 +100,6 @@ public class TestProjectile extends GameObject {
 		
 		++this.iTicksAirBorne;
 		if( this.iTicksAirBorne > this.iMaxTicksAirborne ) {
-			System.out.println("destroyed");
 			this.destroy(false);
 			return;
 		}
@@ -98,4 +115,9 @@ public class TestProjectile extends GameObject {
 		this.physics.applyForce(this.direction, this.velocity);
 	}
 
+	@Override
+	public void onCollision(GameObject object) {
+		ObjectList.getInstance().registerQueuedObject( new Scrap( ( int ) this.aabb.p0.x, ( int ) this.aabb.p0.y ) );
+		this.destroy(false);
+	}
 }

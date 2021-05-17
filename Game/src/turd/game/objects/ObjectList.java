@@ -24,6 +24,12 @@ public class ObjectList {
 	// world objects, etc...
 	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
+	// A queue of game objects that are to be registered into a specific linked list.
+	// The purpose of this is so we can 'add' objects while certain data is being processed
+	// Java is particularly picky about having stuff added or removed to a list during iteration
+	// (in most other languages this behaviour is fine, however, may cause undefined behaviour if done wrongly)
+	private LinkedList<GameObject> queue = new LinkedList<GameObject>();
+	
 	private Player player;
 	private Camera camera;
 	
@@ -40,10 +46,9 @@ public class ObjectList {
 		return instance;
 	}
 	
-	//public StaticObject createStaticObject() {
-	//	this.objects.add(new StaticObject());
-	//	return (StaticObject) this.objects.getLast();
-	//}
+	public void registerQueuedObject(GameObject object) {
+		this.queue.add(object);
+	}
 	
 	public void registerStaticObject(StaticObject object) {
 		this.objects.add(object);
@@ -115,6 +120,14 @@ public class ObjectList {
 	}
 	
 	public void tick(Window window) {
+		//
+		// Process any queued game objects and transfer them to the appropriate list.
+		//
+		// Reference: https://www.vogella.com/tutorials/JavaCollections/article.html
+		// Feel free to read if you're interested in learning how this stuff works.
+		//
+		this.processQueue();
+		
 		for(GameObject object : objects) {
 			object.tick(window);
 		}
@@ -122,6 +135,64 @@ public class ObjectList {
 		for(GameObject entity : entities) {
 			entity.tick(window);
 		}
+		
+		//
+		// Delete any objects which request it.
+		//
+		this.removeDeadObjects();
+	}
+	
+	private void processQueue() {
+		if( !this.queue.isEmpty() ) {
+			
+			// Firstly filter the queued game objects into two categories
+			// 1) StaticObject
+			// 2) GameObject
+			//
+			// StaticObject is considered to be world objects, i.e; platforms, things the player collides with.
+			//
+			// GameObject is generalized and can safely be assumed that no collision is desired, for this purpose
+			// they are considered 'entities', though, they may also provide collisions.
+			
+			List<GameObject> staticObjects = this.queue.stream().filter(
+				n -> ( n instanceof StaticObject )
+			).map( n -> ( StaticObject )n ).collect(Collectors.toList());
+			
+			if( !staticObjects.isEmpty() ) {
+				this.objects.addAll( staticObjects );
+				
+				// Make sure to remove these so that the below GameObject filter does not include any StaticObject classes.
+				this.queue.removeAll( staticObjects );
+			}
+			
+			List<GameObject> gameObjects = this.queue.stream().filter(
+				n -> ( n instanceof GameObject )
+			).map( n -> ( GameObject )n ).collect(Collectors.toList());
+			
+			if( !gameObjects.isEmpty() ) {
+				this.entities.addAll( gameObjects );
+				this.queue.removeAll( gameObjects );
+			}
+			
+			// If we are at this point and the queue still has objects in it then something has gone wrong.
+			if( !( this.queue.isEmpty() ) ) {
+				System.out.println("The queue was not fully emptied into its respective linked lists.");
+			}
+		}
+	}
+	
+	private void removeDeadObjects() {
+		List<GameObject> deadObjects = this.objects.stream().filter(
+			n -> ( ( ( GameObject ) n).shouldDelete() )
+		).collect(Collectors.toList());
+		
+		this.objects.removeAll(deadObjects);
+		
+		List<GameObject> deadEntities = this.entities.stream().filter(
+			n -> ( ( ( GameObject ) n).shouldDelete() )
+		).collect(Collectors.toList());
+			
+		this.entities.removeAll(deadEntities);
 	}
 
 	public List<GameObject> getEntities() {

@@ -13,6 +13,7 @@ public class GameState {
 
     private boolean bIsPaused;
     private boolean bUseCamera;
+    private boolean bIsPlayerAlive;
     
     // Allows for the camera coordinates to be overriden.
     private boolean bOverrideCamera;
@@ -24,17 +25,23 @@ public class GameState {
     
     private double flFrameTime;
     
+    private int iTotalTicks;
+    
     public GameState() {
-    	bIsPaused = false;
-    	bUseCamera = true;
+    	this.bIsPaused = false;
+    	this.bUseCamera = true;
     	
-    	bOverrideCamera = false;
-    	flCameraX = 0.f;
-    	flCameraY = 0.f;
+    	this.bOverrideCamera = false;
+    	this.flCameraX = 0.f;
+    	this.flCameraY = 0.f;
     	
-    	setCameraFOV(90.f);
+    	this.setCameraFOV(90.f);
     	
-    	flFrameTime = 0.f;
+    	this.flFrameTime = 0.f;
+    	this.iTotalTicks = 0;
+    	
+    	// Assume the player is alive by default.
+    	this.bIsPlayerAlive = true;
     }
     
     public void update(Window window) {
@@ -89,5 +96,25 @@ public class GameState {
 
 	public void setCameraFOV(float flCameraFOV) {
 		this.flCameraFOV = flCameraFOV;
+	}
+
+	public void incrementTicks() {
+		++this.iTotalTicks;
+	}
+	
+	public int getCurrentTick() {
+		return this.iTotalTicks;
+	}
+
+	public boolean isIsPlayerAlive() {
+		return bIsPlayerAlive;
+	}
+
+	public void setPlayerDead() {
+		this.bIsPlayerAlive = false;
+	}
+	
+	public boolean isGameRunning() {
+		return !this.bIsPaused && this.bIsPlayerAlive;
 	}
 }

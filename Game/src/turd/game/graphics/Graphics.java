@@ -110,6 +110,17 @@ public class Graphics {
 		nvgFill(nvgHandle);
 	}
 	
+	public void save() {
+		nvgSave(nvgHandle);
+	}
+	
+	public void restore() {
+		nvgRestore(nvgHandle);
+	}
+	
+	public void resetTransform() {
+		nvgResetTransform(nvgHandle);
+	}
 	
 	public static long nvgHandle() {
 		return nvgHandle;

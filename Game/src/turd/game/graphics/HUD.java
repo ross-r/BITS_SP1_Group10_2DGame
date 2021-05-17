@@ -4,6 +4,7 @@ import static org.lwjgl.nanovg.NanoVGGL2.nvgDelete;
 
 import turd.game.Window;
 import turd.game.entities.Player;
+import turd.game.objects.ObjectList;
 
 //would this need to be called only when health/ammo or upgrade is changed?
 //or would it need to be called every frame as the "screen" moves
@@ -45,6 +46,11 @@ public class HUD {
 	}
 
 	public void render(Window window, Graphics g) {
+		Player player = ObjectList.getInstance().getPlayer();
+		if( player == null ) {
+			return;
+		}
+		
 		//choose the initial position on the screen
 		//top left with an offset of 3% from corner in both directions
 		iWidth = window.getScaledWidth();
@@ -54,7 +60,8 @@ public class HUD {
 		int scrap_x = 30% iWidth;
 		int scrap_y = 30% iHeight;
 		int offset = 0;
-		for (int i = 0; i < Player.getScrapValue(); i++) {
+		
+		for (int i = 0; i < player.getScrapValue(); i++) {
 			offset = offset + (60% iWidth);
 			texScrap[i].render(scrap_x + offset, scrap_y, 255.f);
 
