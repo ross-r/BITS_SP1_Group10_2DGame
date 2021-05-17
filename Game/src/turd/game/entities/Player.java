@@ -379,6 +379,15 @@ public class Player extends GameObject {
 		this.iProjectileCooldown = MathUtils.convertMillisecondsToGameTicks( 1000 );
 	}
 	
+	public boolean getMoving() {
+		isMoving = false;
+		if (bInMoveLeft || bInMoveRight) {
+			isMoving = true;
+			return isMoving;
+		}
+		return isMoving;
+	}
+	
 //	private void moveAudio() {
 //		playerAudio.play("playerRevUp");
 //		isMoving = false;
