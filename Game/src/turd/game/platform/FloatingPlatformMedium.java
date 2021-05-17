@@ -5,21 +5,21 @@ import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
 import turd.game.objects.ObjectList;
 
-public class LongPlatform extends Platform {
+public class FloatingPlatformMedium extends Platform {
 
-	private static final int PLATFORM_WIDTH = 800;
+	private static final int PLATFORM_WIDTH = 500;
 	private static final int PLATFORM_HEIGHT = 100;
 	
 	private Texture texLeft;
 	private Texture texRight;
 	private Texture texMid;
 	
-	public LongPlatform(int x, int y) {
+	public FloatingPlatformMedium(int x, int y) {
 		super();
 		
 		this.aabb.init(x, y, PLATFORM_WIDTH, PLATFORM_HEIGHT);
 		
-		this.type = PLATFORM_TYPE.LONG;
+		this.type = PLATFORM_TYPE.MEDIUM_FLOATING_PLATFORM;
 		
 		this.texLeft = new Texture(Graphics.nvgHandle(), "Ground_Platform_Left.png");
 		this.texRight = new Texture(Graphics.nvgHandle(), "Ground_Platform_Right.png");

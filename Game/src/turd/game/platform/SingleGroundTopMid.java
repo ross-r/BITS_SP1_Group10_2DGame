@@ -5,21 +5,21 @@ import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
 import turd.game.objects.ObjectList;
 
-public class SmallSquare extends Platform {
+public class SingleGroundTopMid extends Platform {
 
 	private static final int PLATFORM_WIDTH = 100;
 	private static final int PLATFORM_HEIGHT = 100;
 	
 	private Texture texture;
 	
-	public SmallSquare(int x, int y) {
+	public SingleGroundTopMid(int x, int y) {
 		super();
 		
 		this.aabb.init(x, y, PLATFORM_WIDTH, PLATFORM_HEIGHT);
 		
-		this.type = PLATFORM_TYPE.SMALLSQ;
+		this.type = PLATFORM_TYPE.GROUND_TOP_MID;
 		
-		this.texture = new Texture(Graphics.nvgHandle(), "Ground_Mid_Mid.png");
+		this.texture = new Texture(Graphics.nvgHandle(), "Ground_Top_Mid.png");
 		
 		this.r = 255.f;
 		this.g = 0.f;
