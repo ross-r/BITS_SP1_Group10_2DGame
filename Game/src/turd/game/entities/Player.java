@@ -701,11 +701,11 @@ public class Player extends GameObject {
 		// This is really bad lol
 		// The reason these calls are separated is because both x and y are checked in collision and if ONE of them fails
 		// both are ignored for the current tick, if they are separate calls then this *issue* is *avoided*.
-		boolean bCollided = this.physics.move(this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y);
-		bCollided = bCollided || this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( this.flUpMove * this.flMoveSpeed ));
+		this.physics.move(this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y);
+		boolean bCollidedY = this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( this.flUpMove * this.flMoveSpeed ));
 
 		// If the player collided with something during their jump, they should begin to fall.
-		if( bCollided && this.flJumpTime > 0.f ) {
+		if( bCollidedY && this.flJumpTime > 0.f ) {
 			
 			// Only purge the jump action if the object was above the player (i.e; a ceiling)
 			GameObject collisionObject = this.physics.getCollidedObject();
