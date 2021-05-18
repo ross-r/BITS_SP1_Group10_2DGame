@@ -60,16 +60,6 @@ public class Camera {
 			// the window.
 			final float flCameraX = flCenterX - (window.getWidth() / 2);
 			final float flCameraY = flCenterY - (window.getHeight() / 2);
-
-			// Work out the mouse coordinates in relation to the center of the screen specifically,
-			// i.e; if the mouse is in the center the coordinates should be [0, 0]
-			// if the mouse is off to the left it should be [-30, 0] where 30 is arbitrarily chosen for this example.
-			final double flMouseX = ( window.getMouseX() - ( window.getWidth() / 2 ) );
-			final double flMouseY = ( window.getMouseY() - ( window.getHeight() / 2 ) );
-			
-			//System.out.printf("%f %f - %f %f\n", flCenterX, flCenterY, flMouseX, flMouseY);
-			
-			
 			
 			// Compute the view matrix for the desired position.
 			Matrix4f viewMatrix = setupViewMatrix(flCameraX, flCameraY);

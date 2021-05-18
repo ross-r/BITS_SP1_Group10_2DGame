@@ -28,15 +28,15 @@ public class HUD {
 
 	public HUD(Window window, Graphics g) {
 		//these textures will be updated to the picked up scrap instead of default colours
-		texScrap1 = new Texture(Graphics.nvgHandle(), "hud_scrap1.png");
-		texScrap2 = new Texture(Graphics.nvgHandle(), "hud_scrap2.png");
-		texScrap3 = new Texture(Graphics.nvgHandle(), "hud_scrap3.png");
-		texScrap4 = new Texture(Graphics.nvgHandle(), "hud_scrap4.png");
-		texScrap5 = new Texture(Graphics.nvgHandle(), "hud_scrap5.png");
-		texScrap6 = new Texture(Graphics.nvgHandle(), "hud_scrap6.png");
-		texScrap7 = new Texture(Graphics.nvgHandle(), "hud_scrap7.png");
-		texSpeedUp = new Texture(Graphics.nvgHandle(), "hud_upgrade_speed.png");
-		texUpSpeed = new Texture(Graphics.nvgHandle(), "player-upgrade-speed.png");
+		texScrap1 = TextureManager.get("hud_scrap1.png");
+		texScrap2 = TextureManager.get("hud_scrap2.png");
+		texScrap3 = TextureManager.get("hud_scrap3.png");
+		texScrap4 = TextureManager.get("hud_scrap4.png");
+		texScrap5 = TextureManager.get("hud_scrap5.png");
+		texScrap6 = TextureManager.get("hud_scrap6.png");
+		texScrap7 = TextureManager.get("hud_scrap7.png");
+		texSpeedUp = TextureManager.get("hud_upgrade_speed.png");
+		texUpSpeed = TextureManager.get("player-upgrade-speed.png");
 		texScrap = new Texture[7];
 		texScrap[0] = texScrap1;
 		texScrap[1] = texScrap2;

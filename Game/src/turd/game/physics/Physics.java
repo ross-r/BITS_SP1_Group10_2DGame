@@ -10,9 +10,11 @@ public class Physics {
 	public final float GRAVITY = 4.f;
 
 	private GameObject gameObject;
+	private GameObject collidedObject;
 	
 	public Physics(GameObject obj) {
 		this.gameObject = obj;
+		this.collidedObject = null;
 	}
 	
 	// Applies gravity to a point.
@@ -75,7 +77,9 @@ public class Physics {
 		}
 	}
 	
-	public void move(float flNewX, float flNewY) {
+	public boolean move(float flNewX, float flNewY) {
+		this.collidedObject = null;
+		
 		float x = this.gameObject.aabb.p0.x;
 		float y = this.gameObject.aabb.p0.y;
 		
@@ -95,8 +99,15 @@ public class Physics {
 				// Stops movement.
 				this.gameObject.aabb.p0.x = x;
 				this.gameObject.aabb.p0.y = y;
+				
+				// Store the object that we collided with so we can check if it was above our player.
+				this.collidedObject = staticObject;
+				
+				return true;
 			}
 		}
+		
+		return false;
 	}
 
 	public boolean applyForce(Vec2 direction, Vec2 velocity) {
@@ -114,5 +125,9 @@ public class Physics {
 				Math.abs(this.gameObject.aabb.p0.y - y) > EPSILON;
 				
 		return !moved;
+	}
+	
+	public GameObject getCollidedObject() {
+		return this.collidedObject;
 	}
 }

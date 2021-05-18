@@ -3,6 +3,7 @@ package turd.game.platform;
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
+import turd.game.graphics.TextureManager;
 import turd.game.objects.ObjectList;
 
 public class GroundTopEdgeMedium extends Platform {
@@ -21,9 +22,9 @@ public class GroundTopEdgeMedium extends Platform {
 		
 		this.type = PLATFORM_TYPE.GROUND_TOP_EDGE_MEDIUM;
 		
-		this.texLeft = new Texture(Graphics.nvgHandle(), "Ground_Top_Left.png");
-		this.texRight = new Texture(Graphics.nvgHandle(), "Ground_Top_Right.png");
-		this.texMid = new Texture(Graphics.nvgHandle(), "Ground_Top_Mid.png");
+		this.texLeft = TextureManager.get("Ground_Top_Left.png");
+		this.texRight = TextureManager.get("Ground_Top_Right.png");
+		this.texMid = TextureManager.get("Ground_Top_Mid.png");
 		
 		// red
 		this.r = 255.f;

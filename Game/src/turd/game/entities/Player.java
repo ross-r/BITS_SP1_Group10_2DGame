@@ -9,6 +9,7 @@ import turd.game.Window;
 //import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
+import turd.game.graphics.TextureManager;
 import turd.game.input.KeyboardInput;
 import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
@@ -126,83 +127,83 @@ public class Player extends GameObject {
 		// Create textures.
 		// Create textures.
 		// player walking left/right
-		texLeftE1 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftEmpty.png");
-		texLeftE2 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftEmpty-ALT.png");
-		texRightE1 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightEmpty.png");
-		texRightE2 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightEmpty-ALT.png");
-		texLeftH1 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftHalf.png");
-		texLeftH2 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftHalf-ALT.png");
-		texRightH1 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightHalf.png");
-		texRightH2 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightHalf-ALT.png");
-		texLeftF1 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftFull.png");
-		texLeftF2 = new Texture(Graphics.nvgHandle(), "Player-Stand-LeftFull-ALT.png");
-		texRightF1 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightFull.png");
-		texRightF2 = new Texture(Graphics.nvgHandle(), "Player-Stand-RightFull-ALT.png");
+		texLeftE1 = TextureManager.get("Player-Stand-LeftEmpty.png");
+		texLeftE2 = TextureManager.get("Player-Stand-LeftEmpty-ALT.png");
+		texRightE1 = TextureManager.get("Player-Stand-RightEmpty.png");
+		texRightE2 = TextureManager.get("Player-Stand-RightEmpty-ALT.png");
+		texLeftH1 = TextureManager.get("Player-Stand-LeftHalf.png");
+		texLeftH2 = TextureManager.get("Player-Stand-LeftHalf-ALT.png");
+		texRightH1 = TextureManager.get("Player-Stand-RightHalf.png");
+		texRightH2 = TextureManager.get("Player-Stand-RightHalf-ALT.png");
+		texLeftF1 = TextureManager.get("Player-Stand-LeftFull.png");
+		texLeftF2 = TextureManager.get("Player-Stand-LeftFull-ALT.png");
+		texRightF1 = TextureManager.get("Player-Stand-RightFull.png");
+		texRightF2 = TextureManager.get("Player-Stand-RightFull-ALT.png");
 		// player jumping left/right pre-jump
-		texLeftE1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftEmpty.png");
-		texLeftE2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftEmpty-ALT.png");
-		texRightE1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightEmpty.png");
-		texRightE2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightEmpty-ALT.png");
-		texLeftH1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftHalf.png");
-		texLeftH2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftHalf-ALT.png");
-		texRightH1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightHalf.png");
-		texRightH2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightHalf-ALT.png");
-		texLeftF1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftFull.png");
-		texLeftF2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-LeftFull-ALT.png");
-		texRightF1J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightFull.png");
-		texRightF2J1 = new Texture(Graphics.nvgHandle(), "Player-PreJump-RightFull-ALT.png");
+		texLeftE1J1 = TextureManager.get("Player-PreJump-LeftEmpty.png");
+		texLeftE2J1 = TextureManager.get("Player-PreJump-LeftEmpty-ALT.png");
+		texRightE1J1 = TextureManager.get("Player-PreJump-RightEmpty.png");
+		texRightE2J1 = TextureManager.get("Player-PreJump-RightEmpty-ALT.png");
+		texLeftH1J1 = TextureManager.get("Player-PreJump-LeftHalf.png");
+		texLeftH2J1 = TextureManager.get("Player-PreJump-LeftHalf-ALT.png");
+		texRightH1J1 = TextureManager.get("Player-PreJump-RightHalf.png");
+		texRightH2J1 = TextureManager.get("Player-PreJump-RightHalf-ALT.png");
+		texLeftF1J1 = TextureManager.get("Player-PreJump-LeftFull.png");
+		texLeftF2J1 = TextureManager.get("Player-PreJump-LeftFull-ALT.png");
+		texRightF1J1 = TextureManager.get("Player-PreJump-RightFull.png");
+		texRightF2J1 = TextureManager.get("Player-PreJump-RightFull-ALT.png");
 		// player jumping left/right mid-jump
-		texLeftE1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftEmpty.png");
-		texLeftE2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftEmpty-ALT.png");
-		texRightE1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightEmpty.png");
-		texRightE2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightEmpty-ALT.png");
-		texLeftH1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftHalf.png");
-		texLeftH2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftHalf-ALT.png");
-		texRightH1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightHalf.png");
-		texRightH2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightHalf-ALT.png");
-		texLeftF1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftFull.png");
-		texLeftF2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-LeftFull-ALT.png");
-		texRightF1J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightFull.png");
-		texRightF2J2 = new Texture(Graphics.nvgHandle(), "Player-MidJump-RightFull-ALT.png");
+		texLeftE1J2 = TextureManager.get("Player-MidJump-LeftEmpty.png");
+		texLeftE2J2 = TextureManager.get("Player-MidJump-LeftEmpty-ALT.png");
+		texRightE1J2 = TextureManager.get("Player-MidJump-RightEmpty.png");
+		texRightE2J2 = TextureManager.get("Player-MidJump-RightEmpty-ALT.png");
+		texLeftH1J2 = TextureManager.get("Player-MidJump-LeftHalf.png");
+		texLeftH2J2 = TextureManager.get("Player-MidJump-LeftHalf-ALT.png");
+		texRightH1J2 = TextureManager.get("Player-MidJump-RightHalf.png");
+		texRightH2J2 = TextureManager.get("Player-MidJump-RightHalf-ALT.png");
+		texLeftF1J2 = TextureManager.get("Player-MidJump-LeftFull.png");
+		texLeftF2J2 = TextureManager.get("Player-MidJump-LeftFull-ALT.png");
+		texRightF1J2 = TextureManager.get("Player-MidJump-RightFull.png");
+		texRightF2J2 = TextureManager.get("Player-MidJump-RightFull-ALT.png");
 		// player jumping left/right post-jump
-		texLeftE1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftEmpty.png");
-		texLeftE2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftEmpty-ALT.png");
-		texRightE1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightEmpty.png");
-		texRightE2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightEmpty-ALT.png");
-		texLeftH1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftHalf.png");
-		texLeftH2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftHalf-ALT.png");
-		texRightH1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightHalf.png");
-		texRightH2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightHalf-ALT.png");
-		texLeftF1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftFull.png");
-		texLeftF2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-LeftFull-ALT.png");
-		texRightF1J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightFull.png");
-		texRightF2J3 = new Texture(Graphics.nvgHandle(), "Player-PostJump-RightFull-ALT.png");
+		texLeftE1J3 = TextureManager.get("Player-PostJump-LeftEmpty.png");
+		texLeftE2J3 = TextureManager.get("Player-PostJump-LeftEmpty-ALT.png");
+		texRightE1J3 = TextureManager.get("Player-PostJump-RightEmpty.png");
+		texRightE2J3 = TextureManager.get("Player-PostJump-RightEmpty-ALT.png");
+		texLeftH1J3 = TextureManager.get("Player-PostJump-LeftHalf.png");
+		texLeftH2J3 = TextureManager.get("Player-PostJump-LeftHalf-ALT.png");
+		texRightH1J3 = TextureManager.get("Player-PostJump-RightHalf.png");
+		texRightH2J3 = TextureManager.get("Player-PostJump-RightHalf-ALT.png");
+		texLeftF1J3 = TextureManager.get("Player-PostJump-LeftFull.png");
+		texLeftF2J3 = TextureManager.get("Player-PostJump-LeftFull-ALT.png");
+		texRightF1J3 = TextureManager.get("Player-PostJump-RightFull.png");
+		texRightF2J3 = TextureManager.get("Player-PostJump-RightFull-ALT.png");
 		// player attack left/right mid-attack
-		texLeftE1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftEmpty.png");
-		texLeftE2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftEmpty-ALT.png");
-		texRightE1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightEmpty.png");
-		texRightE2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightEmpty-ALT.png");
-		texLeftH1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftHalf.png");
-		texLeftH2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftHalf-ALT.png");
-		texRightH1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightHalf.png");
-		texRightH2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightHalf-ALT.png");
-		texLeftF1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftFull.png");
-		texLeftF2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-LeftFull-ALT.png");
-		texRightF1A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightFull.png");
-		texRightF2A1 = new Texture(Graphics.nvgHandle(), "Player-MidAttack-RightFull-ALT.png");
+		texLeftE1A1 = TextureManager.get("Player-MidAttack-LeftEmpty.png");
+		texLeftE2A1 = TextureManager.get("Player-MidAttack-LeftEmpty-ALT.png");
+		texRightE1A1 = TextureManager.get("Player-MidAttack-RightEmpty.png");
+		texRightE2A1 = TextureManager.get("Player-MidAttack-RightEmpty-ALT.png");
+		texLeftH1A1 = TextureManager.get("Player-MidAttack-LeftHalf.png");
+		texLeftH2A1 = TextureManager.get("Player-MidAttack-LeftHalf-ALT.png");
+		texRightH1A1 = TextureManager.get("Player-MidAttack-RightHalf.png");
+		texRightH2A1 = TextureManager.get("Player-MidAttack-RightHalf-ALT.png");
+		texLeftF1A1 = TextureManager.get("Player-MidAttack-LeftFull.png");
+		texLeftF2A1 = TextureManager.get("Player-MidAttack-LeftFull-ALT.png");
+		texRightF1A1 = TextureManager.get("Player-MidAttack-RightFull.png");
+		texRightF2A1 = TextureManager.get("Player-MidAttack-RightFull-ALT.png");
 		// player attack left/right fin-attack
-		texLeftE1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftEmpty.png");
-		texLeftE2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftEmpty-ALT.png");
-		texRightE1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightEmpty.png");
-		texRightE2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightEmpty-ALT.png");
-		texLeftH1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftHalf.png");
-		texLeftH2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftHalf-ALT.png");
-		texRightH1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightHalf.png");
-		texRightH2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightHalf-ALT.png");
-		texLeftF1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftFull.png");
-		texLeftF2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-LeftFull-ALT.png");
-		texRightF1A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightFull.png");
-		texRightF2A2 = new Texture(Graphics.nvgHandle(), "Player-FinAttack-RightFull-ALT.png");
+		texLeftE1A2 = TextureManager.get("Player-FinAttack-LeftEmpty.png");
+		texLeftE2A2 = TextureManager.get("Player-FinAttack-LeftEmpty-ALT.png");
+		texRightE1A2 = TextureManager.get("Player-FinAttack-RightEmpty.png");
+		texRightE2A2 = TextureManager.get("Player-FinAttack-RightEmpty-ALT.png");
+		texLeftH1A2 = TextureManager.get("Player-FinAttack-LeftHalf.png");
+		texLeftH2A2 = TextureManager.get("Player-FinAttack-LeftHalf-ALT.png");
+		texRightH1A2 = TextureManager.get("Player-FinAttack-RightHalf.png");
+		texRightH2A2 = TextureManager.get("Player-FinAttack-RightHalf-ALT.png");
+		texLeftF1A2 = TextureManager.get("Player-FinAttack-LeftFull.png");
+		texLeftF2A2 = TextureManager.get("Player-FinAttack-LeftFull-ALT.png");
+		texRightF1A2 = TextureManager.get("Player-FinAttack-RightFull.png");
+		texRightF2A2 = TextureManager.get("Player-FinAttack-RightFull-ALT.png");
 		//texture used for player graphic at all times
 		//this texture references the above textures when it needs to
 		texture = this.texRightF1;
@@ -679,7 +680,7 @@ public class Player extends GameObject {
 		// a value of 1 will have no change, < 1 will slow us, > 1 will make us faster.
 		this.flMoveSpeed *= this.flMoveSpeedBonusMultiplier;
 
-		this.flJumpSpeed = this.bInMoveSpeed ? Constants.PLAYER_JUMP_SPEED_MULTIPLIER : 1.f;
+		//this.flJumpSpeed = Constants.PLAYER_JUMP_SPEED_MULTIPLIER;
 
 		if ( this.flJumpTime > 0.f ) {
 			
@@ -694,15 +695,26 @@ public class Player extends GameObject {
 
 			// Negate regular movement speed and multiply by desired jump speed.
 			this.flUpMove /= this.flMoveSpeed;
-			this.flUpMove *= ( this.flMoveSpeed * this.flJumpSpeed );
+			this.flUpMove *= ( this.flMoveSpeed * Constants.PLAYER_JUMP_SPEED_MULTIPLIER );
 		}
 
 		// This is really bad lol
 		// The reason these calls are separated is because both x and y are checked in collision and if ONE of them fails
 		// both are ignored for the current tick, if they are separate calls then this *issue* is *avoided*.
-		this.physics.move(this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y);
-		this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( this.flUpMove * this.flMoveSpeed ));
+		boolean bCollided = this.physics.move(this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y);
+		bCollided = bCollided || this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( this.flUpMove * this.flMoveSpeed ));
 
+		// If the player collided with something during their jump, they should begin to fall.
+		if( bCollided && this.flJumpTime > 0.f ) {
+			
+			// Only purge the jump action if the object was above the player (i.e; a ceiling)
+			GameObject collisionObject = this.physics.getCollidedObject();
+			
+			if( collisionObject != null && MathUtils.isObjectAbovePlayer(this, collisionObject) ) {
+				this.flJumpTime = 0.f;
+			}
+		}
+		
 		//
 		//
 		//

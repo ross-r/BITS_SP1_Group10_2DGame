@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NVGPaint;
 import org.lwjgl.system.MemoryStack;
 
@@ -24,7 +23,7 @@ public class Texture {
     private final int iTexID;
 
     public Texture(long vg, String imagePath) {
-        this.vg = vg;
+    	this.vg = vg;
 
         ByteBuffer pathBuffer;
         try {

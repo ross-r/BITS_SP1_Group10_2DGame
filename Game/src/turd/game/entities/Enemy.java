@@ -6,6 +6,7 @@ import turd.game.Window;
 import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
+import turd.game.graphics.TextureManager;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
@@ -52,26 +53,26 @@ public class Enemy extends GameObject {
 		
 		
 		//Texture
-		texLeftRun1 = new Texture(Graphics.nvgHandle(), "Enemy-RunPre-Left.png");
-		texLeftRun2 = new Texture(Graphics.nvgHandle(), "Enemy-RunPost-Left.png");
-		texLeftStand = new Texture(Graphics.nvgHandle(), "Enemy-Stand-Left.png");
-		texRightRun1 = new Texture(Graphics.nvgHandle(), "Enemy-RunPre-Right.png");
-		texRightRun2 = new Texture(Graphics.nvgHandle(), "Enemy-RunPost-Right.png");
-		texRightStand = new Texture(Graphics.nvgHandle(), "Enemy-Stand-Right.png");
-		texLeftJump1 = new Texture(Graphics.nvgHandle(), "Enemy-Jump-LeftPre.png");
-		texLeftJump2 = new Texture(Graphics.nvgHandle(), "Enemy-Jump-LeftMid.png");
-		texLeftJump3 = new Texture(Graphics.nvgHandle(), "Enemy-Jump-LeftPost.png");
-		texRightJump1 = new Texture(Graphics.nvgHandle(), "Enemy-JumpPre-Right.png");
-		texRightJump2 = new Texture(Graphics.nvgHandle(), "Enemy-JumpMid-Right.png");
-		texRightJump3 = new Texture(Graphics.nvgHandle(), "Enemy-JumpPost-Right.png");
-		texLeftAtk1 = new Texture(Graphics.nvgHandle(), "Enemy-AttackWindup-Left.png");
-		texLeftAtk2 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPre-Left.png");
-		texLeftAtk3 = new Texture(Graphics.nvgHandle(), "Enemy-AttackMid-Left.png");
-		texLeftAtk4 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPost-Left.png");
-		texRightAtk1 = new Texture(Graphics.nvgHandle(), "Enemy-AttackWindup-Right.png");
-		texRightAtk2 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPre-Right.png");
-		texRightAtk3 = new Texture(Graphics.nvgHandle(), "Enemy-AttackMid-Right.png");
-		texRightAtk4 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPost-Right.png");
+		texLeftRun1 = TextureManager.get("Enemy-RunPre-Left.png");
+		texLeftRun2 = TextureManager.get("Enemy-RunPost-Left.png");
+		texLeftStand = TextureManager.get("Enemy-Stand-Left.png");
+		texRightRun1 = TextureManager.get("Enemy-RunPre-Right.png");
+		texRightRun2 = TextureManager.get("Enemy-RunPost-Right.png");
+		texRightStand = TextureManager.get("Enemy-Stand-Right.png");
+		texLeftJump1 = TextureManager.get("Enemy-Jump-LeftPre.png");
+		texLeftJump2 = TextureManager.get("Enemy-Jump-LeftMid.png");
+		texLeftJump3 = TextureManager.get("Enemy-Jump-LeftPost.png");
+		texRightJump1 = TextureManager.get("Enemy-JumpPre-Right.png");
+		texRightJump2 = TextureManager.get("Enemy-JumpMid-Right.png");
+		texRightJump3 = TextureManager.get("Enemy-JumpPost-Right.png");
+		texLeftAtk1 = TextureManager.get("Enemy-AttackWindup-Left.png");
+		texLeftAtk2 = TextureManager.get("Enemy-AttackPre-Left.png");
+		texLeftAtk3 = TextureManager.get("Enemy-AttackMid-Left.png");
+		texLeftAtk4 = TextureManager.get("Enemy-AttackPost-Left.png");
+		texRightAtk1 = TextureManager.get("Enemy-AttackWindup-Right.png");
+		texRightAtk2 = TextureManager.get("Enemy-AttackPre-Right.png");
+		texRightAtk3 = TextureManager.get("Enemy-AttackMid-Right.png");
+		texRightAtk4 = TextureManager.get("Enemy-AttackPost-Right.png");
 		texture = texLeftAtk1;
 		
 		

@@ -1,5 +1,6 @@
 package turd.game;
 
+import turd.game.entities.Player;
 import turd.game.objects.GameObject;
 import turd.game.physics.Vec2;
 
@@ -91,5 +92,19 @@ public class MathUtils {
 	
 	public static float randomInRange( float flMin, float flMax ) {
 		return ( float ) ( Math.random() * ( flMax - flMin ) ) + flMin;
+	}
+	
+	public static boolean isObjectAbovePlayer(Player player, GameObject object) {
+		// Calculate the direction but don't worry about the x coordinate
+		// including the x coordinate here would produce an angle that is between
+		// x and y and y would only be usable if we were directly under something
+		// and centered perfectly in the middle of the object.
+		final float flCenterY = player.aabb.p0.y + ( player.aabb.p1.y / 2 );
+		final float flTargetY = object.aabb.p0.y + ( object.aabb.p1.y / 2 );
+		final float flDirection = MathUtils.calcDirection(0, flCenterY, 0, flTargetY);
+		final float flAngle = ( float ) ( Math.toDegrees( Math.cos( flDirection ) ) * Math.PI );
+		
+		// -180 would indicate that something is perfectly above us.
+		return flAngle == -180.f;
 	}
 }

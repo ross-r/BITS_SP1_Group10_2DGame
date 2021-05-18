@@ -85,17 +85,6 @@ public class ObjectList {
 		return enemy;
 	}
 	
-	public Scrap createScrap(int iX, int iY){
-		
-		if(this.entities.add(new Scrap(iX, iY))) {
-			System.out.println("Created right");
-			System.out.println(this.entities.size());
-			System.out.println(this.entities);
-		}
-		
-		return (Scrap) this.entities.getLast();
-	}
-	
 	public void render(Window window, Graphics g) {
 		g.beginFrame();
 		

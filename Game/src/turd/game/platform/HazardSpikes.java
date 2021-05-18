@@ -3,6 +3,7 @@ package turd.game.platform;
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
+import turd.game.graphics.TextureManager;
 import turd.game.objects.ObjectList;
 
 public class HazardSpikes extends Platform {
@@ -19,7 +20,7 @@ public class HazardSpikes extends Platform {
 		
 		this.type = PLATFORM_TYPE.SPIKES;
 		
-		this.texture = new Texture(Graphics.nvgHandle(), "Hazard_Spikes.png");
+		this.texture = TextureManager.get("Hazard_Spikes.png");
 		
 		// blue
 		this.r = 0.f;
