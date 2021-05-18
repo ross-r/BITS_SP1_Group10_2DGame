@@ -6,7 +6,7 @@ import turd.game.Constants;
 import turd.game.GameState;
 import turd.game.MathUtils;
 import turd.game.Window;
-import turd.game.audio.Audio;
+//import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
 import turd.game.input.KeyboardInput;
@@ -91,6 +91,12 @@ public class Player extends GameObject {
 	// Health, damage stuff, etc...
 	//
 	private int iHealth;
+
+	//
+	// Upgrades
+	//
+	private boolean PlayerSpeedUp;
+	private boolean PlayerJumpBoost;
 	
 	public Player() {
 		super();
@@ -552,11 +558,15 @@ public class Player extends GameObject {
 					}
 				}
 		
+//				//TEST
+//				if (texture == texRightF1J2) {
+//					System.out.print("midjump");
+//				}
 		
-				if (bInMoveLeft || bInMoveRight)
-					Audio.getInstance().playerMovePlay();
-				else
-					Audio.getInstance().stop("playerMove");
+//				if (bInMoveLeft || bInMoveRight)
+//					Audio.getInstance().playerMovePlay();
+//				else
+//					Audio.getInstance().stop("playerMove");
 		
 		
 		//OLD TEXTURES, LEFT HERE TEMPORARILY
@@ -673,9 +683,9 @@ public class Player extends GameObject {
 
 		if ( this.flJumpTime > 0.f ) {
 			
-			if (!Audio.getInstance().getPlaying("playerJump")) {
-				Audio.getInstance().play("playerJump");
-			}
+//			if (!Audio.getInstance().getPlaying("playerJump")) {
+//				Audio.getInstance().play("playerJump");
+//			}
 		
 			this.flJumpTime -= ( 1.f / 60.f );
 
@@ -699,8 +709,8 @@ public class Player extends GameObject {
 		
 		this.iProjectileCooldown--;
 		if( MouseInput.getInstance().getMouseClicked() ) {
-			if (!Audio.getInstance().getPlaying("playerShoot"))
-			Audio.getInstance().play("playerShoot");
+//			if (!Audio.getInstance().getPlaying("playerShoot"))
+//			Audio.getInstance().play("playerShoot");
 			this.shoot(window);
 		}
 	}
@@ -808,7 +818,7 @@ public class Player extends GameObject {
 		
 		++this.iScrapValue;
 		
-		Audio.getInstance().play("playerPickUp");
+//		Audio.getInstance().play("playerPickUp");
 		
 		return true;
 		
@@ -834,4 +844,14 @@ public class Player extends GameObject {
 	public boolean hasMaxScrap() {
 		return this.iScrapValue == Constants.PLAYER_MAX_SCRAP_VALUE;
 	}
+
+	//for HUD
+	public int getTotalUpgrades() {
+		return 1;
+	}
+	public boolean getPlayerSpeedUp() {
+		return true;
+	}
+	
+	
 }
