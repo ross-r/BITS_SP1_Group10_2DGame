@@ -47,13 +47,20 @@ public class TestProjectile extends GameObject {
 		this.texture = new Texture( Graphics.nvgHandle(), String.format( "hud_scrap%d.png", rand ) );
 	}
 	
-	public void initialize(Vec2 position, Vec2 direction, Vec2 velocity) {
+	public boolean initialize(Vec2 position, Vec2 direction, Vec2 velocity) {
 		this.direction = direction;
 		this.velocity = velocity;
 		
 		this.aabb.init(position.x, position.y, BOUNDS, BOUNDS);
 		
+		// Make sure this projectile does not spawn in an invalid position.
+		if( this.physics.doesObjectCollideWithWorld() ) {
+			this.destroy( false );
+			return false;
+		}
+		
 		this.bInitialized = true;
+		return true;
 	}
 	
 	public boolean isInitialized() {

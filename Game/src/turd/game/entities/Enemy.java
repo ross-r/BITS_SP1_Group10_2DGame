@@ -155,7 +155,12 @@ public class Enemy extends GameObject {
 				
 				Vec2 velocity = new Vec2( 10.f, 10.f );
 				
-				testProjectile.initialize(position, direction, velocity);
+				// Attempt to initialize the projectile.
+				if( !testProjectile.initialize( position, direction, velocity ) ) {
+					
+					// If this fails it means the projectile would spawn in an invalid position.
+					return;
+				}
 				
 				this.iProjectileCooldown = MathUtils.convertMillisecondsToGameTicks( 1000 );
 			}

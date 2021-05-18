@@ -17,35 +17,10 @@ public class Physics {
 		this.collidedObject = null;
 	}
 	
-	// Applies gravity to a point.
 	public boolean gravity() {
-		float y = this.gameObject.aabb.p0.y;
-		
-		this.gameObject.aabb.p0.y += GRAVITY;
-		
-		// Perform collision detection on all other static objects.
-		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
-		
-			// if instance of ....
-			
-			
-			if (this.gameObject.collides(staticObject)) {
-				
-				// SmallSquare extends Platform which extends StaticObject
-				// calling instanceof on a variable will compare x against y (x instanceof y)
-				// and validate the object is of a specific type.
-				
-				//if( staticObject instanceof SmallSquare ) {
-				//	System.out.println("on small square");
-				//}
-				
-				this.gameObject.aabb.p0.y = y;
-				
-				return false;
-			}
-		}
-		
-		return true;
+		Vec2 direction = new Vec2( 0.f, 1.f );
+		Vec2 velocity = new Vec2( 0.f, GRAVITY );		
+		return !applyForce( direction, velocity );
 	}
 	
 	// Check if a projectile intersects with another entity (which is not a projectile)
@@ -77,6 +52,22 @@ public class Physics {
 		}
 	}
 	
+	public boolean doesObjectCollideWithWorld() {
+		// Perform collision detection on all other static objects.
+		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
+			
+			if (this.gameObject.collides(staticObject)) {
+				
+				// Store the object that we collided with so we can check if it was above our player.
+				this.collidedObject = staticObject;
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public boolean move(float flNewX, float flNewY) {
 		this.collidedObject = null;
 		
@@ -88,23 +79,16 @@ public class Physics {
 		
 		this.handleEntityCollisions();
 		
-		// Perform collision detection on all other static objects.
-		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
+		if( this.doesObjectCollideWithWorld() ) {
+		
+			// Notify our object that it has collided with something.
+			this.gameObject.onCollision( this.collidedObject );
 			
-			if (this.gameObject.collides(staticObject)) {
-				
-				// Notify our object that it has collided with something.
-				this.gameObject.onCollision(staticObject);
-				
-				// Stops movement.
-				this.gameObject.aabb.p0.x = x;
-				this.gameObject.aabb.p0.y = y;
-				
-				// Store the object that we collided with so we can check if it was above our player.
-				this.collidedObject = staticObject;
-				
-				return true;
-			}
+			// Stops movement.
+			this.gameObject.aabb.p0.x = x;
+			this.gameObject.aabb.p0.y = y;
+			
+			return true;
 		}
 		
 		return false;
@@ -117,14 +101,14 @@ public class Physics {
 		x += direction.x * velocity.x;
 		y += direction.y * velocity.y;
 		
-		this.move(x, y);
+		boolean bCollided = this.move(x, y);
 		
 		// Check if there was any movement.
 		final float EPSILON = 0.01f;
-		boolean moved = Math.abs(this.gameObject.aabb.p0.x - x) > EPSILON || 
+		boolean bMoved = Math.abs(this.gameObject.aabb.p0.x - x) > EPSILON || 
 				Math.abs(this.gameObject.aabb.p0.y - y) > EPSILON;
 				
-		return !moved;
+		return bCollided && bMoved;
 	}
 	
 	public GameObject getCollidedObject() {

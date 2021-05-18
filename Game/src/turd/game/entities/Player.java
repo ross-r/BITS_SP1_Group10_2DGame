@@ -16,6 +16,8 @@ import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
 import turd.game.physics.Vec2;
+import turd.game.platform.HazardPit;
+import turd.game.platform.HazardSpikes;
 
 public class Player extends GameObject {
 	
@@ -244,11 +246,7 @@ public class Player extends GameObject {
 		flUpMove = 0.f;//bInMoveUp ? -1.f : bInMoveDown ? 1.f : 0.f;
 
 		if ( this.bOnGround && bInJump && flJumpTime <= 0.f ) {
-			// How many ticks we should jump for.
-			// We multiply by a fixed value here to keep the jump height consistent even when we are moving faster.
-			final float flJumpTicks = 48.f * ( bInMoveSpeed ? 0.5f : 1.f );
-
-			flJumpTime = ( 1.f / 60.f ) * Math.round(flJumpTicks);
+			jump( 1.f );
 		}
 	}
 
@@ -771,7 +769,12 @@ public class Player extends GameObject {
 		
 		Vec2 velocity = new Vec2( 10.f, 10.f );
 		
-		testProjectile.initialize(position, direction, velocity);
+		// Attempt to initialize the projectile.
+		if( !testProjectile.initialize( position, direction, velocity ) ) {
+			
+			// If this fails it means the projectile would spawn in an invalid position.
+			return;
+		}
 		
 		// TODO: It would be a good idea to add a delay between projectile shots
 		// this delay could be affected by some of our EVF's (such as speed alter, etc..)
@@ -782,7 +785,14 @@ public class Player extends GameObject {
 		this.iProjectileCooldown = MathUtils.convertMillisecondsToGameTicks( 1000 );
 	}
 	
-	private void onTakeDamage() {
+	private void jump( float flJumpStrength ) {
+		// How many ticks we should jump for.
+		// We multiply by a fixed value here to keep the jump height consistent even when we are moving faster.
+		final float flJumpTicks = 48.f * ( bInMoveSpeed ? 0.5f : 1.f );
+		this.flJumpTime = ( ( 1.f / 60.f ) * Math.round( flJumpTicks ) ) * flJumpStrength;
+	}
+	
+	private void onTakeDamage( GameObject object ) {
 		if( this.iHealth <= 0 ) {
 			
 			// We can allow for a 'lives' system so we can let the player restart the level and try again.
@@ -790,6 +800,11 @@ public class Player extends GameObject {
 			
 			return;
 		}
+		
+		// If we're inside of the bit we want to take a small amount of damage and initiate a jump.
+		if( object instanceof HazardSpikes ) {
+			jump( 0.5f );
+		} 
 		
 		// We can apply a multiplier for things like damage resistance and so on.
 		this.iHealth -= Constants.PROJECTILE_BASE_DAMAGE;
@@ -806,15 +821,17 @@ public class Player extends GameObject {
 		
 		// And finally, end the overlay 250ms after the fade begins.
 		this.iDamageTakenFadeEnd = this.iDamageTakenFadeOutStart + MathUtils.convertMillisecondsToGameTicks(500);
-		
-		//System.out.printf("%d %d\n", this.iDamageTakenStart, this.iDamageTakenFadeOutStart);
 	}
 	
 	@Override
-	public void onCollision(GameObject object) {
-		if( object instanceof TestProjectile ) {
-			onTakeDamage();
+	public void onCollision( GameObject object ) {
+		
+		// Only these objects can damage our player.
+		if( !( object instanceof TestProjectile || object instanceof HazardSpikes ) ) {
+			return;
 		}
+		
+		onTakeDamage( object );
 	}
 	
 	//players health/ammunition value (scrap)
