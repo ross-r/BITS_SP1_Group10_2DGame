@@ -7,6 +7,7 @@ import static org.lwjgl.nanovg.NanoVGGL2.*;
 import org.lwjgl.*;
 import org.lwjgl.glfw.GLFW;
 
+import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.HUD;
 import turd.game.graphics.Texture;
@@ -21,7 +22,7 @@ public class Main {
 	private final int WINDOW_HEIGHT = 720;
 
 	private TheBigBang tbb;
-	
+
 	private Window window;
 	private Graphics graphics;
 
@@ -77,9 +78,9 @@ public class Main {
 			// Draw text indicating the game is paused.
 			graphics.setColor(255.f, 255.f, 255.f, 255.f);
 			graphics.drawString("GAME OVER", 2, 2, 8.f);
-		} 
+		}
 		//
-		
+
 		hud.render(window, graphics);
 		graphics.endFrame();
 	}
@@ -143,8 +144,10 @@ public class Main {
 		// create hud.
 		hud = new HUD(window, graphics);
 
+
 		// Create audio.
 		// audio = new Audio();
+
 
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
@@ -163,7 +166,7 @@ public class Main {
  
 		tbb = new TheBigBang();
 		tbb.Bang();
-		
+
 		texBackground = TextureManager.get("Background01.png");
 
 		window.loop(_render, _tick);
@@ -172,12 +175,13 @@ public class Main {
 		window.terminate();
 		graphics.terminate();
 
+
 		// Terminate all audio devices.
 		// audio.terminate();
 
-		
+
 		//Terminate all audio devices.
-		//Audio.getInstance().terminate();
+		Audio.getInstance().terminate();
 
 //LEO	HUD.terminate();
 	}
