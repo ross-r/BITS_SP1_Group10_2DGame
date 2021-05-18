@@ -22,7 +22,7 @@ public class Main {
 	private final int WINDOW_HEIGHT = 720;
 
 	private TheBigBang tbb;
-	
+
 	private Window window;
 	private Graphics graphics;
 
@@ -78,9 +78,9 @@ public class Main {
 			// Draw text indicating the game is paused.
 			graphics.setColor(255.f, 255.f, 255.f, 255.f);
 			graphics.drawString("GAME OVER", 2, 2, 8.f);
-		} 
+		}
 		//
-		
+
 		hud.render(window, graphics);
 		graphics.endFrame();
 	}
@@ -166,7 +166,7 @@ public class Main {
 
 		tbb = new TheBigBang();
 		tbb.Bang();
-		
+
 		// audio.play("laser");
 
 	texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
@@ -181,7 +181,7 @@ public class Main {
 		// Terminate all audio devices.
 		// audio.terminate();
 
-		
+
 		//Terminate all audio devices.
 		Audio.getInstance().terminate();
 

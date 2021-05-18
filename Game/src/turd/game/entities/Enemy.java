@@ -5,6 +5,7 @@ import turd.game.MathUtils;
 import turd.game.Window;
 import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
+import turd.game.graphics.Texture;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
@@ -20,6 +21,15 @@ public class Enemy extends GameObject {
 	private Player player;
 	
 	private int iHealth;
+	
+	//
+	// Textures
+	//
+	Texture texture;
+	// player moving left/right
+	Texture texLeftRun1, texLeftRun2, texLeftStand, texRightRun1, texRightRun2, texRightStand;
+	Texture texLeftJump1, texLeftJump2, texLeftJump3,texRightJump1, texRightJump2, texRightJump3;
+	Texture texLeftAtk1, texLeftAtk2, texLeftAtk3, texLeftAtk4, texRightAtk1, texRightAtk2, texRightAtk3, texRightAtk4;
 	
 	public Enemy(Vec2 position) {
 		super();
@@ -39,6 +49,32 @@ public class Enemy extends GameObject {
 	
 		// 20 health.
 		this.iHealth = Constants.PLAYER_MAX_HEALTH / 5;
+		
+		
+		//Texture
+		texLeftRun1 = new Texture(Graphics.nvgHandle(), "Enemy-RunPre-Left.png");
+		texLeftRun2 = new Texture(Graphics.nvgHandle(), "Enemy-RunPost-Left.png");
+		texLeftStand = new Texture(Graphics.nvgHandle(), "Enemy-Stand-Left.png");
+		texRightRun1 = new Texture(Graphics.nvgHandle(), "Enemy-RunPre-Right.png");
+		texRightRun2 = new Texture(Graphics.nvgHandle(), "Enemy-RunPost-Right.png");
+		texRightStand = new Texture(Graphics.nvgHandle(), "Enemy-Stand-Right.png");
+		texLeftJump1 = new Texture(Graphics.nvgHandle(), "Enemy-Jump-LeftPre.png");
+		texLeftJump2 = new Texture(Graphics.nvgHandle(), "Enemy-Jump-LeftMid.png");
+		texLeftJump3 = new Texture(Graphics.nvgHandle(), "Enemy-Jump-LeftPost.png");
+		texRightJump1 = new Texture(Graphics.nvgHandle(), "Enemy-JumpPre-Right.png");
+		texRightJump2 = new Texture(Graphics.nvgHandle(), "Enemy-JumpMid-Right.png");
+		texRightJump3 = new Texture(Graphics.nvgHandle(), "Enemy-JumpPost-Right.png");
+		texLeftAtk1 = new Texture(Graphics.nvgHandle(), "Enemy-AttackWindup-Left.png");
+		texLeftAtk2 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPre-Left.png");
+		texLeftAtk3 = new Texture(Graphics.nvgHandle(), "Enemy-AttackMid-Left.png");
+		texLeftAtk4 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPost-Left.png");
+		texRightAtk1 = new Texture(Graphics.nvgHandle(), "Enemy-AttackWindup-Right.png");
+		texRightAtk2 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPre-Right.png");
+		texRightAtk3 = new Texture(Graphics.nvgHandle(), "Enemy-AttackMid-Right.png");
+		texRightAtk4 = new Texture(Graphics.nvgHandle(), "Enemy-AttackPost-Right.png");
+		texture = texLeftAtk1;
+		
+		
 	}
 	
 	// Called from ObjectList method 'createPlayer'
@@ -57,9 +93,12 @@ public class Enemy extends GameObject {
 		final int y = (int)aabb.p0.y;
 		final int w = (int)aabb.p1.x;
 		final int h = (int)aabb.p1.y;
+
 		
-		g.setColor(255.f, 0.f, 255.f, 255.f);
-		g.drawFilledRect(x, y, w, h);
+		texture.render(x, y, w, h, 255.f);
+		
+//		g.setColor(255.f, 0.f, 255.f, 255.f);
+//		g.drawFilledRect(x, y, w, h);
 	}
 
 	@Override

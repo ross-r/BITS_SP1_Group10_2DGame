@@ -20,7 +20,8 @@ public class HUD {
 	Texture texScrap7;
 	Texture texSpeedUp;
 	Texture texScrap[];
-
+	Texture texUpSpeed;
+	
 	// the window width and height
 	int iWidth;
 	int iHeight;
@@ -35,6 +36,7 @@ public class HUD {
 		texScrap6 = new Texture(Graphics.nvgHandle(), "hud_scrap6.png");
 		texScrap7 = new Texture(Graphics.nvgHandle(), "hud_scrap7.png");
 		texSpeedUp = new Texture(Graphics.nvgHandle(), "hud_upgrade_speed.png");
+		texUpSpeed = new Texture(Graphics.nvgHandle(), "player-upgrade-speed.png");
 		texScrap = new Texture[7];
 		texScrap[0] = texScrap1;
 		texScrap[1] = texScrap2;
@@ -43,6 +45,7 @@ public class HUD {
 		texScrap[4] = texScrap5;
 		texScrap[5] = texScrap6;
 		texScrap[6] = texScrap7;
+		
 	}
 
 	public void render(Window window, Graphics g) {
@@ -64,7 +67,14 @@ public class HUD {
 		for (int i = 0; i < player.getScrapValue(); i++) {
 			offset = offset + (60% iWidth);
 			texScrap[i].render(scrap_x + offset, scrap_y, 255.f);
-
+		}
+		
+		int offset2 = 12;
+		for (int i = 0; i < player.getTotalUpgrades(); i++) {	
+			offset2 = offset2 + (60% iWidth);
+			if (player.getPlayerSpeedUp())
+			texUpSpeed.render(scrap_x + offset2, scrap_y, 255.f);
+		}
 		
 //		switch (Player.getScrapValue()) {
 //		
@@ -80,4 +90,4 @@ public class HUD {
 //		nvgDelete(nvgHandle);
 //	}
 
-}
+
