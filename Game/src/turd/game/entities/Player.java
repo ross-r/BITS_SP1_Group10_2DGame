@@ -402,6 +402,7 @@ public class Player extends GameObject {
 			return;
 		}
 		
+		Audio.getInstance().play("playerDamage");
 		// We can apply a multiplier for things like damage resistance and so on.
 		this.iHealth -= Constants.PROJECTILE_BASE_DAMAGE;
 		

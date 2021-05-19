@@ -143,13 +143,9 @@ public class Main {
 
 		// create hud.
 		hud = new HUD(window, graphics);
+		
+		Audio.getInstance().play("soundtrack");
 
-<<<<<<< HEAD
-		// Create audio.
-		// audio = new Audio();
-
-=======
->>>>>>> f6a8734c1291783b553bdd4c796e320543575a6f
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
 		// GameState.getInstance().setUseCamera(false);
@@ -165,35 +161,14 @@ public class Main {
 		ObjectList.getInstance().createEnemy(420.f, 20.f);
 		ObjectList.getInstance().createEnemy(1640.f, 20.f);
 
-<<<<<<< HEAD
 		tbb = new TheBigBang();
 		tbb.Bang();
 		
-		// audio.play("laser");
-
-=======
 		// (Length , Height)
 		// Window size
 		// 720
 		// 1280
-
-		new LongPlatform(-80, 144);
-		new SmallSquare(-80, 80);
-		new SmallSquare(656, 80);
-		new Spikes(720, 100);
-		new LongPlatform(850, 144);
-		new SmallSquare(850, 80);
-		new SmallSquare(1820, 144);
-		new MediumPlatform(2046, 144);
-		new Pit(1650, 240);
-		new FallingPlat(2450,144);
-		new FallingPlat(2520,144);
-		new FallingPlat(2590,144);
-		new FallingPlat(2660,144);
-		new FallingPlat(2730,144);
-		new MediumPlatform(2800, 144);
 		
->>>>>>> f6a8734c1291783b553bdd4c796e320543575a6f
 		texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
 
 		window.loop(_render, _tick);
@@ -201,15 +176,10 @@ public class Main {
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
-<<<<<<< HEAD
-
-		// Terminate all audio devices.
-		// audio.terminate();
-=======
 		
+		Audio.getInstance().stop("soundtrack");
 		//Terminate all audio devices.
 		Audio.getInstance().terminate();
->>>>>>> f6a8734c1291783b553bdd4c796e320543575a6f
 
 //LEO	HUD.terminate();
 	}
