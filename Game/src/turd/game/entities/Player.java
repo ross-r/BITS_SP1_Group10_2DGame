@@ -7,6 +7,7 @@ import turd.game.Constants;
 import turd.game.GameState;
 import turd.game.MathUtils;
 import turd.game.Window;
+import turd.game.audio.Audio;
 //import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
@@ -254,7 +255,7 @@ public class Player extends GameObject {
 		final int w = (int)aabb.p1.x;
 		final int h = (int)aabb.p1.y;
 		
-		if( this.bInMoveSpeed || this.flMoveSpeedBonusMultiplier != 1.F ) {
+		if( this.bInMoveSpeed || this.flMoveSpeedBonusMultiplier > 2.F ) {
 			final int trail = 5;
 
 			// trail - 1 because the last trail is 0 opacity.
@@ -669,6 +670,15 @@ public class Player extends GameObject {
 
 		this.flMoveSpeed = this.bInMoveSpeed ? ( Constants.PLAYER_MOVE_SPEED * Constants.PLAYER_MOVE_SPEED_MULTIPLIER ) : Constants.PLAYER_MOVE_SPEED;
 
+		// Calculate movement speed penality based on the amount of scrap the player has.
+		// The more scrap they have the slower they will move.
+		if( this.iScrapValue >= 0 ) {
+			float y = Constants.PLAYER_MAX_SCRAP_VALUE - ( Constants.PLAYER_MAX_SCRAP_VALUE - this.iScrapValue );
+			float z = 0.8f + ( 2.5f / Math.max( 1.f, y ) );
+			
+			this.flMoveSpeedBonusMultiplier = Math.max( 1.f , z );
+		}
+		
 		// 'flMoveSpeedBonusMultiplier' is the variable we would write to when we want to gain a bonus to movement speed outside of the
 		// default movement speed limitations (i.e; move speed, jump speed, jump height) - this value is a multiplier so it scales,
 		// a value of 1 will have no change, < 1 will slow us, > 1 will make us faster.
@@ -677,11 +687,6 @@ public class Player extends GameObject {
 		//this.flJumpSpeed = Constants.PLAYER_JUMP_SPEED_MULTIPLIER;
 
 		if ( this.flJumpTime > 0.f ) {
-			
-//			if (!Audio.getInstance().getPlaying("playerJump")) {
-//				Audio.getInstance().play("playerJump");
-//			}
-		
 			this.flJumpTime -= ( 1.f / 60.f );
 
 			// Negative value here since we want to go upwards.
@@ -689,7 +694,7 @@ public class Player extends GameObject {
 
 			// Negate regular movement speed and multiply by desired jump speed.
 			this.flUpMove /= this.flMoveSpeed;
-			this.flUpMove *= ( this.flMoveSpeed * Constants.PLAYER_JUMP_SPEED_MULTIPLIER );
+			this.flUpMove *= ( ( this.flMoveSpeed / this.flMoveSpeedBonusMultiplier ) * Constants.PLAYER_JUMP_SPEED_MULTIPLIER );
 		}
 
 		// This is really bad lol
@@ -778,6 +783,10 @@ public class Player extends GameObject {
 		// We multiply by a fixed value here to keep the jump height consistent even when we are moving faster.
 		final float flJumpTicks = 48.f * ( bInMoveSpeed ? 0.5f : 1.f );
 		this.flJumpTime = ( ( 1.f / 60.f ) * Math.round( flJumpTicks ) ) * flJumpStrength;
+		
+		if (!Audio.getInstance().getPlaying("playerJump")) {
+			Audio.getInstance().play("playerJump");
+		}
 	}
 	
 	private void dropScrap() {
