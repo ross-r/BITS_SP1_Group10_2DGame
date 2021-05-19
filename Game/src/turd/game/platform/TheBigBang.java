@@ -116,6 +116,11 @@ public class TheBigBang {
 
 		new FloatingPlatformMedium(3450, -100);
 
+		// floating platforms over bottomless pits before climb obstical
+		new FloatingPlatformSmall(4250, -600);
+		new FloatingPlatformSmall(3700, -750);
+		new FloatingPlatformSmall(3200, -1100); // make enclosed later ?
+
 		// other end of pit plus climb obstical
 		// step1
 		new SingleGroundTopLeft(4300, 0);
@@ -223,13 +228,115 @@ public class TheBigBang {
 		new GroundFillLong(6600, -400);
 		new GroundFillLong(6300, -300);
 		new GroundFillLong(6100, -200);
+
+		// over-hang after spikes step ups
+		new SingleGroundPlatformEdgeConnectLeft(7900, -500);
+		new SingleGroundPlatformMid(8000, -500);
+		new SingleGroundPlatformMid(8100, -500);
+		new SingleGroundPlatformMid(8200, -500);
+		new SingleGroundPlatformMid(8300, -500);
+		new SingleGroundPlatformRight(8400, -500);
+	
+		new SingleGroundWallTopRight(7800, -400);
+		new SingleGroundMidRight(7800, -300);
+		new SingleGroundMidRight(7800, -200);
+		new SingleGroundMidRight(7800, -100);
+	
+		// over-hang fill
+		new GroundFillSmall(7600, -400);
+		new GroundFillMedium(7300, -300);
+		new GroundFillLong(6800, -200);
+		new GroundFillLong(6800, -100);
+		new GroundFillSmall(7700, 0);
 		
-		// floating platforms over bottomless pits before climb obstical
-		new FloatingPlatformSmall(4250, -600);
-		new FloatingPlatformSmall(3700, -750);
-
-		new FloatingPlatformSmall(3200, -1100); // make enclosed later ?
-
+		new GroundFillMedium(7500, 0);
+		new GroundFillMedium(7000, 0);
+		
+		new GroundFillLong(7000, 100);
+		new GroundFillMedium(6500, 100);
+		new GroundFillLong(7000, 200);
+		new GroundFillMedium(6500, 200);
+		new GroundFillLong(7000, 300);
+		new GroundFillMedium(6500, 300);
+		new GroundFillLong(7000, 400);
+		new GroundFillMedium(6500, 400);
+	
+		new GroundFillMedium(8000, 100);
+		new GroundFillMedium(8000, 200);
+		new GroundFillMedium(8000, 300);
+		new GroundFillMedium(8000, 400);
+		
+		// floating platforms above over-hang and over the pillar jummping obsticals
+		new FloatingPlatformMedium(7600, -900);
+		new FloatingPlatformSmall(8600, -800);
+		new FloatingPlatformSmall(10000, -700);
+		new FloatingPlatformSmall(11000, -800);
+		
+		
+		// over-hang platform bellow
+		new GroundTopMedium(8000, 0);
+		new SingleGroundBottomFarRight(7900, 0);
+		new SingleGroundTopRight(8700, 0);
+		new SingleGroundMidRight(8700, 100);
+		new SingleGroundMidRight(8700, 200);
+		new SingleGroundMidRight(8700, 300);
+		
+		new GroundTopSmall(8500, 0);
+		new GroundFillSmall(8500, 100);
+		new GroundFillSmall(8500, 200);
+		new GroundFillSmall(8500, 300);
+		
+		
+		
+		// pillar jummping obsticals after over-hang with fill
+		
+		// pillar1
+		new SingleGroundTopLeft(9700, 0);
+		new GroundTopSmall(9800, 0);
+		new SingleGroundTopRight(10000, 0);
+		
+		new SingleGroundMidLeft(9700, 100);
+		new GroundFillSmall(9800, 100);
+		new SingleGroundMidRight(10000, 100);
+		new SingleGroundMidLeft(9700, 200);
+		new GroundFillSmall(9800, 200);
+		new SingleGroundMidRight(10000, 200);
+		new SingleGroundMidLeft(9700, 300);
+		new GroundFillSmall(9800, 300);
+		new SingleGroundMidRight(10000, 300);
+		new SingleGroundMidLeft(9700, 400);
+		new GroundFillSmall(9800, 400);
+		new SingleGroundMidRight(10000, 400);
+		new SingleGroundMidLeft(9700, 500);
+		new GroundFillSmall(9800, 500);
+		new SingleGroundMidRight(10000, 500);
+		
+		// pillar2
+		new GroundTopEdgeSmall(11200, 100);
+		new SingleGroundBottomLeft(11200, 200);		
+		new SingleGroundBottomRight(11300, 200);	
+		new SingleGroundBottomLeft(11200, 300);		
+		new SingleGroundBottomRight(11300, 300);	
+		new SingleGroundBottomLeft(11200, 400);		
+		new SingleGroundBottomRight(11300, 400);	
+		new SingleGroundBottomLeft(11200, 500);		
+		new SingleGroundBottomRight(11300, 500);	
+		new SingleGroundBottomLeft(11200, 600);		
+		new SingleGroundBottomRight(11300, 600);	
+		
+		// pillar3
+		new GroundTopEdgeSmall(12000, 0);
+		new SingleGroundBottomLeft(12000, 100);		
+		new SingleGroundBottomRight(12100, 100);	
+		new SingleGroundBottomLeft(12000, 200);		
+		new SingleGroundBottomRight(12100, 200);	
+		new SingleGroundBottomLeft(12000, 300);		
+		new SingleGroundBottomRight(12100, 300);	
+		new SingleGroundBottomLeft(12000, 400);		
+		new SingleGroundBottomRight(12100, 400);	
+		new SingleGroundBottomLeft(12000, 500);		
+		new SingleGroundBottomRight(12100, 500);	
+			
 	}
 
 }
