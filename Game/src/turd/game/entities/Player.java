@@ -794,9 +794,7 @@ public class Player extends GameObject {
 			return;
 		}
 		
-<<<<<<< HEAD
 		Audio.getInstance().play("playerDamage");
-=======
 		--this.iScrapValue;
 
 		Vector2f direction = new Vector2f( 
@@ -828,7 +826,6 @@ public class Player extends GameObject {
 			jump( 0.5f );
 		}
 		
->>>>>>> f0dcaa39a32ace7b187ca839130eab268afc9bbf
 		// We can apply a multiplier for things like damage resistance and so on.
 		//this.iHealth -= Constants.PROJECTILE_BASE_DAMAGE;
 		
@@ -884,7 +881,7 @@ public class Player extends GameObject {
 		
 		++this.iScrapValue;
 		
-//		Audio.getInstance().play("playerPickUp");
+		Audio.getInstance().play("playerPickUp");
 		
 		return true;
 		

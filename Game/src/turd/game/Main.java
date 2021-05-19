@@ -146,14 +146,6 @@ public class Main {
 		
 		Audio.getInstance().play("soundtrack");
 
-<<<<<<< HEAD
-=======
-
-		// Create audio.
-		// audio = new Audio();
-
-
->>>>>>> f0dcaa39a32ace7b187ca839130eab268afc9bbf
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
 		// GameState.getInstance().setUseCamera(false);
@@ -168,7 +160,6 @@ public class Main {
 		ObjectList.getInstance().createPlayer();
 		ObjectList.getInstance().createEnemy(420.f, 20.f);
 		ObjectList.getInstance().createEnemy(1640.f, 20.f);
-<<<<<<< HEAD
 
 		tbb = new TheBigBang();
 		tbb.Bang();
@@ -179,30 +170,21 @@ public class Main {
 		// 1280
 		
 		texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
-=======
  
 		tbb = new TheBigBang();
 		tbb.Bang();
 
 		texBackground = TextureManager.get("Background01.png");
->>>>>>> f0dcaa39a32ace7b187ca839130eab268afc9bbf
 
 		window.loop(_render, _tick);
 
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
-<<<<<<< HEAD
 		
+		//Stop the soundtrack from looping.
 		Audio.getInstance().stop("soundtrack");
-=======
 
-
-		// Terminate all audio devices.
-		// audio.terminate();
-
-
->>>>>>> f0dcaa39a32ace7b187ca839130eab268afc9bbf
 		//Terminate all audio devices.
 		Audio.getInstance().terminate();
 
