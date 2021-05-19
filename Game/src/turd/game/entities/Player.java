@@ -1,5 +1,6 @@
 package turd.game.entities;
 
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import turd.game.Constants;
@@ -15,7 +16,6 @@ import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
-import turd.game.physics.Vec2;
 import turd.game.platform.HazardPit;
 import turd.game.platform.HazardSpikes;
 
@@ -290,7 +290,6 @@ public class Player extends GameObject {
 		final int y = (int)aabb.p0.y;
 		final int w = (int)aabb.p1.x;
 		final int h = (int)aabb.p1.y;
-		
 
 		// sets the last input so when the player stops their left/right
 		// keyboard input, the animations still update correctly
@@ -652,10 +651,9 @@ public class Player extends GameObject {
 		}
 		
 		input();
-
-		// 'physics.gravity()' returns false when a collision has happened.
+		
 		this.bOnGround = !this.physics.gravity();
-
+		
 		if( !this.bOnGround ) {
 			iFallTicks++;
 		}
@@ -699,18 +697,10 @@ public class Player extends GameObject {
 		// This is really bad lol
 		// The reason these calls are separated is because both x and y are checked in collision and if ONE of them fails
 		// both are ignored for the current tick, if they are separate calls then this *issue* is *avoided*.
-		this.physics.move(this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y);
-		boolean bCollidedY = this.physics.move(this.aabb.p0.x, this.aabb.p0.y + ( this.flUpMove * this.flMoveSpeed ));
-
-		// If the player collided with something during their jump, they should begin to fall.
-		if( bCollidedY && this.flJumpTime > 0.f ) {
-			
-			// Only purge the jump action if the object was above the player (i.e; a ceiling)
-			GameObject collisionObject = this.physics.getCollidedObject();
-			
-			if( collisionObject != null && MathUtils.isObjectAbovePlayer(this, collisionObject) ) {
-				this.flJumpTime = 0.f;
-			}
+		this.physics.move( this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y );
+		boolean bCollidedY = this.physics.move( this.aabb.p0.x, this.aabb.p0.y + + ( this.flUpMove * this.flMoveSpeed ) );
+		if( bCollidedY && MathUtils.isObjectAbovePlayer(this, this.physics.getCollidedObject()) ) {
+			this.flJumpTime = 0.f;
 		}
 		
 		//
@@ -754,7 +744,7 @@ public class Player extends GameObject {
 	
 		TestProjectile testProjectile = this.testProjectiles[ iProjectileIndex ];
 						
-		Vec2 direction = MathUtils.calcDirFromGameObjectToMouse(window, this);
+		Vector2f direction = MathUtils.calcDirFromGameObjectToMouse(window, this);
 		
 		// Compute center coordinates of our aabb.
 		final float flCenterX = this.aabb.p0.x + ( this.aabb.p1.x / 2 );
@@ -762,12 +752,12 @@ public class Player extends GameObject {
 		
 		// Compute the position and move it out of the players bounding box slightly.
 		// This prevents the projectile getting stuck on the entity shooting it.
-		Vec2 position = new Vec2( 
+		Vector2f position = new Vector2f( 
 			flCenterX + ( direction.x * Constants.PLAYER_BOUNDS ), 
 			flCenterY + ( direction.y * Constants.PLAYER_BOUNDS ) 
 		);
 		
-		Vec2 velocity = new Vec2( 10.f, 10.f );
+		Vector2f velocity = new Vector2f( 10.f, 10.f );
 		
 		// Attempt to initialize the projectile.
 		if( !testProjectile.initialize( position, direction, velocity ) ) {

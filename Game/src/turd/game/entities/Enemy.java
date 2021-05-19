@@ -1,5 +1,7 @@
 package turd.game.entities;
 
+import org.joml.Vector2f;
+
 import turd.game.Constants;
 import turd.game.MathUtils;
 import turd.game.Window;
@@ -10,7 +12,6 @@ import turd.game.graphics.TextureManager;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
-import turd.game.physics.Vec2;
 
 public class Enemy extends GameObject {
 	
@@ -32,7 +33,7 @@ public class Enemy extends GameObject {
 	Texture texLeftJump1, texLeftJump2, texLeftJump3,texRightJump1, texRightJump2, texRightJump3;
 	Texture texLeftAtk1, texLeftAtk2, texLeftAtk3, texLeftAtk4, texRightAtk1, texRightAtk2, texRightAtk3, texRightAtk4;
 	
-	public Enemy(Vec2 position) {
+	public Enemy(Vector2f position) {
 		super();
 
 		this.physics = new Physics(this);
@@ -140,7 +141,7 @@ public class Enemy extends GameObject {
 			
 			if( this.iProjectileCooldown == 0 ) {
 				
-				Vec2 direction = MathUtils.calcDirBetweenGameObjects(this, this.player);
+				Vector2f direction = MathUtils.calcDirBetweenGameObjects(this, this.player);
 				
 				// Compute center coordinates of our aabb.
 				final float flCenterX = this.aabb.p0.x + ( this.aabb.p1.x / 2 );
@@ -148,12 +149,12 @@ public class Enemy extends GameObject {
 				
 				// Compute the position and move it out of the players bounding box slightly.
 				// This prevents the projectile getting stuck on the entity shooting it.
-				Vec2 position = new Vec2( 
+				Vector2f position = new Vector2f( 
 					flCenterX + ( direction.x * Constants.PLAYER_BOUNDS ), 
 					flCenterY + ( direction.y * Constants.PLAYER_BOUNDS ) 
 				);
 				
-				Vec2 velocity = new Vec2( 10.f, 10.f );
+				Vector2f velocity = new Vector2f( 10.f, 10.f );
 				
 				// Attempt to initialize the projectile.
 				if( !testProjectile.initialize( position, direction, velocity ) ) {

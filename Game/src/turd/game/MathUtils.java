@@ -1,8 +1,9 @@
 package turd.game;
 
+import org.joml.Vector2f;
+
 import turd.game.entities.Player;
 import turd.game.objects.GameObject;
-import turd.game.physics.Vec2;
 
 public class MathUtils {
 	public static float calcAngle( int x, int y, int x1, int y1 ) {
@@ -38,7 +39,7 @@ public class MathUtils {
 	}
 	
 	// returned values are in radians.
-	public static Vec2 calcDirFromGameObjectToMouse(Window window, GameObject object) {
+	public static Vector2f calcDirFromGameObjectToMouse(Window window, GameObject object) {
 		// Compute center coordinates of our aabb.
 		final float flCenterX = object.aabb.p0.x + ( object.aabb.p1.x / 2 );
 		final float flCenterY = object.aabb.p0.y + ( object.aabb.p1.y / 2 );
@@ -54,10 +55,10 @@ public class MathUtils {
 		float flDirectionX = (float) Math.sin(-flDirection);
 		float flDirectionY = (float) Math.cos(flDirection);
 		
-		return new Vec2(flDirectionX, flDirectionY);
+		return new Vector2f(flDirectionX, flDirectionY);
 	}
 	
-	public static Vec2 calcDirBetweenGameObjects(GameObject object0, GameObject object1) {
+	public static Vector2f calcDirBetweenGameObjects(GameObject object0, GameObject object1) {
 		// Compute center coordinates of our aabb.
 		final float flCenterX = object0.aabb.p0.x + ( object0.aabb.p1.x / 2 );
 		final float flCenterY = object0.aabb.p0.y + ( object0.aabb.p1.y / 2 );
@@ -71,7 +72,7 @@ public class MathUtils {
 		float flDirectionX = (float) Math.sin(-flDirection);
 		float flDirectionY = (float) Math.cos(flDirection);
 		
-		return new Vec2(flDirectionX, flDirectionY);
+		return new Vector2f(flDirectionX, flDirectionY);
 	}
 	
 	// Expected input is milliseconds.
@@ -95,6 +96,10 @@ public class MathUtils {
 	}
 	
 	public static boolean isObjectAbovePlayer(Player player, GameObject object) {
+		if( object == null ) {
+			return false;
+		}
+		
 		// Calculate the direction but don't worry about the x coordinate
 		// including the x coordinate here would produce an angle that is between
 		// x and y and y would only be usable if we were directly under something

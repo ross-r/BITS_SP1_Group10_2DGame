@@ -1,19 +1,20 @@
 package turd.game.entities;
 
+import org.joml.Vector2f;
+
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
-import turd.game.physics.Vec2;
 
 public class TestProjectile extends GameObject {
 
 	private final int BOUNDS = 16;
 	
-	private Vec2 direction;
-	private Vec2 velocity;
+	private Vector2f direction;
+	private Vector2f velocity;
 	private boolean bInitialized;
 	
 	private Physics physics;
@@ -47,7 +48,7 @@ public class TestProjectile extends GameObject {
 		this.texture = new Texture( Graphics.nvgHandle(), String.format( "hud_scrap%d.png", rand ) );
 	}
 	
-	public boolean initialize(Vec2 position, Vec2 direction, Vec2 velocity) {
+	public boolean initialize(Vector2f position, Vector2f direction, Vector2f velocity) {
 		this.direction = direction;
 		this.velocity = velocity;
 		

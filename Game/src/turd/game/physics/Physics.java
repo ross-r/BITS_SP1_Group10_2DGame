@@ -1,5 +1,7 @@
 package turd.game.physics;
 
+import org.joml.Vector2f;
+
 import turd.game.entities.TestProjectile;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
@@ -18,8 +20,8 @@ public class Physics {
 	}
 	
 	public boolean gravity() {
-		Vec2 direction = new Vec2( 0.f, 1.f );
-		Vec2 velocity = new Vec2( 0.f, GRAVITY );		
+		Vector2f direction = new Vector2f( 0.f, 1.f );
+		Vector2f velocity = new Vector2f( 0.f, GRAVITY );
 		return !applyForce( direction, velocity );
 	}
 	
@@ -69,10 +71,8 @@ public class Physics {
 	}
 	
 	public boolean move(float flNewX, float flNewY) {
-		this.collidedObject = null;
-		
-		float x = this.gameObject.aabb.p0.x;
-		float y = this.gameObject.aabb.p0.y;
+		float flOldX = this.gameObject.aabb.p0.x;
+		float flOldY = this.gameObject.aabb.p0.y;
 		
 		this.gameObject.aabb.p0.x = flNewX;
 		this.gameObject.aabb.p0.y = flNewY;
@@ -84,31 +84,29 @@ public class Physics {
 			// Notify our object that it has collided with something.
 			this.gameObject.onCollision( this.collidedObject );
 			
-			// Stops movement.
-			this.gameObject.aabb.p0.x = x;
-			this.gameObject.aabb.p0.y = y;
+			// Resolve the collision so that we don't go into other objects.
+			//this.gameObject.aabb.resolveCollision( this.gameObject, this.collidedObject );
+			
+			this.gameObject.aabb.p0.x = flOldX;
+			this.gameObject.aabb.p0.y = flOldY;
 			
 			return true;
+		}
+		else {
+			this.collidedObject = null;
 		}
 		
 		return false;
 	}
 
-	public boolean applyForce(Vec2 direction, Vec2 velocity) {
+	public boolean applyForce(Vector2f direction, Vector2f velocity) {
 		float x = this.gameObject.aabb.p0.x;
 		float y = this.gameObject.aabb.p0.y;
 		
 		x += direction.x * velocity.x;
 		y += direction.y * velocity.y;
 		
-		boolean bCollided = this.move(x, y);
-		
-		// Check if there was any movement.
-		final float EPSILON = 0.01f;
-		boolean bMoved = Math.abs(this.gameObject.aabb.p0.x - x) > EPSILON || 
-				Math.abs(this.gameObject.aabb.p0.y - y) > EPSILON;
-				
-		return bCollided && bMoved;
+		return this.move(x, y);
 	}
 	
 	public GameObject getCollidedObject() {
