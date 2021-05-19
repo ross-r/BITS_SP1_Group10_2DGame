@@ -41,9 +41,7 @@ public final class IOUtil {
         ByteBuffer buffer;
 
         Path path = Paths.get(resource);
-        
-        System.out.println(path.toString());
-        
+                
         if (Files.isReadable(path)) {
             try (SeekableByteChannel fc = Files.newByteChannel(path)) {
                 buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);

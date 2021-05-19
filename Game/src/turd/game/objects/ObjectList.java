@@ -4,13 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.joml.Vector2f;
+
 import turd.game.Camera;
 import turd.game.Window;
 import turd.game.entities.Enemy;
 import turd.game.entities.Player;
 import turd.game.graphics.Graphics;
-import turd.game.physics.Vec2;
-import turd.game.entities.Scrap;
 
 public class ObjectList {
 	private static ObjectList instance = null;
@@ -79,21 +79,10 @@ public class ObjectList {
 	}
 	
 	public Enemy createEnemy(float x, float y) {
-		this.entities.add(new Enemy(new Vec2(x, y)));
+		this.entities.add(new Enemy(new Vector2f(x, y)));
 		Enemy enemy = (Enemy) this.entities.getLast();
 		enemy.initialize();
 		return enemy;
-	}
-	
-	public Scrap createScrap(int iX, int iY){
-		
-		if(this.entities.add(new Scrap(iX, iY))) {
-			System.out.println("Created right");
-			System.out.println(this.entities.size());
-			System.out.println(this.entities);
-		}
-		
-		return (Scrap) this.entities.getLast();
 	}
 	
 	public void render(Window window, Graphics g) {
@@ -107,13 +96,22 @@ public class ObjectList {
 			object.render(window, g);
 			
 			// Draw the AABB of all objects.
-			g.setColor(0.F, 255.F, 255.F, 127.F);
-			g.drawRect((int)object.aabb.p0.x, (int)object.aabb.p0.y, (int)object.aabb.p1.x, (int)object.aabb.p1.y);
+			//g.setColor(255.F, 0.F, 0.F, 127.F);
+			//g.drawRect((int)object.aabb.p0.x, (int)object.aabb.p0.y, (int)object.aabb.p1.x, (int)object.aabb.p1.y);
 		}
 
 		// Now render our entities on top of the non-interactable objects.
 		for(GameObject entity : entities) {
 			entity.render(window, g);
+			
+			// Draw the AABB of all objects.
+			/*if( entity.aabb.bCollided ) {
+				g.setColor(255.F, 0.F, 0.F, 127.F);
+			} else {
+				g.setColor(0.F, 255.F, 0.F, 127.F);
+			}
+			
+			g.drawRect((int)entity.aabb.p0.x, (int)entity.aabb.p0.y, (int)entity.aabb.p1.x, (int)entity.aabb.p1.y);*/
 		}
 
 		g.endFrame();

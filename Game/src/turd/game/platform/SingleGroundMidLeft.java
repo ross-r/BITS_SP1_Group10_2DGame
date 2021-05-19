@@ -3,6 +3,7 @@ package turd.game.platform;
 import turd.game.Window;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
+import turd.game.graphics.TextureManager;
 import turd.game.objects.ObjectList;
 
 public class SingleGroundMidLeft extends Platform {
@@ -19,7 +20,7 @@ public class SingleGroundMidLeft extends Platform {
 		
 		this.type = PLATFORM_TYPE.GROUND_MID_LEFT;
 		
-		this.texture = new Texture(Graphics.nvgHandle(), "Ground_Mid_Left.png");
+		this.texture = TextureManager.get("Ground_Mid_Left.png");
 		
 		this.r = 255.f;
 		this.g = 0.f;

@@ -11,10 +11,10 @@ import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.HUD;
 import turd.game.graphics.Texture;
+import turd.game.graphics.TextureManager;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
 import turd.game.platform.TheBigBang;
-
 
 public class Main {
 
@@ -22,7 +22,7 @@ public class Main {
 	private final int WINDOW_HEIGHT = 720;
 
 	private TheBigBang tbb;
-	
+
 	private Window window;
 	private Graphics graphics;
 
@@ -78,9 +78,9 @@ public class Main {
 			// Draw text indicating the game is paused.
 			graphics.setColor(255.f, 255.f, 255.f, 255.f);
 			graphics.drawString("GAME OVER", 2, 2, 8.f);
-		} 
+		}
 		//
-		
+
 		hud.render(window, graphics);
 		graphics.endFrame();
 	}
@@ -146,6 +146,14 @@ public class Main {
 		
 		Audio.getInstance().play("soundtrack");
 
+<<<<<<< HEAD
+=======
+
+		// Create audio.
+		// audio = new Audio();
+
+
+>>>>>>> f0dcaa39a32ace7b187ca839130eab268afc9bbf
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
 		// GameState.getInstance().setUseCamera(false);
@@ -160,6 +168,7 @@ public class Main {
 		ObjectList.getInstance().createPlayer();
 		ObjectList.getInstance().createEnemy(420.f, 20.f);
 		ObjectList.getInstance().createEnemy(1640.f, 20.f);
+<<<<<<< HEAD
 
 		tbb = new TheBigBang();
 		tbb.Bang();
@@ -170,14 +179,30 @@ public class Main {
 		// 1280
 		
 		texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
+=======
+ 
+		tbb = new TheBigBang();
+		tbb.Bang();
+
+		texBackground = TextureManager.get("Background01.png");
+>>>>>>> f0dcaa39a32ace7b187ca839130eab268afc9bbf
 
 		window.loop(_render, _tick);
 
 		// Terminate the window and cleanup NanoVG context.
 		window.terminate();
 		graphics.terminate();
+<<<<<<< HEAD
 		
 		Audio.getInstance().stop("soundtrack");
+=======
+
+
+		// Terminate all audio devices.
+		// audio.terminate();
+
+
+>>>>>>> f0dcaa39a32ace7b187ca839130eab268afc9bbf
 		//Terminate all audio devices.
 		Audio.getInstance().terminate();
 

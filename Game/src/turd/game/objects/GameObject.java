@@ -6,7 +6,7 @@ import turd.game.physics.AABB;
 
 public abstract class GameObject {
 	public AABB aabb;
-	
+		
 	protected GameObject() {
 		this.aabb = new AABB();
 	}
@@ -27,4 +27,5 @@ public abstract class GameObject {
 		// Override this method in classes which wish to have deleted.
 		return false;
 	}
+	
 }

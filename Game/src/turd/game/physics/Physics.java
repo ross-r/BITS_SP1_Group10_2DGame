@@ -1,5 +1,7 @@
 package turd.game.physics;
 
+import org.joml.Vector2f;
+
 import turd.game.entities.TestProjectile;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
@@ -10,40 +12,17 @@ public class Physics {
 	public final float GRAVITY = 4.f;
 
 	private GameObject gameObject;
+	private GameObject collidedObject;
 	
 	public Physics(GameObject obj) {
 		this.gameObject = obj;
+		this.collidedObject = null;
 	}
 	
-	// Applies gravity to a point.
 	public boolean gravity() {
-		float y = this.gameObject.aabb.p0.y;
-		
-		this.gameObject.aabb.p0.y += GRAVITY;
-		
-		// Perform collision detection on all other static objects.
-		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
-		
-			// if instance of ....
-			
-			
-			if (this.gameObject.collides(staticObject)) {
-				
-				// SmallSquare extends Platform which extends StaticObject
-				// calling instanceof on a variable will compare x against y (x instanceof y)
-				// and validate the object is of a specific type.
-				
-				//if( staticObject instanceof SmallSquare ) {
-				//	System.out.println("on small square");
-				//}
-				
-				this.gameObject.aabb.p0.y = y;
-				
-				return false;
-			}
-		}
-		
-		return true;
+		Vector2f direction = new Vector2f( 0.f, 1.f );
+		Vector2f velocity = new Vector2f( 0.f, GRAVITY );
+		return !applyForce( direction, velocity );
 	}
 	
 	// Check if a projectile intersects with another entity (which is not a projectile)
@@ -75,44 +54,62 @@ public class Physics {
 		}
 	}
 	
-	public void move(float flNewX, float flNewY) {
-		float x = this.gameObject.aabb.p0.x;
-		float y = this.gameObject.aabb.p0.y;
+	public boolean doesObjectCollideWithWorld() {
+		// Perform collision detection on all other static objects.
+		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
+			
+			if (this.gameObject.collides(staticObject)) {
+				
+				// Store the object that we collided with so we can check if it was above our player.
+				this.collidedObject = staticObject;
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean move(float flNewX, float flNewY) {
+		float flOldX = this.gameObject.aabb.p0.x;
+		float flOldY = this.gameObject.aabb.p0.y;
 		
 		this.gameObject.aabb.p0.x = flNewX;
 		this.gameObject.aabb.p0.y = flNewY;
 		
 		this.handleEntityCollisions();
 		
-		// Perform collision detection on all other static objects.
-		for (StaticObject staticObject : ObjectList.getInstance().getStaticObjects()) {
+		if( this.doesObjectCollideWithWorld() ) {
+		
+			// Notify our object that it has collided with something.
+			this.gameObject.onCollision( this.collidedObject );
 			
-			if (this.gameObject.collides(staticObject)) {
-				
-				// Notify our object that it has collided with something.
-				this.gameObject.onCollision(staticObject);
-				
-				// Stops movement.
-				this.gameObject.aabb.p0.x = x;
-				this.gameObject.aabb.p0.y = y;
-			}
+			// Resolve the collision so that we don't go into other objects.
+			//this.gameObject.aabb.resolveCollision( this.gameObject, this.collidedObject );
+			
+			this.gameObject.aabb.p0.x = flOldX;
+			this.gameObject.aabb.p0.y = flOldY;
+			
+			return true;
 		}
+		else {
+			this.collidedObject = null;
+		}
+		
+		return false;
 	}
 
-	public boolean applyForce(Vec2 direction, Vec2 velocity) {
+	public boolean applyForce(Vector2f direction, Vector2f velocity) {
 		float x = this.gameObject.aabb.p0.x;
 		float y = this.gameObject.aabb.p0.y;
 		
 		x += direction.x * velocity.x;
 		y += direction.y * velocity.y;
 		
-		this.move(x, y);
-		
-		// Check if there was any movement.
-		final float EPSILON = 0.01f;
-		boolean moved = Math.abs(this.gameObject.aabb.p0.x - x) > EPSILON || 
-				Math.abs(this.gameObject.aabb.p0.y - y) > EPSILON;
-				
-		return !moved;
+		return this.move(x, y);
+	}
+	
+	public GameObject getCollidedObject() {
+		return this.collidedObject;
 	}
 }
