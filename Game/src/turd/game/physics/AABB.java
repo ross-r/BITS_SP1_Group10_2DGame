@@ -10,7 +10,6 @@ import org.joml.Intersectionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import turd.game.MathUtils;
 import turd.game.objects.GameObject;
 
 public final class AABB {

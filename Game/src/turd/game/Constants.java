@@ -13,4 +13,6 @@ public class Constants {
 	
 	public static final int		PROJECTILE_BASE_DAMAGE = 10;
 	public static final int 	MAX_PROJECTILES = 25; // Maximum amount of projectile objects that should be created.
+	
+	public static final int 	SCRAP_BOUNDS = 16;
 }

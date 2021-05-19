@@ -16,7 +16,6 @@ import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
-import turd.game.platform.HazardPit;
 import turd.game.platform.HazardSpikes;
 
 public class Player extends GameObject {
@@ -37,7 +36,6 @@ public class Player extends GameObject {
 
 	private float flMoveSpeed;
 	private float flMoveSpeedBonusMultiplier;
-	private float flJumpSpeed;
 	private float flJumpTime;
 
 	private int iFallTicks;
@@ -743,7 +741,7 @@ public class Player extends GameObject {
 		}
 	
 		TestProjectile testProjectile = this.testProjectiles[ iProjectileIndex ];
-						
+		
 		Vector2f direction = MathUtils.calcDirFromGameObjectToMouse(window, this);
 		
 		// Compute center coordinates of our aabb.
@@ -782,22 +780,44 @@ public class Player extends GameObject {
 		this.flJumpTime = ( ( 1.f / 60.f ) * Math.round( flJumpTicks ) ) * flJumpStrength;
 	}
 	
-	private void onTakeDamage( GameObject object ) {
-		if( this.iHealth <= 0 ) {
-			
-			// We can allow for a 'lives' system so we can let the player restart the level and try again.
-			GameState.getInstance().setPlayerDead();
-			
+	private void dropScrap() {
+		if( this.iScrapValue == 0 ) {
 			return;
 		}
 		
+		--this.iScrapValue;
+
+		Vector2f direction = new Vector2f( 
+			MathUtils.randomInRange( -1.f, 1.f ),
+			-1.f
+		);
+		
+		// Compute center coordinates of our aabb.
+		final float flCenterX = this.aabb.p0.x + ( this.aabb.p1.x / 2 );
+		final float flCenterY = this.aabb.p0.y + ( this.aabb.p1.y / 2 );
+		
+		// Compute the position and move it out of the players bounding box slightly.
+		// This prevents the projectile getting stuck on the entity shooting it.
+		Vector2f position = new Vector2f( 
+			flCenterX + ( direction.x * Constants.PLAYER_BOUNDS ), 
+			flCenterY + ( direction.y * Constants.PLAYER_BOUNDS ) 
+		);
+		
+		Vector2f velocity = new Vector2f( 2.f, 0.f );
+		
+		ObjectList.getInstance().registerQueuedObject( new Scrap( position, direction, velocity ) );
+	}
+	
+	private void onTakeDamage( GameObject object ) {		
+		final boolean bDamagedBySpikes = object instanceof HazardSpikes;
+		
 		// If we're inside of the bit we want to take a small amount of damage and initiate a jump.
-		if( object instanceof HazardSpikes ) {
+		if( bDamagedBySpikes ) {
 			jump( 0.5f );
-		} 
+		}
 		
 		// We can apply a multiplier for things like damage resistance and so on.
-		this.iHealth -= Constants.PROJECTILE_BASE_DAMAGE;
+		//this.iHealth -= Constants.PROJECTILE_BASE_DAMAGE;
 		
 		// Reset damage overlay alpha.
 		this.flDamageOverlayAlpha = 0.f;
@@ -811,6 +831,20 @@ public class Player extends GameObject {
 		
 		// And finally, end the overlay 250ms after the fade begins.
 		this.iDamageTakenFadeEnd = this.iDamageTakenFadeOutStart + MathUtils.convertMillisecondsToGameTicks(500);
+		
+		// If we took damage drop a piece of scrap in a random direction.
+		if( !bDamagedBySpikes ) {
+			dropScrap();
+		}
+		
+		// Keep health in increments of 10s.
+		this.iHealth = this.iScrapValue * 10;
+		if( this.iHealth <= 0 ) {
+			
+			// We can allow for a 'lives' system so we can let the player restart the level and try again.
+			GameState.getInstance().setPlayerDead();
+		
+		}
 	}
 	
 	@Override

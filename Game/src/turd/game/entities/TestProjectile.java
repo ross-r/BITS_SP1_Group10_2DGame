@@ -125,7 +125,11 @@ public class TestProjectile extends GameObject {
 
 	@Override
 	public void onCollision(GameObject object) {
-		ObjectList.getInstance().registerQueuedObject( new Scrap( ( int ) this.aabb.p0.x, ( int ) this.aabb.p0.y ) );
+		Vector2f direction = new Vector2f( 0.f, -1.f );
+		Vector2f velocity = new Vector2f();
+		
+		ObjectList.getInstance().registerQueuedObject( new Scrap( this.aabb.p0, direction, velocity ) );
+		
 		this.destroy(false);
 	}
 }

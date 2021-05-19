@@ -161,8 +161,8 @@ public class Main {
 
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
-		//ObjectList.getInstance().createEnemy(420.f, 20.f);
-		//ObjectList.getInstance().createEnemy(1640.f, 20.f);
+		ObjectList.getInstance().createEnemy(420.f, 20.f);
+		ObjectList.getInstance().createEnemy(1640.f, 20.f);
  
 		tbb = new TheBigBang();
 		tbb.Bang();

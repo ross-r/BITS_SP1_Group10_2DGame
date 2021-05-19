@@ -194,7 +194,11 @@ public class Enemy extends GameObject {
 				flScrapX += MathUtils.randomInRange( -30.f, 30.f );
 				flScrapY -= MathUtils.randomInRange( 20.f, 	50.f );
 				
-				ObjectList.getInstance().registerQueuedObject( new Scrap( ( int )flScrapX, ( int )flScrapY ) );
+				Vector2f position = new Vector2f(flScrapX, flScrapY);
+				Vector2f direction = new Vector2f( 0.f, -1.f );
+				Vector2f velocity = new Vector2f();
+				
+				ObjectList.getInstance().registerQueuedObject( new Scrap( position, direction, velocity ) );
 			}
 		}
 	}
