@@ -95,7 +95,7 @@ public class MathUtils {
 		return ( float ) ( Math.random() * ( flMax - flMin ) ) + flMin;
 	}
 	
-	public static boolean isObjectAbovePlayer(Player player, GameObject object) {
+	public static boolean isObjectAbovePlayer(GameObject player, GameObject object) {
 		if( object == null ) {
 			return false;
 		}

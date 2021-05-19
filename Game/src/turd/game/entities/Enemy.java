@@ -3,6 +3,7 @@ package turd.game.entities;
 import org.joml.Vector2f;
 
 import turd.game.Constants;
+import turd.game.GameState;
 import turd.game.MathUtils;
 import turd.game.Window;
 import turd.game.audio.Audio;
@@ -23,6 +24,13 @@ public class Enemy extends GameObject {
 	private Player player;
 	
 	private int iHealth;
+	
+	private boolean bOnGround;
+	private float 	flSideMove;
+	private float 	flUpMove;
+	private float 	flMoveSpeed;
+	private float 	flJumpTime;
+	private int		iJumpTick;
 	
 	//
 	// Textures
@@ -52,6 +60,11 @@ public class Enemy extends GameObject {
 		// 20 health.
 		this.iHealth = Constants.PLAYER_MAX_HEALTH / 5;
 		
+		this.flUpMove = 0.f;
+		this.flMoveSpeed = 4.f;
+		
+		// Decide a random move direction.
+		this.flSideMove = MathUtils.randomInRange( 0.f, 100.f ) >= 50.f ? 1.f : -1.f;
 		
 		//Texture
 		texLeftRun1 = TextureManager.get("Enemy-RunPre-Left.png");
@@ -96,16 +109,41 @@ public class Enemy extends GameObject {
 		final int w = (int)aabb.p1.x;
 		final int h = (int)aabb.p1.y;
 
-		
 		texture.render(x, y, w, h, 255.f);
-		
-//		g.setColor(255.f, 0.f, 255.f, 255.f);
-//		g.drawFilledRect(x, y, w, h);
 	}
 
 	@Override
 	public void tick(Window w) {
-		this.physics.gravity();
+		this.bOnGround = !this.physics.gravity();
+		
+		// Decide to randomly jump.
+		if( MathUtils.randomInRange( 0.f , 100.f ) >= 95.f ) {
+			jump( 1.f );
+		}
+		
+		this.flUpMove = 0.f;
+		if ( this.flJumpTime > 0.f ) {
+			this.flJumpTime -= ( 1.f / 60.f );
+
+			// Negative value here since we want to go upwards.
+			this.flUpMove = -2.f;
+
+			// Negate regular movement speed and multiply by desired jump speed.
+			this.flUpMove /= this.flMoveSpeed;
+			this.flUpMove *= ( this.flMoveSpeed * Constants.PLAYER_JUMP_SPEED_MULTIPLIER );
+		}
+		
+		boolean bCollidedX = this.physics.move( this.aabb.p0.x + ( this.flSideMove * this.flMoveSpeed ), this.aabb.p0.y );
+		boolean bCollidedY = this.physics.move( this.aabb.p0.x, this.aabb.p0.y + + ( this.flUpMove * this.flMoveSpeed ) );
+		
+		if( bCollidedY && MathUtils.isObjectAbovePlayer(this, this.physics.getCollidedObject()) ) {
+			this.flJumpTime = 0.f;
+		}
+		
+		// If the enemy collides on the x axis swap their direction.
+		if( bCollidedX ) {
+			this.flSideMove *= -1.f;
+		}
 		
 		if( this.iProjectileCooldown > 0 ) {
 			this.iProjectileCooldown--;
@@ -167,9 +205,28 @@ public class Enemy extends GameObject {
 			}
 			
 		}
-		
 	}
 
+	private void jump( float flJumpStrength ) {
+		if( this.iJumpTick > 0 ) {
+			final int iDelta = GameState.getInstance().getCurrentTick() - this.iJumpTick;
+			if( iDelta < MathUtils.convertMillisecondsToGameTicks( 10000.f ) ) {
+				return;
+			}
+		}
+		
+		if( this.bOnGround && this.flJumpTime <= 0.f ) {
+			
+			// How many ticks we should jump for.
+			// We multiply by a fixed value here to keep the jump height consistent even when we are moving faster.
+			final float flJumpTicks = 48.f;
+			this.flJumpTime = ( ( 1.f / 60.f ) * Math.round( flJumpTicks ) ) * flJumpStrength;
+			
+			// Limit how frequently the enemy can jump.
+			this.iJumpTick = GameState.getInstance().getCurrentTick();
+		}
+	}
+	
 	private void onTakeDamage() {
 		if( this.iHealth <= 0 ) {
 			return;
