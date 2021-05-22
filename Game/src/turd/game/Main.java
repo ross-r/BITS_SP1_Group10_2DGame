@@ -144,7 +144,7 @@ public class Main {
 		// create hud.
 		hud = new HUD(window, graphics);
 		
-		Audio.getInstance().play("soundtrack");
+		//Audio.getInstance().play("soundtrack");
 
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
@@ -158,9 +158,16 @@ public class Main {
 
 		// Create our player.
 		ObjectList.getInstance().createPlayer();
-		ObjectList.getInstance().createEnemy(420.f, 20.f);
-		ObjectList.getInstance().createEnemy(1640.f, 20.f);
-
+		
+		
+		// enemys
+		ObjectList.getInstance().createEnemy(1420.f, -120.f);
+		ObjectList.getInstance().createEnemy(5000.f, -300.f);
+		ObjectList.getInstance().createEnemy(6500.f, -700.f);
+		
+		// needs adjusting
+		ObjectList.getInstance().createEnemy(11500.f, 800.f);
+		
 		tbb = new TheBigBang();
 		tbb.Bang();
 		
@@ -169,12 +176,12 @@ public class Main {
 		// 720
 		// 1280
 		
-		texBackground = new Texture(Graphics.nvgHandle(), "Background01.png");
+		texBackground = new Texture(Graphics.nvgHandle(), "Background02_80% opasity.png");
  
 		tbb = new TheBigBang();
 		tbb.Bang();
 
-		texBackground = TextureManager.get("Background01.png");
+		texBackground = TextureManager.get("Background02_80% opasity.png");
 
 		window.loop(_render, _tick);
 
@@ -183,7 +190,7 @@ public class Main {
 		graphics.terminate();
 		
 		//Stop the soundtrack from looping.
-		Audio.getInstance().stop("soundtrack");
+		//Audio.getInstance().stop("soundtrack");
 
 		//Terminate all audio devices.
 		Audio.getInstance().terminate();

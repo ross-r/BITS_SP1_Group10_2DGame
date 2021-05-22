@@ -58,11 +58,21 @@ public class Platform extends StaticObject {
 		GROUND_PLATFORM_LEFT,
 		GROUND_PLATFORM_MID,
 		
+		GROUND_ROOF_MID,
+		GROUND_ROOF_LEFT,
+		GROUND_ROOF_RIGHT,
+		
+		GROUND_ROOF_MID_CONNECT_RIGHT,
+		GROUND_ROOF_MID_CONNECT_LEFT,
+		
 		// hazards
 		SPIKES,
 		PIT,
 		FALLING_PLATFORMS,
 	
+		// objects
+		OBJECT_CAR01,
+		OBJECT_CRANE,
 	}
 	
 	// Indicates the type of platform this class should handle.
