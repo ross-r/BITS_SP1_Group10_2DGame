@@ -35,7 +35,6 @@ public class HUD {
 		texScrap5 = TextureManager.get("hud_scrap5.png");
 		texScrap6 = TextureManager.get("hud_scrap6.png");
 		texScrap7 = TextureManager.get("hud_scrap7.png");
-		texSpeedUp = TextureManager.get("hud_upgrade_speed.png");
 		texUpSpeed = TextureManager.get("player-upgrade-speed.png");
 		texScrap = new Texture[7];
 		texScrap[0] = texScrap1;
@@ -70,11 +69,11 @@ public class HUD {
 		}
 		
 		int offset2 = 12;
-		for (int i = 0; i < player.getTotalUpgrades(); i++) {	
-			offset2 = offset2 + (60% iWidth);
-			if (player.getPlayerSpeedUp())
-			texUpSpeed.render(scrap_x + offset2, scrap_y, 255.f);
-		}
+//		for (int i = 0; i < player.getTotalUpgrades(); i++) {	
+//			offset2 = offset2 + (60% iWidth);
+			if (3 > player.getScrapValue())
+			texUpSpeed.render(scrap_x + offset2, scrap_y + 600, 255.f);
+//		}
 		
 //		switch (Player.getScrapValue()) {
 //		

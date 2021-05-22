@@ -8,7 +8,6 @@ import turd.game.GameState;
 import turd.game.MathUtils;
 import turd.game.Window;
 import turd.game.audio.Audio;
-//import turd.game.audio.Audio;
 import turd.game.graphics.Graphics;
 import turd.game.graphics.Texture;
 import turd.game.graphics.TextureManager;
@@ -44,7 +43,7 @@ public class Player extends GameObject {
 	//
 	// Animations
 	//
-	private int iAnimateTicks; //leo - used for temporarily animating wheels
+	private int iAnimateTicks;
 	private int iAnimateTickTimer;
 	private int iDamageTakenStart;
 	private int iDamageTakenFadeOutStart;
@@ -555,44 +554,6 @@ public class Player extends GameObject {
 					}
 				}
 		
-//				//TEST
-//				if (texture == texRightF1J2) {
-//					System.out.print("midjump");
-//				}
-		
-//				if (bInMoveLeft || bInMoveRight)
-//					Audio.getInstance().playerMovePlay();
-//				else
-//					Audio.getInstance().stop("playerMove");
-		
-		
-		//OLD TEXTURES, LEFT HERE TEMPORARILY
-//		if (bInMoveLeft) {
-//			Audio.getInstance().playerMovePlay();
-//			if (this.flJumpTime > 0.f) {
-//				texture = texPlayerJumpLeft;
-//			} else {
-//				if (iAnimateTicks == 1) {
-//					texture = texPlayerLeft1;
-//				} else if (iAnimateTicks == 0) {
-//					texture = texPlayerLeft2;
-//				}
-//			}
-//		} else if (bInMoveRight) {
-//			Audio.getInstance().playerMovePlay();
-//			if (this.flJumpTime > 0.f) {
-//				texture = texPlayerJumpRight;
-//			} else {
-//				if (iAnimateTicks == 1) {
-//					texture = texPlayerRight1;
-//				} else if (iAnimateTicks == 0) {
-//					texture = texPlayerRight2;
-//				}
-//			}
-//		} else {
-//			Audio.getInstance().stop("playerMove");
-//			//texture = texPlayerIdle;
-//		}
 		
 		drawTrail(texture);
 		
@@ -712,8 +673,8 @@ public class Player extends GameObject {
 		
 		this.iProjectileCooldown--;
 		if( MouseInput.getInstance().getMouseClicked() ) {
-//			if (!Audio.getInstance().getPlaying("playerShoot"))
-//			Audio.getInstance().play("playerShoot");
+			if (!Audio.getInstance().getPlaying("playerShoot"))
+			Audio.getInstance().play("playerShoot");
 			this.shoot(window);
 		}
 	}
@@ -908,12 +869,15 @@ public class Player extends GameObject {
 		return this.iScrapValue == Constants.PLAYER_MAX_SCRAP_VALUE;
 	}
 
-	//for HUD
-	public int getTotalUpgrades() {
-		return 1;
-	}
-	public boolean getPlayerSpeedUp() {
-		return true;
+//	//for HUD
+//	public int getTotalUpgrades() {
+//		return 1;
+//	}
+//	public boolean getPlayerSpeedUp() {
+//		return true;
+//	}
+	public int getiAnimateTicks() {
+		return iAnimateTicks;
 	}
 	
 	

@@ -144,7 +144,7 @@ public class Main {
 		// create hud.
 		hud = new HUD(window, graphics);
 		
-		//Audio.getInstance().play("soundtrack");
+		Audio.getInstance().play("soundtrack");
 
 		// If you would like to disable the camera projection do so here.
 		// This may be useful when placing around more objects.
@@ -190,12 +190,11 @@ public class Main {
 		graphics.terminate();
 		
 		//Stop the soundtrack from looping.
-		//Audio.getInstance().stop("soundtrack");
+		Audio.getInstance().stop("soundtrack");
 
 		//Terminate all audio devices.
 		Audio.getInstance().terminate();
 
-//LEO	HUD.terminate();
 	}
 
 	public static void main(String[] args) {
