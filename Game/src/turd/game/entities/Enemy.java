@@ -156,6 +156,7 @@ public class Enemy extends GameObject {
 		}
 		// attack
 		if (bIsAttacking) {
+			Audio.getInstance().enemyShoot();
 			if (iAnimateTicks == 0) {
 				// windup attack texture
 				this.texture = this.texLeftAtk1; // windup-atk (attack)

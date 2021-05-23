@@ -68,7 +68,7 @@ public class Audio {
 		//Create Player Sounds
 		AudioSource playerJump = new AudioSource("playerJump.ogg", false, false, -50);
 		AudioSource playerRevUp = new AudioSource("playerRevUp.ogg", false, false, 20);
-		AudioSource playerMove = new AudioSource("playerMove.ogg", true, false, 20);
+		AudioSource playerMove = new AudioSource("playerMove2.ogg", true, false, 20);
 		AudioSource playerShoot = new AudioSource("playerShoot.ogg", false, false, 1);
 		AudioSource playerPickUp = new AudioSource("playerPickUp.ogg", false, false, 1);
 		AudioSource playerDamage = new AudioSource("playerDamage.ogg", false, false, 1);
@@ -82,8 +82,10 @@ public class Audio {
 		//Create Enemy Sounds
 		AudioSource enemyDamage = new AudioSource("enemyDamage.ogg", false, false, 1);
 		AudioSource enemyMove = new AudioSource("enemyMove.ogg", false, false, 1);
+		AudioSource enemyShoot = new AudioSource("enemyShoot.ogg", false, false, 1);
 		soundMap.put("enemyDamage", enemyDamage);
 		soundMap.put("enemyMove", enemyMove);
+		soundMap.put("enemyShoot", enemyShoot);
 		
 		//Create game sounds
 		AudioSource pausePlay = new AudioSource("pausePlay.ogg", false, false, 1);
@@ -131,6 +133,12 @@ public class Audio {
 	public void playerMovePlay() {
 		if (!soundMap.get("playerMove").isPlaying()) {
 			play("playerMove");
+		}
+	}
+	
+	public void enemyShoot() {
+		if (!soundMap.get("enemyShoot").isPlaying()) {
+			play("enemyShoot");
 		}
 	}
 	

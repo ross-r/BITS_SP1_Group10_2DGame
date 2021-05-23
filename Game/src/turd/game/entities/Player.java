@@ -300,6 +300,11 @@ public class Player extends GameObject {
 			iLastInput = 1;
 		}
 		
+		if (bInMoveLeft || bInMoveRight) {
+			Audio.getInstance().playerMovePlay();
+		} else {
+			Audio.getInstance().stop("playerMove");
+		}
 		//render the player graphic
 				if (iLastInput == 0) {								// LEFT
 					if (iEmptyScrapValue >= iScrapValue) { 			// EMPTY
