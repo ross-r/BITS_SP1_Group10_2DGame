@@ -14,6 +14,8 @@ import turd.game.graphics.Texture;
 import turd.game.graphics.TextureManager;
 import turd.game.input.KeyboardInput;
 import turd.game.objects.ObjectList;
+import turd.game.platform.HazardSpikesGrass;
+import turd.game.platform.HazardSpikesUp;
 import turd.game.platform.TheBigBang;
 
 public class Main {
@@ -164,10 +166,19 @@ public class Main {
 		ObjectList.getInstance().createEnemy(1420.f, -120.f);
 		ObjectList.getInstance().createEnemy(5000.f, -300.f);
 		ObjectList.getInstance().createEnemy(6500.f, -700.f);
+
+		ObjectList.getInstance().createEnemy(4500.f, -600.f);
+		ObjectList.getInstance().createEnemy(8200.f, -200.f);
 		
-		// needs adjusting
 		ObjectList.getInstance().createEnemy(11500.f, 800.f);
+		ObjectList.getInstance().createEnemy(11600.f, 800.f);
 		
+		ObjectList.getInstance().createEnemy(14200.f, 2700.f);
+		ObjectList.getInstance().createEnemy(14300.f, 2700.f);
+		ObjectList.getInstance().createEnemy(14400.f, 2700.f);
+		ObjectList.getInstance().createEnemy(14500.f, 2700.f);
+		ObjectList.getInstance().createEnemy(14600.f, 2700.f);
+
 		tbb = new TheBigBang();
 		tbb.Bang();
 		

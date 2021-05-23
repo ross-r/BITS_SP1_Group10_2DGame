@@ -4,8 +4,8 @@ import turd.game.objects.ObjectList;
 
 public class HazardPit extends Platform {
 
-	private static final int PLATFORM_WIDTH = 400;
-	private static final int PLATFORM_HEIGHT = 100;
+	private static final int PLATFORM_WIDTH = 2000;
+	private static final int PLATFORM_HEIGHT = 10;
 	
 	public HazardPit(int x, int y) { // pass in paramiters 
 		super();
@@ -15,8 +15,8 @@ public class HazardPit extends Platform {
 		this.type = PLATFORM_TYPE.PIT;
 		
 		// blue
-		this.r = 0.f;
-		this.g = 255.f;
+		this.r = 255.f;
+		this.g = 0.f;
 		this.b = 0.f;
 		this.a = 255.f;
 		

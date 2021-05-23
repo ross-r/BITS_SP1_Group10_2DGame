@@ -17,7 +17,10 @@ import turd.game.input.MouseInput;
 import turd.game.objects.GameObject;
 import turd.game.objects.ObjectList;
 import turd.game.physics.Physics;
+import turd.game.platform.HazardPit;
 import turd.game.platform.HazardSpikes;
+import turd.game.platform.HazardSpikesGrass;
+import turd.game.platform.HazardSpikesUp;
 
 public class Player extends GameObject {
 	
@@ -820,11 +823,18 @@ public class Player extends GameObject {
 	
 	private void onTakeDamage( GameObject object ) {		
 		final boolean bDamagedBySpikes = object instanceof HazardSpikes;
+		final boolean bDamagedBySpikesGrass = object instanceof HazardSpikesGrass;
+		final boolean bDamagedBySpikesUp = object instanceof HazardSpikesUp;
+		final boolean bDamagedByPit = object instanceof HazardPit;
 		
 		// If we're inside of the bit we want to take a small amount of damage and initiate a jump.
 		if( bDamagedBySpikes ) {
 			jump( 0.5f );
 		}
+		else if( bDamagedBySpikesGrass ) {
+			jump( 0.5f );
+		}
+		
 		
 		// We can apply a multiplier for things like damage resistance and so on.
 		//this.iHealth -= Constants.PROJECTILE_BASE_DAMAGE;
@@ -846,6 +856,21 @@ public class Player extends GameObject {
 		if( !bDamagedBySpikes ) {
 			dropScrap();
 		}
+		else if( !bDamagedBySpikesGrass ) {
+			dropScrap();
+		}
+		else if( !bDamagedBySpikesUp ) {
+			dropScrap();
+		}
+		
+		else if( !bDamagedByPit ) {
+			dropScrap();
+			dropScrap();
+			dropScrap();
+			dropScrap();
+			dropScrap();
+			
+		}
 		
 		// Keep health in increments of 10s.
 		this.iHealth = this.iScrapValue * 10;
@@ -861,7 +886,9 @@ public class Player extends GameObject {
 	public void onCollision( GameObject object ) {
 		
 		// Only these objects can damage our player.
-		if( !( object instanceof TestProjectile || object instanceof HazardSpikes ) ) {
+		if( !( object instanceof TestProjectile || object instanceof HazardSpikes || 
+				object instanceof HazardSpikesGrass || object instanceof HazardSpikesUp 
+				|| object instanceof HazardPit) ) {
 			return;
 		}
 		

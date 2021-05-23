@@ -1,23 +1,9 @@
 package turd.game.platform;
 
-import turd.game.graphics.Texture;
-import turd.game.graphics.TextureManager;
-
 public class TheBigBang {
 
-	Texture crane;
-	
 	public void Bang() {
-		
-		
-		
-		crane = TextureManager.get("Object_Crane.png");
-		crane.render(255, 0, 255.f);
-		
-		
-		
-		
-		
+
 		// starting area, before first hurdle and rear wall
 		new GroundTopMedium(-600, 100);
 		new SingleGroundBottomFarRight(-700, 100);
@@ -67,11 +53,10 @@ public class TheBigBang {
 		new SingleGroundMidRight(-800, -1500);
 
 		new GroundTopEdgeLong(-1700, -1600);
-		
+
 		// objects
 		new ObjectCar01(400, 0);
-		//new ObjectCrane(400, -800);
-		
+
 		new GroundTopLong(-100, 100);
 		new GroundFillLong(-100, 200);
 		new GroundFillLong(-100, 300);
@@ -95,6 +80,9 @@ public class TheBigBang {
 
 		// floating platforms in starting area
 		new FloatingPlatformSmall(600, -350);
+
+		new HazardSpikesGrass(1550, -500);
+		new ObjectFridge01(1650, -600);
 		new FloatingPlatformMedium(1400, -420);
 
 		// first spikes encounter
@@ -104,7 +92,12 @@ public class TheBigBang {
 		new SingleGroundBottomRightSpikesConnect(1900, 100);
 		new GroundFillSmall(2000, 200);
 
+		new HazardSpikesGrass(2900, -100);
+		new HazardSpikesGrass(2800, -100);
 		new GroundTopEdgeLong(2200, 0);
+
+		new HazardPit(3200, 150);
+
 		new SingleGroundBottomLeftSpikesConnect(2200, 100);
 
 		new GroundFillMedium(2300, 100);
@@ -132,7 +125,7 @@ public class TheBigBang {
 		// floating platforms over bottomless pits before climb obstical
 		new FloatingPlatformSmall(4250, -600);
 		new FloatingPlatformSmall(3700, -750);
-		new FloatingPlatformSmall(3200, -1100); // make enclosed later ?
+		new FloatingPlatformSmall(3200, -1100); 
 
 		// other end of pit plus climb obstical
 
@@ -154,6 +147,10 @@ public class TheBigBang {
 		new SingleGroundBottomFarLeft(4800, -100);
 
 		// step3
+
+		new HazardSpikesGrass(4900, -300);
+		new HazardSpikesGrass(5000, -300);
+
 		new SingleGroundTopLeft(4900, -200);
 		new SingleGroundBottomFarLeft(5000, -200);
 		// step4
@@ -207,6 +204,10 @@ public class TheBigBang {
 		new HazardSpikes(7300, -500);
 		new HazardSpikes(7400, -500);
 		new HazardSpikes(7500, -500);
+
+		new HazardSpikesGrass(7800, -600);
+		new HazardSpikesGrass(7900, -600);
+		new HazardSpikesGrass(8000, -600);
 
 		new SingleGroundTopLeft(7600, -500);
 		new SingleGroundTopMid(7700, -500);
@@ -286,12 +287,22 @@ public class TheBigBang {
 		new GroundFillMedium(8000, 400);
 
 		// floating platforms above over-hang and over the pillar jummping obsticals
+		new ObjectBarrel02(7800, -1000);
+		new ObjectBarrel01(7900, -1000);
 		new FloatingPlatformMedium(7600, -900);
 		new FloatingPlatformSmall(8600, -800);
 		new FloatingPlatformSmall(10000, -700);
 		new FloatingPlatformSmall(11000, -800);
 
 		// over-hang platform bellow
+
+		new HazardPit(8700, 250);
+		new HazardPit(9300, 250);
+
+		new HazardSpikesGrass(8400, -100);
+		new HazardSpikesGrass(8500, -100);
+		new HazardSpikesGrass(8600, -100);
+
 		new GroundTopMedium(8000, 0);
 		new SingleGroundBottomFarRight(7900, 0);
 		new SingleGroundTopRight(8700, 0);
@@ -351,13 +362,11 @@ public class TheBigBang {
 
 		// ledge2 left
 		new SingleGroundMidMid(11300, 1000);
-		new SingleGroundBottomFarRight(11400, 1000);
-
-		new SingleGroundTopMid(11500, 1000);
-		new SingleGroundTopMid(11600, 1000);
-		new SingleGroundTopMid(11700, 1000);
-		new SingleGroundTopRight(11800, 1000);
-
+		new SingleGroundMidMid(11400, 1000);
+		new SingleGroundMidMid(11500, 1000);
+		new SingleGroundMidMid(11600, 1000);
+		new SingleGroundMidMid(11700, 1000);
+		new SingleGroundMidRight(11800, 1000);
 		new SingleGroundMidMid(11300, 1100);
 		new SingleGroundRoofMidConnectLeft(11400, 1100);
 		new SingleGroundRoofMid(11500, 1100);
@@ -368,7 +377,7 @@ public class TheBigBang {
 		new SingleGroundMidLeft(11200, 1200);
 		new SingleGroundWallTopRight(11300, 1200);
 
-		// wall continued
+		// wall continued left
 		new SingleGroundMidLeft(11200, 1300);
 		new SingleGroundMidRight(11300, 1300);
 		new SingleGroundMidLeft(11200, 1400);
@@ -377,10 +386,28 @@ public class TheBigBang {
 		new SingleGroundMidRight(11300, 1500);
 		new SingleGroundMidLeft(11200, 1600);
 		new SingleGroundMidRight(11300, 1600);
+
+		// spikes 2 on left wall
+
+		new SingleGroundMidMid(11300, 1900);
+		new SingleGroundRoofMidConnectLeft(11400, 1900);
+		new SingleGroundRoofMid(11500, 1900);
+		new SingleGroundRoofMid(11600, 1900);
+		new SingleGroundRoofRight(11700, 1900);
+
+		new HazardSpikes(11700, 1800);
+		new HazardSpikes(11600, 1800);
+		new HazardSpikes(11500, 1800);
+		new HazardSpikes(11400, 1800);
+
+		new SingleGroundWallTopRight(11300, 2000);
+		new SingleGroundMidLeft(11200, 1800);
+		new SingleGroundBottomRightSpikesConnect(11300, 1800);
+
+		// left wall continued
 		new SingleGroundMidLeft(11200, 1700);
 		new SingleGroundMidRight(11300, 1700);
-		new SingleGroundMidLeft(11200, 1800);
-		new SingleGroundMidRight(11300, 1800);
+
 		new SingleGroundMidLeft(11200, 1900);
 		new SingleGroundMidRight(11300, 1900);
 		new SingleGroundMidLeft(11200, 2000);
@@ -391,13 +418,22 @@ public class TheBigBang {
 		new SingleGroundMidRight(11300, 2200);
 		new SingleGroundMidLeft(11200, 2300);
 		new SingleGroundMidRight(11300, 2300);
+
+		// floating platforms in wall fall
+		new FloatingPlatformSmall(11500, 2300);
+
+		new HazardSpikesGrass(11600, 2650);
+		new HazardSpikesGrass(11700, 2650);
+		new FloatingPlatformSmall(11600, 2750);
+		new FloatingPlatformSmall(11680, 3200);
+
+		// left wall continued
 		new SingleGroundMidLeft(11200, 2400);
 		new SingleGroundMidRight(11300, 2400);
 		new SingleGroundMidLeft(11200, 2500);
 		new SingleGroundMidRight(11300, 2500);
 		new SingleGroundMidLeft(11200, 2600);
 		new SingleGroundMidRight(11300, 2600);
-
 		new SingleGroundMidLeft(11200, 2700);
 		new SingleGroundMidRight(11300, 2700);
 		new SingleGroundMidLeft(11200, 2800);
@@ -420,23 +456,6 @@ public class TheBigBang {
 		new SingleGroundMidRight(11300, 3600);
 		new SingleGroundMidLeft(11200, 3700);
 		new SingleGroundMidRight(11300, 3700);
-
-		new SingleGroundBottomFarRight(11400, 3800);
-		new SingleGroundBottomFarLeft(11100, 3800);
-		new GroundTopLong(11500, 3800);
-
-		new GroundFillLong(11500, 3900);
-		new GroundFillLong(11500, 4000);
-		new GroundFillLong(11500, 4100);
-		new GroundFillLong(11500, 4200);
-
-		new GroundFillLong(10500, 3900);
-		new GroundFillLong(10500, 4000);
-		new GroundFillLong(10500, 4100);
-		new GroundFillLong(10500, 4200);
-
-		new GroundTopMedium(10600, 3800);
-		new GroundFillSmall(11200, 3800);
 
 		// pillar3 and fall
 		new SingleGroundMidLeft(12000, 0);
@@ -487,6 +506,14 @@ public class TheBigBang {
 
 		// ground cut out right
 
+		new ObjectFridge02(12100, 820);
+
+		new HazardSpikes(11800, 900);
+		new HazardSpikes(11700, 900);
+		new HazardSpikes(11600, 900);
+		new HazardSpikes(11500, 900);
+		new HazardSpikes(11400, 900);
+
 		new SingleGroundMidMid(12100, 400);
 		new SingleGroundRoofMid(12000, 500);
 		new SingleGroundRoofMid(12100, 500);
@@ -495,6 +522,7 @@ public class TheBigBang {
 		new SingleGroundRoofMid(12400, 500);
 		new SingleGroundMidMid(12500, 500);
 		new SingleGroundTopLeft(12000, 1000);
+
 		new SingleGroundTopMid(12100, 1000);
 		new SingleGroundTopMid(12200, 1000);
 		new SingleGroundTopMid(12300, 1000);
@@ -578,6 +606,220 @@ public class TheBigBang {
 		new SingleGroundMidRight(12100, 3200);
 		new SingleGroundRoofLeft(12000, 3300);
 		new SingleGroundRoofRight(12100, 3300);
+
+		// ground at bottom
+		new SingleGroundBottomFarRight(11400, 3800);
+		new SingleGroundBottomFarLeft(11100, 3800);
+
+		new GroundTopLong(11500, 3800);
+		new GroundFillLong(11500, 3900);
+		new GroundFillLong(11500, 4000);
+		new GroundFillLong(11500, 4100);
+		new GroundFillLong(11500, 4200);
+
+		new HazardSpikesGrass(11500, 3700);
+		new HazardSpikesGrass(11600, 3700);
+		new HazardSpikesGrass(11700, 3700);
+		new HazardSpikesGrass(11800, 3700);
+		new HazardSpikesGrass(11900, 3700);
+		new HazardSpikesGrass(12000, 3700);
+		new HazardSpikesGrass(12100, 3700);
+
+		new ObjectFridge01(12200, 3620);
+
+		new GroundFillLong(10500, 3900);
+		new GroundFillLong(10500, 4000);
+		new GroundFillLong(10500, 4100);
+		new GroundFillLong(10500, 4200);
+
+		new GroundTopMedium(10600, 3800);
+		new GroundFillSmall(11200, 3800);
+
+		new GroundTopSmall(12500, 3800);
+		new GroundFillSmall(12500, 3900);
+		new GroundFillSmall(12500, 4000);
+		new GroundFillSmall(12500, 4100);
+		new GroundFillSmall(12500, 4200);
+
+		new SingleGroundBottomFarLeft(12700, 3800);
+		new SingleGroundMidMid(12800, 3800);
+		new GroundFillSmall(12700, 3900);
+		new GroundFillSmall(12700, 4000);
+		new GroundFillSmall(12700, 4100);
+		new GroundFillSmall(12700, 4200);
+
+		new SingleGroundMidMid(12900, 3800);
+		new GroundFillLong(13000, 3800);
+
+		new SingleGroundMidMid(12900, 3900);
+		new GroundFillLong(13000, 3900);
+
+		new SingleGroundMidMid(12900, 4000);
+		new GroundFillLong(13000, 4000);
+
+		new SingleGroundMidMid(12900, 4100);
+		new GroundFillLong(13000, 4100);
+
+		new SingleGroundMidMid(12900, 4200);
+		new GroundFillLong(13000, 4200);
+
+		new SingleGroundMidMid(12900, 3700);
+		new GroundFillLong(13000, 4300);
+
+		new SingleGroundMidLeft(12800, 3700);
+		new SingleGroundMidMid(12900, 3600);
+		new GroundFillLong(13000, 3600);
+
+		new SingleGroundMidLeft(12800, 3600);
+		new SingleGroundMidMid(12900, 3500);
+		new GroundFillLong(13000, 3500);
+
+		new SingleGroundMidLeft(12800, 3500);
+		new SingleGroundMidMid(12900, 3400);
+		new GroundFillLong(13000, 3900);
+
+		new SingleGroundMidLeft(12800, 3400);
+
+		new SingleGroundMidLeft(12800, 3300);
+
+		// boss room
+		new SingleGroundMidMid(12900, 3300);
+		new SingleGroundMidMid(12900, 3200);
+		new SingleGroundBottomFarRight(13000, 3200);
+
+		new ObjectBarrel03(13200, 3100);
+		new ObjectBarrel01(13300, 3100);
+
+		new ObjectBarrel02(14400, 3100);
+		new ObjectBarrel01(14500, 3100);
+		new ObjectBarrel03(14600, 3100);
+		new ObjectBarrel01(14550, 3030);
+
+		new GroundTopLong(13100, 3200);
+		new GroundTopMedium(14100, 3200);
+
+		new SingleGroundBottomFarLeft(14600, 3200);
+		new GroundFillLong(14700, 3200);
+
+		new GroundFillLong(14000, 3300);
+		new GroundFillLong(14000, 3400);
+		new GroundFillLong(14000, 3500);
+
+		new SingleGroundMidLeft(14700, 3100);
+		new SingleGroundMidLeft(14700, 3000);
+		new SingleGroundMidLeft(14700, 2900);
+		new SingleGroundMidLeft(14700, 2800);
+		new SingleGroundMidLeft(14700, 2700);
+		new SingleGroundMidLeft(14700, 2600);
+		new SingleGroundWallTopLeft(14700, 2500);
+		new SingleGroundMidMid(14700, 2400);
+
+		new GroundFillLong(14800, 3100);
+		new GroundFillLong(14800, 3000);
+		new GroundFillLong(14800, 2900);
+		new GroundFillLong(14800, 2800);
+		new GroundFillLong(14800, 2700);
+		new GroundFillLong(14800, 2600);
+		new GroundFillLong(14800, 2500);
+		new GroundFillLong(14800, 2400);
+
+		new GroundFillLong(14600, 3300);
+		new GroundFillLong(14600, 3400);
+		new GroundFillLong(14600, 3500);
+		new GroundFillLong(14600, 3600);
+
+		new SingleGroundMidMid(14500, 3500);
+
+		new GroundFillLong(13100, 3300);
+		new SingleGroundMidMid(13000, 3300);
+		new GroundFillLong(13100, 3400);
+		new SingleGroundMidMid(13000, 3400);
+		new GroundFillLong(13100, 3700);
+		new SingleGroundMidMid(13000, 3700);
+		// wall 3 continued
+		new SingleGroundMidLeft(12800, 3200);
+		new SingleGroundMidRight(12900, 3100);
+		new SingleGroundMidLeft(12800, 3100);
+		new SingleGroundMidRight(12900, 3000);
+		new SingleGroundMidLeft(12800, 3000);
+		new SingleGroundMidRight(12900, 2900);
+		new SingleGroundMidLeft(12800, 2900);
+
+		new FloatingPlatformSmall(12500, 2900);
+		new HazardSpikesGrass(12590, 2800);
+
+		new FloatingPlatformSmall(12220, 3250);
+		new HazardSpikesGrass(12240, 3150);
+
+		new SingleGroundMidRight(12900, 2800);
+		new SingleGroundMidLeft(12800, 2800);
+		new SingleGroundMidRight(12900, 2700);
+		new SingleGroundMidLeft(12800, 2700);
+		new SingleGroundTopLeft(12800, 2600);
+		new SingleGroundTopRight(12900, 2600);
+
+		new SingleGroundRoofLeft(12800, 2400);
+		new SingleGroundMidLeft(12800, 2300);
+		new SingleGroundMidLeft(12800, 2200);
+		new SingleGroundMidLeft(12800, 2100);
+		new SingleGroundMidLeft(12800, 2000);
+		new SingleGroundMidLeft(12800, 1900);
+		new SingleGroundMidLeft(12800, 1800);
+		new SingleGroundMidLeft(12800, 1700);
+		new SingleGroundMidLeft(12800, 1600);
+
+		new GroundFillLong(12900, 2300);
+		new GroundFillLong(12900, 2200);
+		new GroundFillLong(12900, 2100);
+		new GroundFillLong(12900, 2000);
+		new GroundFillLong(12900, 1900);
+		new GroundFillLong(12900, 1800);
+		new GroundFillLong(12900, 1700);
+		new GroundFillLong(12900, 1600);
+
+		new GroundFillLong(13900, 2300);
+		new GroundFillLong(13900, 2200);
+		new GroundFillLong(13900, 2100);
+		new GroundFillLong(13900, 2000);
+		new GroundFillLong(13900, 1900);
+		new GroundFillLong(13900, 1800);
+		new GroundFillLong(13900, 1700);
+		new GroundFillLong(13900, 1600);
+
+		new SingleGroundRoofMid(12900, 2400);
+		new SingleGroundRoofMid(12900, 2400);
+		new SingleGroundRoofMid(13000, 2400);
+		new SingleGroundRoofMid(13100, 2400);
+
+		new SingleGroundRoofRight(13200, 2400);
+
+		new HazardSpikesUp(13300, 2400);
+		new HazardSpikesUp(13400, 2400);
+		new HazardSpikesUp(13500, 2400);
+		new HazardSpikesUp(13600, 2400);
+
+		new HazardSpikesUp(13700, 2400);
+		new HazardSpikesUp(13800, 2400);
+		new HazardSpikesUp(13900, 2400);
+		new HazardSpikesUp(14000, 2400);
+		new HazardSpikesUp(14100, 2400);
+		new HazardSpikesUp(14200, 2400);
+
+		new SingleGroundRoofLeft(14300, 2400);
+
+		new SingleGroundRoofMid(14400, 2400);
+		new SingleGroundRoofMid(14500, 2400);
+
+		new SingleGroundRoofMidConnectRight(14600, 2400);
+		new GroundFillLong(14900, 2300);
+		new GroundFillLong(14900, 2200);
+		new GroundFillLong(14900, 2100);
+
+		new FloatingPlatformSmall(13300, 2900);
+
+		new ObjectBarrel04(13800, 2800);
+		new FloatingPlatformSmall(13700, 2900);
+		new FloatingPlatformSmall(14100, 2900);
 
 	}
 
