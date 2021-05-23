@@ -301,7 +301,12 @@ public class Player extends GameObject {
 		}
 		
 		if (bInMoveLeft || bInMoveRight) {
-			Audio.getInstance().playerMovePlay();
+			if (!jumping) {
+				Audio.getInstance().playerMovePlay();
+			}
+			else {
+				Audio.getInstance().stop("playerMove");
+			}
 		} else {
 			Audio.getInstance().stop("playerMove");
 		}
