@@ -89,7 +89,7 @@ public class Audio {
 		
 		//Create game sounds
 		AudioSource pausePlay = new AudioSource("pausePlay.ogg", false, false, 1);
-		AudioSource soundtrack = new AudioSource("soundtrack2_2.ogg", true, false, 1);
+		AudioSource soundtrack = new AudioSource("soundtrack.ogg", true, false, -100);
 		soundMap.put("pausePlay", pausePlay);
 		soundMap.put("soundtrack", soundtrack);
 		
